@@ -1,0 +1,102 @@
+import {
+  LayoutDashboard,
+  Users,
+  Calendar,
+  Stethoscope,
+  FlaskConical,
+  Pill,
+  Receipt,
+  BarChart3,
+  UserCog,
+  Settings,
+} from "lucide-react";
+import { ROLE_IDS } from "./roles";
+
+export const NAV_ITEMS = [
+  {
+    name: "Dashboard",
+    path: "/dashboard",
+    icon: LayoutDashboard,
+    roles: [
+      ROLE_IDS.ADMIN,
+      ROLE_IDS.DOCTOR,
+      ROLE_IDS.TRIAGE_NURSE,
+      ROLE_IDS.RECEPTIONIST,
+      ROLE_IDS.PHARMACIST,
+      ROLE_IDS.LAB_TECHNICIAN,
+      ROLE_IDS.CASHIER,
+    ],
+  },
+  {
+    name: "Patients",
+    path: "/patients",
+    icon: Users,
+    roles: [
+      ROLE_IDS.ADMIN,
+      ROLE_IDS.DOCTOR,
+      ROLE_IDS.TRIAGE_NURSE,
+      ROLE_IDS.RECEPTIONIST,
+      ROLE_IDS.CASHIER,
+      ROLE_IDS.LAB_TECHNICIAN,
+      ROLE_IDS.PHARMACIST,
+    ],
+  },
+  {
+    name: "Appointments",
+    path: "/appointments",
+    icon: Calendar,
+    roles: [ROLE_IDS.ADMIN, ROLE_IDS.DOCTOR, ROLE_IDS.RECEPTIONIST],
+  },
+  {
+    name: "Consultations",
+    path: "/consultations",
+    icon: Stethoscope,
+    roles: [ROLE_IDS.ADMIN, ROLE_IDS.DOCTOR],
+  },
+  {
+    name: "Laboratory",
+    path: "/labs",
+    icon: FlaskConical,
+    roles: [ROLE_IDS.ADMIN, ROLE_IDS.DOCTOR, ROLE_IDS.LAB_TECHNICIAN],
+  },
+  {
+    name: "Pharmacy",
+    path: "/pharmacy",
+    icon: Pill,
+    roles: [ROLE_IDS.ADMIN, ROLE_IDS.PHARMACIST],
+  },
+  {
+    name: "Billing",
+    path: "/billing",
+    icon: Receipt,
+    roles: [ROLE_IDS.ADMIN, ROLE_IDS.CASHIER],
+  },
+  {
+    name: "Reports",
+    path: "/reports",
+    icon: BarChart3,
+    roles: [ROLE_IDS.ADMIN, ROLE_IDS.CASHIER],
+  },
+  {
+    name: "Workforce",
+    path: "/attendance",
+    icon: UserCog,
+    roles: [
+      ROLE_IDS.ADMIN,
+      ROLE_IDS.DOCTOR,
+      ROLE_IDS.TRIAGE_NURSE,
+      ROLE_IDS.RECEPTIONIST,
+      ROLE_IDS.PHARMACIST,
+      ROLE_IDS.LAB_TECHNICIAN,
+      ROLE_IDS.CASHIER,
+      ROLE_IDS.MIDWIFE,
+    ],
+  },
+  { name: "Users", path: "/users", icon: UserCog, roles: [ROLE_IDS.ADMIN] },
+  {
+    name: "Settings",
+    path: "/settings",
+    icon: Settings,
+    roles: [ROLE_IDS.ADMIN],
+  },
+];
