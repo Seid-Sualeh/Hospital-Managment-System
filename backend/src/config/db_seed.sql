@@ -78,20 +78,20 @@ INSERT INTO role_permissions (role_id, permission_id) VALUES
 
 -- 5. Seed Users
 -- Password hash here corresponds to plain password: "Password123!" hashed with bcrypt (rounds 12)
--- $2a$12$Z06bBexGbeX6k5q64XfAee.r4ZlqL/bW5z/lA1r.iMv12uWpSUp/6
+-- $2a$12$57elWN3a/CmIkeQ.IDQu1.eHWkMZIj9qZ7xSM4R1zeVjXDYYRkZAG
 INSERT INTO users (id, clinic_id, first_name, last_name, email, phone_number, password_hash, role_id, is_active) VALUES
 -- Admin User (Role 1)
-(1, 1, 'Yared', 'Negash', 'yared@yaredclinic.com', '+251911223344', '$2a$12$Z06bBexGbeX6k5q64XfAee.r4ZlqL/bW5z/lA1r.iMv12uWpSUp/6', 1, TRUE),
+(1, 1, 'Yared', 'Negash', 'yared@yaredclinic.com', '+251911223344', '$2a$12$57elWN3a/CmIkeQ.IDQu1.eHWkMZIj9qZ7xSM4R1zeVjXDYYRkZAG', 1, TRUE),
 -- Doctor User (Role 2)
-(2, 1, 'Almaz', 'Bekele', 'almaz@yaredclinic.com', '+251911998877', '$2a$12$Z06bBexGbeX6k5q64XfAee.r4ZlqL/bW5z/lA1r.iMv12uWpSUp/6', 2, TRUE),
+(2, 1, 'Almaz', 'Bekele', 'almaz@yaredclinic.com', '+251911998877', '$2a$12$57elWN3a/CmIkeQ.IDQu1.eHWkMZIj9qZ7xSM4R1zeVjXDYYRkZAG', 2, TRUE),
 -- Receptionist User (Role 4)
-(3, 1, 'Lidya', 'Tadesse', 'lidya@yaredclinic.com', '+251912445566', '$2a$12$Z06bBexGbeX6k5q64XfAee.r4ZlqL/bW5z/lA1r.iMv12uWpSUp/6', 4, TRUE),
+(3, 1, 'Lidya', 'Tadesse', 'lidya@yaredclinic.com', '+251912445566', '$2a$12$57elWN3a/CmIkeQ.IDQu1.eHWkMZIj9qZ7xSM4R1zeVjXDYYRkZAG', 4, TRUE),
 -- Laboratory Technician User (Role 6)
-(4, 1, 'Samuel', 'Chala', 'samuel@yaredclinic.com', '+251913778899', '$2a$12$Z06bBexGbeX6k5q64XfAee.r4ZlqL/bW5z/lA1r.iMv12uWpSUp/6', 6, TRUE),
+(4, 1, 'Samuel', 'Chala', 'samuel@yaredclinic.com', '+251913778899', '$2a$12$57elWN3a/CmIkeQ.IDQu1.eHWkMZIj9qZ7xSM4R1zeVjXDYYRkZAG', 6, TRUE),
 -- Cashier User (Role 7)
-(5, 1, 'Kebede', 'Tolosa', 'kebede@yaredclinic.com', '+251914112233', '$2a$12$Z06bBexGbeX6k5q64XfAee.r4ZlqL/bW5z/lA1r.iMv12uWpSUp/6', 7, TRUE),
+(5, 1, 'Kebede', 'Tolosa', 'kebede@yaredclinic.com', '+251914112233', '$2a$12$57elWN3a/CmIkeQ.IDQu1.eHWkMZIj9qZ7xSM4R1zeVjXDYYRkZAG', 7, TRUE),
 -- Pharmacist User (Role 5)
-(6, 1, 'Tigist', 'Mulu', 'tigist@yaredclinic.com', '+251915667788', '$2a$12$Z06bBexGbeX6k5q64XfAee.r4ZlqL/bW5z/lA1r.iMv12uWpSUp/6', 5, TRUE);
+(6, 1, 'Tigist', 'Mulu', 'tigist@yaredclinic.com', '+251915667788', '$2a$12$57elWN3a/CmIkeQ.IDQu1.eHWkMZIj9qZ7xSM4R1zeVjXDYYRkZAG', 5, TRUE);
 
 -- 6. Seed a Default Patient for Testing
 INSERT INTO patients (id, clinic_id, mrn, first_name, middle_name, last_name, gender, dob_gregorian, dob_ethiopian, phone_number, address) VALUES

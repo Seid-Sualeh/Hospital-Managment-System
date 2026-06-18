@@ -5,7 +5,7 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 
 // Configs and Helpers
-dotenv.config();
+dotenv.config({ override: true });
 const logger = require("./src/config/logger");
 const db = require("./src/config/db");
 
@@ -31,6 +31,7 @@ const queueRoutes = require("./src/routes/queue.routes");
 const shiftRoutes = require("./src/routes/shift.routes");
 const leaveRoutes = require("./src/routes/leave.routes");
 const attendanceRoutes = require("./src/routes/attendance.routes");
+const installRoutes = require("./src/routes/install.routes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -85,6 +86,7 @@ app.use(
 app.use(tenantResolver);
 
 // API Route Bindings
+app.use("/install", installRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/patients", patientRoutes);
 app.use("/api/v1/consultations", consultationRoutes);
@@ -126,18 +128,14 @@ if (SKIP_DB) {
     "[Server] SKIP_DB=true — skipping database connection check. Server will start without verifying DB.",
   );
   app.listen(PORT, () => {
-    logger.info(
-      `[Server] CMS SaaS Engine listening at http://localhost:${PORT} (DB check skipped)`,
-    );
+    logger.info(`[Server] CMS SaaS Engine listening at ${PORT} `);
   });
 } else {
   db.testConnection()
     .then((connected) => {
       if (connected) {
         app.listen(PORT, () => {
-          logger.info(
-            `[Server] CMS SaaS Engine listening at http://localhost:${PORT}`,
-          );
+          logger.info(`[Server] CMS SaaS Engine listening at:${PORT}`);
         });
       } else {
         logger.error(

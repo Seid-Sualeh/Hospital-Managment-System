@@ -115,7 +115,7 @@ const Login = () => {
       {/* Right Panel - Hero */}
       <div className="login-hero-panel">
         <div className="login-hero-content text-center">
-          <h2 className="fw-bold mb-3">Smart Clinic Management</h2>
+          <h2 className="fw-bold mb-3">Smart Hospital Management System</h2>
           <p className="opacity-75 mb-0">
             Manage your clinic operations efficiently and provide better care for your patients.
           </p>

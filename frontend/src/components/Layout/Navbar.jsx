@@ -54,6 +54,13 @@ const Navbar = ({ onMenuToggle }) => {
     resetViewRole();
   };
 
+  const handleLogout = async (event) => {
+    event.preventDefault();
+    setShowUserMenu(false);
+    await logout();
+    navigate('/login', { replace: true });
+  };
+
   return (
     <header className="top-navbar">
       <div className="d-flex align-items-center justify-content-between gap-3 gap-md-4">
@@ -181,11 +188,7 @@ const Navbar = ({ onMenuToggle }) => {
                 </a>
                 <div className="dropdown-divider"></div>
                 <button
-                  onClick={async () => {
-                    await logout();
-                    setShowUserMenu(false);
-                    navigate("/login", { replace: true });
-                  }}
+                  onClick={handleLogout}
                   className="dropdown-item d-flex align-items-center gap-2 small text-danger"
                   type="button"
                 >

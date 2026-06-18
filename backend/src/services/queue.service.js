@@ -212,7 +212,7 @@ const queueService = {
     }
   },
 
-  listAllQueues: async (clinicId, status = null) => {
+  listAllQueues: async (clinicId, queueType = null, status = null) => {
     try {
       let sql = `
         SELECT qe.*, v.visit_status, p.first_name AS patient_first_name, p.last_name AS patient_last_name,
@@ -224,6 +224,12 @@ const queueService = {
         WHERE qe.clinic_id = ?
       `;
       const params = [clinicId];
+
+      if (queueType) {
+        queueService.validateQueueType(queueType);
+        sql += " AND qe.queue_type = ?";
+        params.push(queueType);
+      }
 
       if (status) {
         sql += " AND qe.status = ?";
