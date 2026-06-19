@@ -8,6 +8,7 @@ import Modal from "../../components/Common/Modal";
 import Loader from "../../components/Common/Loader";
 import EmptyState from "../../components/Common/EmptyState";
 import AlertBanner from "../../components/Common/AlertBanner";
+import LaboratoryAIPanel from "../../components/AI/LaboratoryAIPanel";
 import api from "../../services/api";
 import { Plus, Eye, FlaskConical, CheckCircle2 } from "lucide-react";
 
@@ -92,15 +93,12 @@ const LabWorkspace = () => {
       const params = {};
       if (search) params.search = search;
       if (statusFilter) params.status = statusFilter;
-      const res = await api.get("/lab-requests", { params });
+      const res = await api.get("/labs/requests", { params });
       const data = res.data?.data || res.data;
-      setRequests(
-        data.requests ||
-          data.rows ||
-          (Array.isArray(data) ? data : MOCK_LAB_REQUESTS),
-      );
-    } catch {
-      setRequests(MOCK_LAB_REQUESTS);
+      setRequests(Array.isArray(data) ? data : data?.requests || data?.rows || []);
+    } catch (err) {
+      console.error("Failed to load lab requests:", err);
+      setRequests([]);
     } finally {
       setLoading(false);
     }
@@ -114,26 +112,16 @@ const LabWorkspace = () => {
     e.preventDefault();
     setSaving(true);
     try {
-      await api.post("/lab-requests", form);
+      await api.post("/labs/requests", form);
       setAlert({ type: "success", msg: "Lab request created." });
       setShowAddModal(false);
       setForm({ ...EMPTY_FORM });
       load();
-    } catch {
-      setRequests((prev) => [
-        {
-          id: Date.now(),
-          request_uid: `LAB-${String(Math.floor(Math.random() * 9999)).padStart(4, "0")}`,
-          ...form,
-          date: new Date().toISOString().slice(0, 10),
-          status: "pending",
-          patient_name: form.patient_uid,
-        },
-        ...prev,
-      ]);
-      setAlert({ type: "success", msg: "Lab request created." });
-      setShowAddModal(false);
-      setForm({ ...EMPTY_FORM });
+    } catch (err) {
+      setAlert({
+        type: "danger",
+        msg: err.apiError?.message || "Failed to create lab request.",
+      });
     } finally {
       setSaving(false);
     }
@@ -152,26 +140,15 @@ const LabWorkspace = () => {
     e.preventDefault();
     setSaving(true);
     try {
-      await api.put(`/lab-requests/${selectedRequest.id}/result`, resultForm);
-      setRequests((prev) =>
-        prev.map((r) =>
-          r.id === selectedRequest.id
-            ? { ...r, ...resultForm, status: "completed" }
-            : r,
-        ),
-      );
+      await api.put(`/labs/requests/${selectedRequest.id}/result`, resultForm);
       setAlert({ type: "success", msg: "Result uploaded successfully." });
       setShowResultModal(false);
-    } catch {
-      setRequests((prev) =>
-        prev.map((r) =>
-          r.id === selectedRequest.id
-            ? { ...r, ...resultForm, status: "completed" }
-            : r,
-        ),
-      );
-      setAlert({ type: "success", msg: "Result uploaded successfully." });
-      setShowResultModal(false);
+      load();
+    } catch (err) {
+      setAlert({
+        type: "danger",
+        msg: err.apiError?.message || "Failed to upload result.",
+      });
     } finally {
       setSaving(false);
     }
@@ -366,7 +343,7 @@ const LabWorkspace = () => {
         show={showResultModal}
         onClose={() => setShowResultModal(false)}
         title={`Result — ${selectedRequest?.request_uid}`}
-        size="md"
+        size="lg"
       >
         <form onSubmit={handleResultSubmit}>
           <div className="mb-3">
@@ -394,7 +371,10 @@ const LabWorkspace = () => {
               }
             />
           </div>
-          <div className="d-flex justify-content-end gap-2">
+
+          <LaboratoryAIPanel request={selectedRequest} resultForm={resultForm} />
+
+          <div className="d-flex justify-content-end gap-2 mt-3">
             <button
               type="button"
               className="btn btn-outline-secondary"

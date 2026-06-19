@@ -207,10 +207,25 @@ const billingController = {
     try {
       const { transaction_reference, status } = req.body;
       const signature = req.headers['x-chapa-signature'] || req.headers['signature'];
+      const webhookSecret = process.env.CHAPA_WEBHOOK_SECRET || process.env.PAYMENT_WEBHOOK_SECRET;
 
-      // Mock Signature validation - check if key is provided and headers are present
       if (!transaction_reference || !status) {
         throw new APIError('Missing transaction_reference or status in payload.', 400, 'BAD_REQUEST');
+      }
+
+      if (webhookSecret) {
+        if (!signature) {
+          throw new APIError('Webhook signature is required.', 401, 'INVALID_WEBHOOK_SIGNATURE');
+        }
+        const expected = crypto
+          .createHmac('sha256', webhookSecret)
+          .update(JSON.stringify(req.body))
+          .digest('hex');
+        if (signature !== expected) {
+          throw new APIError('Invalid webhook signature.', 401, 'INVALID_WEBHOOK_SIGNATURE');
+        }
+      } else if (process.env.NODE_ENV === 'production') {
+        throw new APIError('Payment webhook secret is not configured.', 500, 'WEBHOOK_MISCONFIGURED');
       }
 
       // Query transaction status in DB

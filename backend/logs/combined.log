@@ -1258,3 +1258,203 @@
 {"level":"error","message":"[500 Server Error] Path: GET /api/v1/queues?type=CONSULTATION","timestamp":"2026-06-18T10:29:27.409Z"}
 {"level":"error","message":"Error: getaddrinfo ENOTFOUND mysql-1baa60-seidsualeh123.a.aivencloud.com\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:59:34)\n    at tenantResolver (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\middlewares\\tenant.js:70:32)\n    at Layer.handle [as handle_request] (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at trim_prefix (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\node_modules\\express\\lib\\router\\index.js:328:13)\n    at C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\node_modules\\express\\lib\\router\\index.js:286:9\n    at Function.process_params (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at logger (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\node_modules\\morgan\\index.js:170:5)\n    at Layer.handle [as handle_request] (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at trim_prefix (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\node_modules\\express\\lib\\router\\index.js:328:13)","timestamp":"2026-06-18T10:29:27.410Z"}
 {"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 500 176 - 1660.450 ms","timestamp":"2026-06-18T10:29:27.412Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T10:40:59.335Z"}
+{"level":"info","message":"POST /api/v1/auth/login - - - - ms","timestamp":"2026-06-18T10:45:10.564Z"}
+{"level":"error","message":"[500 Server Error] Path: POST /api/v1/auth/login","timestamp":"2026-06-18T10:45:11.234Z"}
+{"level":"error","message":"TypeError: authService.loginClinicUser is not a function\n    at login (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\auth.controller.js:20:45)\n    at Layer.handle [as handle_request] (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at validateLogin (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\middlewares\\auth.validation.js:23:5)\n    at Layer.handle [as handle_request] (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at Function.process_params (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)","timestamp":"2026-06-18T10:45:11.236Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T11:02:29.174Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/auth/login - Code: INVALID_CREDENTIALS - Message: Invalid email or password credentials.","timestamp":"2026-06-18T11:02:39.212Z"}
+{"level":"info","message":"POST /api/v1/auth/login 401 159 - 1692.035 ms","timestamp":"2026-06-18T11:02:39.216Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/queues?type=CONSULTATION - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:05:44.666Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 401 136 - 5.725 ms","timestamp":"2026-06-18T11:05:44.669Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/queues?type=CONSULTATION - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:05:44.679Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 401 136 - 6.645 ms","timestamp":"2026-06-18T11:05:44.682Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients?page=1&limit=10 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:05:53.604Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 401 136 - 3.879 ms","timestamp":"2026-06-18T11:05:53.607Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients?page=1&limit=10 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:05:53.610Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 401 136 - 1.538 ms","timestamp":"2026-06-18T11:05:53.612Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients/1 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:05:59.066Z"}
+{"level":"info","message":"GET /api/v1/patients/1 401 136 - 2.493 ms","timestamp":"2026-06-18T11:05:59.068Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients/1/visits - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:05:59.070Z"}
+{"level":"info","message":"GET /api/v1/patients/1/visits 401 136 - 1.381 ms","timestamp":"2026-06-18T11:05:59.072Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients/1 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:05:59.073Z"}
+{"level":"info","message":"GET /api/v1/patients/1 401 136 - 1.129 ms","timestamp":"2026-06-18T11:05:59.077Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients/1/visits - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:05:59.079Z"}
+{"level":"info","message":"GET /api/v1/patients/1/visits 401 136 - 1.497 ms","timestamp":"2026-06-18T11:05:59.083Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients?page=1&limit=10 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:06:33.679Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 401 136 - 2.197 ms","timestamp":"2026-06-18T11:06:33.684Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients?page=1&limit=10 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:06:33.688Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 401 136 - 2.830 ms","timestamp":"2026-06-18T11:06:33.690Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/consultations/queue - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:06:37.623Z"}
+{"level":"info","message":"GET /api/v1/consultations/queue 401 136 - 1.627 ms","timestamp":"2026-06-18T11:06:37.625Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/consultations/queue - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:06:37.628Z"}
+{"level":"info","message":"GET /api/v1/consultations/queue 401 136 - 2.482 ms","timestamp":"2026-06-18T11:06:37.630Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/attendance/my-attendance - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:07:08.083Z"}
+{"level":"info","message":"GET /api/v1/attendance/my-attendance 401 136 - 5.301 ms","timestamp":"2026-06-18T11:07:08.087Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/attendance/my-attendance - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:07:08.089Z"}
+{"level":"info","message":"GET /api/v1/attendance/my-attendance 401 136 - 1.652 ms","timestamp":"2026-06-18T11:07:08.090Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/leaves/types - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:07:08.092Z"}
+{"level":"info","message":"GET /api/v1/leaves/types 401 136 - 1.519 ms","timestamp":"2026-06-18T11:07:08.097Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/leaves/types - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:07:08.101Z"}
+{"level":"info","message":"GET /api/v1/leaves/types 401 136 - 2.606 ms","timestamp":"2026-06-18T11:07:08.104Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/attendance/check-in - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:07:13.670Z"}
+{"level":"info","message":"POST /api/v1/attendance/check-in 401 136 - 0.622 ms","timestamp":"2026-06-18T11:07:13.671Z"}
+{"level":"info","message":"GET /api/v1/lab-requests 404 158 - 2.456 ms","timestamp":"2026-06-18T11:07:29.780Z"}
+{"level":"info","message":"GET /api/v1/lab-requests 404 158 - 1.189 ms","timestamp":"2026-06-18T11:07:29.783Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/consultations/queue - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:07:39.975Z"}
+{"level":"info","message":"GET /api/v1/consultations/queue 401 136 - 2.575 ms","timestamp":"2026-06-18T11:07:39.977Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/consultations/queue - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:07:39.979Z"}
+{"level":"info","message":"GET /api/v1/consultations/queue 401 136 - 1.283 ms","timestamp":"2026-06-18T11:07:39.982Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/appointments?year=2024&month=5 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:07:42.881Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2024&month=5 401 136 - 1.705 ms","timestamp":"2026-06-18T11:07:42.884Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/appointments?year=2024&month=5 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:07:42.886Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2024&month=5 401 136 - 1.578 ms","timestamp":"2026-06-18T11:07:42.889Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients?page=1&limit=10 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:07:45.013Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 401 136 - 1.333 ms","timestamp":"2026-06-18T11:07:45.015Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients?page=1&limit=10 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:07:45.019Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 401 136 - 2.795 ms","timestamp":"2026-06-18T11:07:45.021Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/queues?type=CONSULTATION - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:07:46.186Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 401 136 - 1.829 ms","timestamp":"2026-06-18T11:07:46.189Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/queues?type=CONSULTATION - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:07:46.191Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 401 136 - 1.679 ms","timestamp":"2026-06-18T11:07:46.193Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/consultations/queue - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:07:52.364Z"}
+{"level":"info","message":"GET /api/v1/consultations/queue 401 136 - 6.479 ms","timestamp":"2026-06-18T11:07:52.367Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/consultations/queue - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:07:52.369Z"}
+{"level":"info","message":"GET /api/v1/consultations/queue 401 136 - 1.084 ms","timestamp":"2026-06-18T11:07:52.371Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/appointments?year=2024&month=5 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:07:58.943Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2024&month=5 401 136 - 4.311 ms","timestamp":"2026-06-18T11:07:58.945Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/appointments?year=2024&month=5 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:07:58.948Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2024&month=5 401 136 - 1.276 ms","timestamp":"2026-06-18T11:07:58.951Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients?page=1&limit=10 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:08:00.602Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 401 136 - 1.548 ms","timestamp":"2026-06-18T11:08:00.605Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients?page=1&limit=10 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:08:00.611Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 401 136 - 3.519 ms","timestamp":"2026-06-18T11:08:00.613Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/queues?type=CONSULTATION - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:08:02.022Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 401 136 - 2.717 ms","timestamp":"2026-06-18T11:08:02.027Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/queues?type=CONSULTATION - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T11:08:02.030Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 401 136 - 1.263 ms","timestamp":"2026-06-18T11:08:02.033Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/auth/login - Code: INVALID_CREDENTIALS - Message: Invalid email or password credentials.","timestamp":"2026-06-18T11:08:10.547Z"}
+{"level":"info","message":"POST /api/v1/auth/login 401 159 - 2445.550 ms","timestamp":"2026-06-18T11:08:10.548Z"}
+{"level":"error","message":"[Server] Critical Error: Unable to verify database connection. Server startup aborted.","timestamp":"2026-06-18T11:10:58.503Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5001","timestamp":"2026-06-18T11:23:43.491Z"}
+{"level":"error","message":"[Server] Critical Error: Unable to verify database connection. Server startup aborted.","timestamp":"2026-06-18T11:27:24.500Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5001","timestamp":"2026-06-18T11:33:53.772Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5001","timestamp":"2026-06-18T11:34:17.930Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5001","timestamp":"2026-06-18T16:27:37.209Z"}
+{"level":"error","message":"[Server] Critical Error: Unable to verify database connection. Server startup aborted.","timestamp":"2026-06-18T16:34:07.555Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5001","timestamp":"2026-06-18T16:34:49.072Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T16:41:42.561Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T16:41:54.193Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T16:42:03.415Z"}
+{"level":"info","message":"GET /api/v1/lab-requests 404 158 - 723.571 ms","timestamp":"2026-06-18T16:42:12.980Z"}
+{"level":"info","message":"GET /api/v1/lab-requests 404 158 - 3.231 ms","timestamp":"2026-06-18T16:42:13.006Z"}
+{"level":"info","message":"GET /api/v1/lab-requests 404 158 - 1.597 ms","timestamp":"2026-06-18T16:45:24.162Z"}
+{"level":"info","message":"GET /api/v1/lab-requests 404 158 - 0.976 ms","timestamp":"2026-06-18T16:45:24.172Z"}
+{"level":"info","message":"GET /api/v1/lab-requests 404 158 - 2.478 ms","timestamp":"2026-06-18T16:45:40.150Z"}
+{"level":"info","message":"GET /api/v1/lab-requests 404 158 - 0.895 ms","timestamp":"2026-06-18T16:45:40.153Z"}
+{"level":"info","message":"GET /api/v1/lab-requests 404 158 - 0.849 ms","timestamp":"2026-06-18T16:48:12.363Z"}
+{"level":"info","message":"GET /api/v1/lab-requests 404 158 - 0.665 ms","timestamp":"2026-06-18T16:48:13.195Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T16:49:44.580Z"}
+{"level":"info","message":"GET /api/v1/lab-requests 404 158 - 863.564 ms","timestamp":"2026-06-18T16:50:07.472Z"}
+{"level":"info","message":"GET /api/v1/lab-requests 404 158 - 0.945 ms","timestamp":"2026-06-18T16:50:07.476Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T16:50:15.461Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/auth/login - Code: INVALID_CREDENTIALS - Message: Invalid email or password credentials.","timestamp":"2026-06-18T16:51:08.807Z"}
+{"level":"info","message":"POST /api/v1/auth/login 401 159 - 1313.815 ms","timestamp":"2026-06-18T16:51:08.898Z"}
+{"level":"info","message":"GET /api/v1/lab-requests 404 158 - 6.700 ms","timestamp":"2026-06-18T16:51:27.253Z"}
+{"level":"info","message":"GET /api/v1/lab-requests 404 158 - 2.124 ms","timestamp":"2026-06-18T16:51:27.265Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/queues?type=CONSULTATION - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T16:51:31.011Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 401 136 - 4.773 ms","timestamp":"2026-06-18T16:51:31.015Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/queues?type=CONSULTATION - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T16:51:31.019Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 401 136 - 2.326 ms","timestamp":"2026-06-18T16:51:31.027Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/queues?type=CONSULTATION - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T16:51:33.137Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 401 136 - 1.993 ms","timestamp":"2026-06-18T16:51:33.139Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/queues?type=CONSULTATION - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T16:51:33.144Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 401 136 - 2.113 ms","timestamp":"2026-06-18T16:51:33.147Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients?page=1&limit=10 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T16:52:00.243Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 401 136 - 1.341 ms","timestamp":"2026-06-18T16:52:00.244Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients?page=1&limit=10 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T16:52:00.247Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 401 136 - 1.893 ms","timestamp":"2026-06-18T16:52:00.251Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients?page=1&limit=10 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T16:59:49.022Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 401 136 - 2.732 ms","timestamp":"2026-06-18T16:59:49.031Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients?page=1&limit=10 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T16:59:49.034Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 401 136 - 2.760 ms","timestamp":"2026-06-18T16:59:49.039Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/auth/login - Code: INVALID_CREDENTIALS - Message: Invalid email or password credentials.","timestamp":"2026-06-18T16:59:57.707Z"}
+{"level":"info","message":"POST /api/v1/auth/login 401 159 - 237.525 ms","timestamp":"2026-06-18T16:59:57.709Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/attendance/my-attendance - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T17:02:20.754Z"}
+{"level":"info","message":"GET /api/v1/attendance/my-attendance 401 136 - 451.022 ms","timestamp":"2026-06-18T17:02:20.757Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/attendance/my-attendance - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T17:02:20.761Z"}
+{"level":"info","message":"GET /api/v1/attendance/my-attendance 401 136 - 2.408 ms","timestamp":"2026-06-18T17:02:20.763Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/leaves/types - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T17:02:22.600Z"}
+{"level":"info","message":"GET /api/v1/leaves/types 401 136 - 2294.154 ms","timestamp":"2026-06-18T17:02:22.603Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/leaves/types - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T17:02:22.608Z"}
+{"level":"info","message":"GET /api/v1/leaves/types 401 136 - 2.526 ms","timestamp":"2026-06-18T17:02:22.611Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/attendance/check-in - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T17:02:24.699Z"}
+{"level":"info","message":"POST /api/v1/attendance/check-in 401 136 - 5.050 ms","timestamp":"2026-06-18T17:02:24.704Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:04:13.497Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/attendance/my-attendance - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T17:04:44.794Z"}
+{"level":"info","message":"GET /api/v1/attendance/my-attendance 401 136 - 693.005 ms","timestamp":"2026-06-18T17:04:44.891Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/attendance/my-attendance - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T17:04:44.992Z"}
+{"level":"info","message":"GET /api/v1/attendance/my-attendance 401 136 - 78.267 ms","timestamp":"2026-06-18T17:04:45.004Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/leaves/types - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T17:04:46.054Z"}
+{"level":"info","message":"GET /api/v1/leaves/types 401 136 - 1933.784 ms","timestamp":"2026-06-18T17:04:46.174Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/leaves/types - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T17:04:46.741Z"}
+{"level":"info","message":"GET /api/v1/leaves/types 401 136 - 11.239 ms","timestamp":"2026-06-18T17:04:46.808Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/queues?type=CONSULTATION - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T17:05:55.096Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 401 136 - 3.672 ms","timestamp":"2026-06-18T17:05:55.101Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/queues?type=CONSULTATION - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T17:05:55.112Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 401 136 - 8.659 ms","timestamp":"2026-06-18T17:05:55.116Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/queues?type=CONSULTATION - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T17:05:58.504Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 401 136 - 3.560 ms","timestamp":"2026-06-18T17:05:58.508Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/queues?type=CONSULTATION - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T17:05:58.516Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 401 136 - 4.557 ms","timestamp":"2026-06-18T17:05:58.521Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients?page=1&limit=10 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T17:06:30.727Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 401 136 - 3.937 ms","timestamp":"2026-06-18T17:06:30.731Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients?page=1&limit=10 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T17:06:30.782Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 401 136 - 28.855 ms","timestamp":"2026-06-18T17:06:30.787Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/auth/login - Code: INVALID_CREDENTIALS - Message: Invalid email or password credentials.","timestamp":"2026-06-18T17:06:51.044Z"}
+{"level":"info","message":"POST /api/v1/auth/login 401 159 - 476.085 ms","timestamp":"2026-06-18T17:06:51.047Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:21:33.420Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients?page=1&limit=10 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T17:22:45.746Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 401 136 - 618.783 ms","timestamp":"2026-06-18T17:22:45.749Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients?page=1&limit=10 - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T17:22:45.753Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 401 136 - 1.478 ms","timestamp":"2026-06-18T17:22:45.754Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/auth/me - Code: INVALID_TOKEN - Message: Invalid access token.","timestamp":"2026-06-18T17:22:47.952Z"}
+{"level":"info","message":"GET /api/v1/auth/me 401 136 - 2540.656 ms","timestamp":"2026-06-18T17:22:47.966Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:24:08.124Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:24:20.833Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:24:25.082Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:24:47.028Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:24:56.955Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:25:03.712Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:25:07.657Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:25:16.791Z"}
+{"level":"error","message":"[Server] Critical Error: Unable to verify database connection. Server startup aborted.","timestamp":"2026-06-18T17:25:34.763Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:26:11.835Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:26:18.632Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:26:25.866Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:26:44.334Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:26:53.712Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:33:40.410Z"}
+{"level":"error","message":"[Server] Critical Error: Unable to verify database connection. Server startup aborted.","timestamp":"2026-06-18T17:42:15.680Z"}
+{"level":"error","message":"[Server] Critical Error: Unable to verify database connection. Server startup aborted.","timestamp":"2026-06-18T17:44:18.798Z"}
+{"level":"error","message":"[Server] Critical Error: Unable to verify database connection. Server startup aborted.","timestamp":"2026-06-18T17:52:15.490Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:56:10.574Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:56:40.891Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T17:56:50.976Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T18:02:20.275Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T18:02:52.955Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T18:03:07.088Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-18T18:03:12.980Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/auth/login - Code: INVALID_CREDENTIALS - Message: Invalid email or password credentials.","timestamp":"2026-06-18T18:19:31.842Z"}
+{"level":"info","message":"POST /api/v1/auth/login 401 159 - 985.697 ms","timestamp":"2026-06-18T18:19:31.856Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/auth/login - Code: INVALID_CREDENTIALS - Message: Invalid email or password credentials.","timestamp":"2026-06-18T18:19:37.934Z"}
+{"level":"info","message":"POST /api/v1/auth/login 401 159 - 271.718 ms","timestamp":"2026-06-18T18:19:37.937Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/auth/login - Code: INVALID_CREDENTIALS - Message: Invalid email or password credentials.","timestamp":"2026-06-18T18:19:58.182Z"}
+{"level":"info","message":"POST /api/v1/auth/login 401 159 - 316.768 ms","timestamp":"2026-06-18T18:19:58.185Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/auth/login - Code: INVALID_CREDENTIALS - Message: Invalid email or password credentials.","timestamp":"2026-06-18T18:20:01.145Z"}
+{"level":"info","message":"POST /api/v1/auth/login 401 159 - 316.585 ms","timestamp":"2026-06-18T18:20:01.149Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/auth/login - Code: INVALID_CREDENTIALS - Message: Invalid email or password credentials.","timestamp":"2026-06-18T18:20:02.205Z"}
+{"level":"info","message":"POST /api/v1/auth/login 401 159 - 237.427 ms","timestamp":"2026-06-18T18:20:05.106Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-19T02:30:14.143Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/auth/login - Code: INVALID_CREDENTIALS - Message: Invalid email or password credentials.","timestamp":"2026-06-19T02:30:25.439Z"}
+{"level":"info","message":"POST /api/v1/auth/login 401 159 - 1455.588 ms","timestamp":"2026-06-19T02:30:25.511Z"}

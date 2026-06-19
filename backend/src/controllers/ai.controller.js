@@ -273,6 +273,7 @@ Provide clinical presentation summary:`;
         success: true,
         data: {
           summary_draft: summaryText,
+          disclaimer: aiService.AI_DISCLAIMER,
         },
       });
     } catch (error) {
@@ -593,6 +594,171 @@ Summarize:`;
           summary: summaryText,
         },
       });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  diagnosisSupport: async (req, res, next) => {
+    try {
+      const tenantId = req.tenantId;
+      const { patient_id, consultation } = req.body;
+      let patient = null;
+      if (patient_id) {
+        const rows = await db.query(
+          "SELECT *, TIMESTAMPDIFF(YEAR, dob_gregorian, CURDATE()) as age FROM patients WHERE id = ? AND clinic_id = ? LIMIT 1",
+          [patient_id, tenantId],
+        );
+        patient = rows?.[0] || null;
+      }
+      const response = await aiService.diagnosisSupport({
+        tenantId,
+        req,
+        patient: patient || req.body.patient,
+        consultation: consultation || req.body,
+        userId: req.user?.id,
+      });
+      res.status(200).json({ success: true, data: response });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  medicationAssistance: async (req, res, next) => {
+    try {
+      const tenantId = req.tenantId;
+      const { patient_id, diagnosis, prescription, allergies, current_medications } = req.body;
+      let patient = null;
+      if (patient_id) {
+        const rows = await db.query(
+          "SELECT *, TIMESTAMPDIFF(YEAR, dob_gregorian, CURDATE()) as age FROM patients WHERE id = ? AND clinic_id = ? LIMIT 1",
+          [patient_id, tenantId],
+        );
+        patient = rows?.[0] || null;
+      }
+      const response = await aiService.medicationAssistance({
+        tenantId,
+        req,
+        patient: patient || req.body.patient,
+        payload: { diagnosis, prescription, allergies, current_medications, medication_name: prescription },
+        userId: req.user?.id,
+      });
+      res.status(200).json({ success: true, data: response });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  labSummary: async (req, res, next) => {
+    try {
+      const tenantId = req.tenantId;
+      const { lab_result_id, lab_request_id, result, interpretation, test_name, patient_id } = req.body;
+      let labResult = { result, interpretation, test_name };
+      let patient = null;
+
+      if (lab_result_id) {
+        const rows = await db.query(
+          `SELECT lr.*, p.first_name, p.last_name, p.gender, p.mrn,
+                  TIMESTAMPDIFF(YEAR, p.dob_gregorian, CURDATE()) as age
+           FROM lab_results lr JOIN patients p ON lr.patient_id = p.id
+           WHERE lr.id = ? AND lr.clinic_id = ? LIMIT 1`,
+          [lab_result_id, tenantId],
+        );
+        if (rows?.[0]) {
+          labResult = rows[0];
+          patient = rows[0];
+        }
+      } else if (patient_id) {
+        const rows = await db.query(
+          "SELECT *, TIMESTAMPDIFF(YEAR, dob_gregorian, CURDATE()) as age FROM patients WHERE id = ? AND clinic_id = ? LIMIT 1",
+          [patient_id, tenantId],
+        );
+        patient = rows?.[0] || null;
+      }
+
+      const response = await aiService.labSummary({
+        tenantId,
+        req,
+        patient,
+        labResult: { ...labResult, id: lab_result_id, lab_request_id },
+        userId: req.user?.id,
+      });
+      res.status(200).json({ success: true, data: response });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  labAbnormalDetection: async (req, res, next) => {
+    try {
+      const { result, interpretation, results_json } = req.body;
+      const response = await aiService.detectLabAbnormalities({
+        labResult: { result, interpretation, results_json },
+      });
+      res.status(200).json({ success: true, data: response });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  dashboardInsights: async (req, res, next) => {
+    try {
+      const tenantId = req.tenantId;
+      const [patientCount] = await db.query("SELECT COUNT(*) as total FROM patients WHERE clinic_id = ?", [tenantId]);
+      const [appointmentCount] = await db.query("SELECT COUNT(*) as total FROM appointments WHERE clinic_id = ?", [tenantId]);
+      const [labCount] = await db.query("SELECT COUNT(*) as total FROM lab_requests WHERE clinic_id = ?", [tenantId]);
+      const [revenueRow] = await db.query(
+        "SELECT COALESCE(SUM(grand_total), 0) as total FROM invoices WHERE clinic_id = ? AND status != 'void'",
+        [tenantId],
+      );
+      const [todayRevenue] = await db.query(
+        "SELECT COALESCE(SUM(amount_paid), 0) as total FROM payments WHERE clinic_id = ? AND payment_status = 'completed' AND DATE(payment_date) = CURDATE()",
+        [tenantId],
+      );
+      const metrics = {
+        totalPatients: patientCount?.total || 0,
+        totalAppointments: appointmentCount?.total || 0,
+        labRequests: labCount?.total || 0,
+        totalRevenue: revenueRow?.total || 0,
+        todayRevenue: todayRevenue?.total || 0,
+        ...(req.body.metrics || {}),
+      };
+      const response = await aiService.dashboardInsights({
+        tenantId,
+        req,
+        metrics,
+        userId: req.user?.id,
+      });
+      res.status(200).json({ success: true, data: response });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  pharmacyInsights: async (req, res, next) => {
+    try {
+      const tenantId = req.tenantId;
+      let medicines = req.body.medicines;
+      if (!Array.isArray(medicines)) {
+        const rows = await db.query(
+          "SELECT id, name, generic_name, dosage_form, quantity_in_stock, reorder_level, unit_price, expiry_date FROM medicines WHERE clinic_id = ? AND is_active = TRUE ORDER BY quantity_in_stock ASC LIMIT 50",
+          [tenantId],
+        );
+        medicines = (rows || []).map((m) => ({
+          ...m,
+          stock: m.quantity_in_stock,
+          status: m.quantity_in_stock === 0 ? "out_of_stock" : m.quantity_in_stock <= m.reorder_level ? "low_stock" : "in_stock",
+          category: m.dosage_form,
+        }));
+      }
+      const response = await aiService.pharmacyInsights({
+        tenantId,
+        req,
+        medicines,
+        safetyContext: req.body.safetyContext || {},
+        userId: req.user?.id,
+      });
+      res.status(200).json({ success: true, data: response });
     } catch (error) {
       next(error);
     }

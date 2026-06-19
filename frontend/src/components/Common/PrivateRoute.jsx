@@ -6,9 +6,8 @@ import Loader from "./Loader";
 import { canAccessRoute, getRoleDisplayName } from "../../constants/roles";
 
 const PrivateRoute = ({ children, allowedRoles }) => {
-  const { user, effectiveUser, isAuthenticated, loading } = useAuth();
+  const { user, isAuthenticated, loading } = useAuth();
   const location = useLocation();
-  const displayUser = effectiveUser || user;
 
   if (loading) {
     return <Loader message="Restoring clinic session..." fullPage />;
@@ -18,7 +17,7 @@ const PrivateRoute = ({ children, allowedRoles }) => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (allowedRoles && !canAccessRoute(displayUser, allowedRoles)) {
+  if (allowedRoles && !canAccessRoute(user, allowedRoles)) {
     return (
       <div className="d-flex align-items-center justify-content-center min-vh-100 p-3">
         <div className="mc-card mc-card-body text-center w-480">
@@ -27,7 +26,7 @@ const PrivateRoute = ({ children, allowedRoles }) => {
           </div>
           <h3 className="fw-bold">Access Denied</h3>
           <p className="text-muted mb-4">
-            Your role (<strong>{getRoleDisplayName(displayUser)}</strong>)
+            Your role (<strong>{getRoleDisplayName(user)}</strong>)
             cannot access this module.
           </p>
           <Link to="/dashboard" className="btn btn-primary px-4 fw-semibold">

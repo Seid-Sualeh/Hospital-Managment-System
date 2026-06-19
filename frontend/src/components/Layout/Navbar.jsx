@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { getRoleDisplayName, ROLE_IDS } from "../../constants/roles";
+import { getRoleDisplayName } from "../../constants/roles";
 import {
   Bell,
   Menu,
@@ -9,27 +9,17 @@ import {
   Search,
   LogOut,
   User,
-  Eye,
 } from "lucide-react";
 import SearchInput from "../Common/SearchInput";
 
-const DEMO_ROLES = [
-  { id: ROLE_IDS.DOCTOR, name: "Doctor" },
-  { id: ROLE_IDS.RECEPTIONIST, name: "Receptionist" },
-];
-
 const Navbar = ({ onMenuToggle }) => {
   const navigate = useNavigate();
-  const { user, logout, viewAsRole, switchViewRole, resetViewRole } = useAuth();
+  const { user, logout } = useAuth();
   const [search, setSearch] = useState("");
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef(null);
 
-  const isAdmin =
-    user?.role?.id === ROLE_IDS.ADMIN || user?.role_id === ROLE_IDS.ADMIN;
-  const displayRole = viewAsRole
-    ? `${viewAsRole.roleName} (View As)`
-    : getRoleDisplayName(user);
+  const displayRole = getRoleDisplayName(user);
 
   const initials = user
     ? `${user.first_name?.[0] || ""}${user.last_name?.[0] || ""}`.toUpperCase()
@@ -45,20 +35,17 @@ const Navbar = ({ onMenuToggle }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSwitchRole = (roleId, roleName) => {
-    switchViewRole(roleId, roleName);
-    setShowUserMenu(false);
-  };
-
-  const handleResetRole = () => {
-    resetViewRole();
-  };
-
   const handleLogout = async (event) => {
     event.preventDefault();
     setShowUserMenu(false);
-    await logout();
-    navigate('/login', { replace: true });
+    try {
+      await logout();
+      navigate('/login', { replace: true });
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Still navigate to login even if logout fails
+      navigate('/login', { replace: true });
+    }
   };
 
   return (
@@ -136,48 +123,6 @@ const Navbar = ({ onMenuToggle }) => {
                     </div>
                   </div>
                 </div>
-
-                {/* Admin-only: Role switching */}
-                {isAdmin && (
-                  <>
-                    <div className="dropdown-divider my-2"></div>
-                    <div className="px-3 py-2">
-                      <small className="text-muted d-block mb-2">
-                        <Eye
-                          size={12}
-                          className="me-1"
-                          style={{ display: "inline" }}
-                        />
-                        View As Role (Admin Only)
-                      </small>
-                      {DEMO_ROLES.map((role) => (
-                        <button
-                          key={role.id}
-                          onClick={() => {
-                            if (viewAsRole?.roleId === role.id) {
-                              handleResetRole();
-                            } else {
-                              handleSwitchRole(role.id, role.name);
-                            }
-                          }}
-                          className={`btn btn-sm d-block w-100 text-start mb-1 ${
-                            viewAsRole?.roleId === role.id
-                              ? "btn-primary"
-                              : role.id === user?.role?.id
-                                ? "btn-outline-primary"
-                                : "btn-outline-secondary"
-                          }`}
-                        >
-                          <small>
-                            {role.name}
-                            {viewAsRole?.roleId === role.id && " ✓"}
-                          </small>
-                        </button>
-                      ))}
-                    </div>
-                    <div className="dropdown-divider my-2"></div>
-                  </>
-                )}
 
                 <a
                   className="dropdown-item d-flex align-items-center gap-2 small"

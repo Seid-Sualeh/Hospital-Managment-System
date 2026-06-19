@@ -2,6 +2,8 @@ import React from 'react';
 import Loader from './Loader';
 import EmptyState from './EmptyState';
 
+const getColumnKey = (col, index) => col.key || col.header || `col-${index}`;
+
 const DataTable = ({
   columns,
   data,
@@ -25,9 +27,9 @@ const DataTable = ({
       <table className="table mc-table mb-0">
         <thead>
           <tr>
-            {columns.map((col) => (
-              <th key={col.key} className={col.className || ''}>
-                {col.label}
+            {columns.map((col, index) => (
+              <th key={getColumnKey(col, index)} className={col.className || ''}>
+                {col.label || col.header}
               </th>
             ))}
             {actions && <th className="text-end">Action</th>}
@@ -40,9 +42,9 @@ const DataTable = ({
               onClick={onRowClick ? () => onRowClick(row) : undefined}
               className={onRowClick ? 'cursor-pointer' : ''}
             >
-              {columns.map((col) => (
-                <td key={col.key} className={col.className || ''}>
-                  {col.render ? col.render(row) : row[col.key]}
+              {columns.map((col, index) => (
+                <td key={getColumnKey(col, index)} className={col.className || ''}>
+                  {col.render ? col.render(row) : row[col.key || col.header]}
                 </td>
               ))}
               {actions && (

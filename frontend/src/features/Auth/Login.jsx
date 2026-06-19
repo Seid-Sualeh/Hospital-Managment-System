@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import { Heart, Eye, EyeOff } from 'lucide-react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { Heart, Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
   const { login, error } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [remember, setRemember] = useState(false);
@@ -17,7 +17,7 @@ const Login = () => {
     setSubmitting(true);
     try {
       await login(email, password);
-      navigate('/dashboard', { replace: true });
+      navigate("/dashboard", { replace: true });
     } catch {
       // error is set via AuthContext
     } finally {
@@ -48,10 +48,10 @@ const Login = () => {
 
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label className="mc-form-label">Email or Username</label>
+              <label className="mc-form-label">Email</label>
               <input
                 className="form-control"
-                placeholder="Enter email or username"
+                placeholder="Enter email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -63,7 +63,7 @@ const Login = () => {
               <div className="input-group">
                 <input
                   className="form-control"
-                  type={showPw ? 'text' : 'password'}
+                  type={showPw ? "text" : "password"}
                   placeholder="Enter password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -93,12 +93,19 @@ const Login = () => {
                   Remember me
                 </label>
               </div>
-              <a href="#!" className="small text-primary text-decoration-none fw-semibold">
+              <a
+                href="#!"
+                className="small text-primary text-decoration-none fw-semibold"
+              >
                 Forgot Password?
               </a>
             </div>
 
-            <button className="btn btn-primary w-100 py-2 fw-bold" type="submit" disabled={submitting}>
+            <button
+              className="btn btn-primary w-100 py-2 fw-bold"
+              type="submit"
+              disabled={submitting}
+            >
               {submitting ? (
                 <span className="spinner-border spinner-border-sm me-2" />
               ) : null}
@@ -107,7 +114,8 @@ const Login = () => {
           </form>
 
           <p className="text-center text-muted small mt-4 mb-0">
-            © 2024 MediCare CMS. All rights reserved.
+            © {new Date().getFullYear()} 
+        MediCare CMS. All rights reserved.
           </p>
         </div>
       </div>
@@ -117,7 +125,8 @@ const Login = () => {
         <div className="login-hero-content text-center">
           <h2 className="fw-bold mb-3">Smart Hospital Management System</h2>
           <p className="opacity-75 mb-0">
-            Manage your clinic operations efficiently and provide better care for your patients.
+            Manage your clinic operations efficiently and provide better care
+            for your patients.
           </p>
         </div>
       </div>

@@ -1,86 +1,81 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import {
-  Plus,
-  ChevronLeft,
-  ChevronRight,
-  CalendarPlus,
-} from 'lucide-react';
-import api from '../../services/api';
-import PageShell from '../../components/Common/PageShell';
-import PageHeader from '../../components/Common/PageHeader';
-import Modal from '../../components/Common/Modal';
-import Loader from '../../components/Common/Loader';
-import AlertBanner from '../../components/Common/AlertBanner';
-import FormLabel from '../../components/Common/FormLabel';
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { Plus, ChevronLeft, ChevronRight, CalendarPlus } from "lucide-react";
+import api from "../../services/api";
+import PageShell from "../../components/Common/PageShell";
+import PageHeader from "../../components/Common/PageHeader";
+import Modal from "../../components/Common/Modal";
+import Loader from "../../components/Common/Loader";
+import AlertBanner from "../../components/Common/AlertBanner";
+import FormLabel from "../../components/Common/FormLabel";
 
 /* ───────────────── Mock / Fallback Data ───────────────── */
 const MOCK_APPOINTMENTS = [
   {
     id: 1,
-    date: '2024-05-10',
-    time: '09:00 AM',
-    patient_name: 'Abebe Kebede',
-    doctor_name: 'Dr. Elias M.',
-    type: 'General',
-    color: 'purple',
+    date: "2024-05-10",
+    time: "09:00 AM",
+    patient_name: "Abebe Kebede",
+    doctor_name: "Dr. Elias M.",
+    type: "General",
+    color: "purple",
   },
   {
     id: 2,
-    date: '2024-05-20',
-    time: '10:30 AM',
-    patient_name: 'Selamawit G.',
-    doctor_name: 'Dr. Tigist H.',
-    type: 'Follow-up',
-    color: 'green',
+    date: "2024-05-20",
+    time: "10:30 AM",
+    patient_name: "Selamawit G.",
+    doctor_name: "Dr. Tigist H.",
+    type: "Follow-up",
+    color: "green",
   },
   {
     id: 3,
-    date: '2024-05-20',
-    time: '01:30 PM',
-    patient_name: 'Melahom T.',
-    doctor_name: 'Dr. Elias M.',
-    type: 'Specialist',
-    color: 'purple',
+    date: "2024-05-20",
+    time: "01:30 PM",
+    patient_name: "Melahom T.",
+    doctor_name: "Dr. Elias M.",
+    type: "Specialist",
+    color: "purple",
   },
   {
     id: 4,
-    date: '2024-05-22',
-    time: '01:00 PM',
-    patient_name: 'Hana Abebe',
-    doctor_name: 'Dr. Tigist H.',
-    type: 'Urgent',
-    color: 'orange',
+    date: "2024-05-22",
+    time: "01:00 PM",
+    patient_name: "Hana Abebe",
+    doctor_name: "Dr. Tigist H.",
+    type: "Urgent",
+    color: "orange",
   },
   {
     id: 5,
-    date: '2024-05-22',
-    time: '03:30 PM',
-    patient_name: 'Tesfaye B.',
-    doctor_name: 'Dr. Yonas K.',
-    type: 'General',
-    color: 'green',
+    date: "2024-05-22",
+    time: "03:30 PM",
+    patient_name: "Tesfaye B.",
+    doctor_name: "Dr. Yonas K.",
+    type: "General",
+    color: "green",
   },
 ];
 
-const VIEW_TABS = ['Day', 'Week', 'Month'];
+const VIEW_TABS = ["Day", "Week", "Month"];
 
 const APPOINTMENT_TYPES = [
-  'General',
-  'Follow-up',
-  'Specialist',
-  'Urgent',
-  'Checkup',
+  "General",
+  "Follow-up",
+  "Specialist",
+  "Urgent",
+  "Checkup",
 ];
 
-const WEEKDAY_HEADERS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const WEEKDAY_HEADERS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const EMPTY_FORM = {
-  patient_id: '',
-  doctor_id: '',
-  date: '',
-  time: '',
-  type: 'General',
-  notes: '',
+  patient_id: "",
+  doctor_id: "",
+  date: "",
+  time: "",
+  type: "General",
+  notes: "",
 };
 
 /* ───────────────── Helper Functions ───────────────── */
@@ -112,24 +107,24 @@ const getMonthMatrix = (year, month) => {
 
 const formatMonthYear = (year, month) => {
   const d = new Date(year, month);
-  return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  return d.toLocaleDateString("en-US", { month: "long", year: "numeric" });
 };
 
 const dateKey = (year, month, day) => {
-  const m = String(month + 1).padStart(2, '0');
-  const d = String(day).padStart(2, '0');
+  const m = String(month + 1).padStart(2, "0");
+  const d = String(day).padStart(2, "0");
   return `${year}-${m}-${d}`;
 };
 
 /* ───────────────── Component ───────────────── */
 const AppointmentManagement = () => {
   const today = new Date();
-  const [year, setYear] = useState(2024);
-  const [month, setMonth] = useState(4); // May = 4 (0-indexed)
-  const [activeView, setActiveView] = useState('Month');
+  const [year, setYear] = useState(today.getFullYear());
+  const [month, setMonth] = useState(today.getMonth());
+  const [activeView, setActiveView] = useState("Month");
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [alert, setAlert] = useState({ type: '', message: '' });
+  const [alert, setAlert] = useState({ type: "", message: "" });
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({ ...EMPTY_FORM });
   const [submitting, setSubmitting] = useState(false);
@@ -138,7 +133,7 @@ const AppointmentManagement = () => {
   const fetchAppointments = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await api.get('/appointments', {
+      const res = await api.get("/appointments", {
         params: { year, month: month + 1 },
       });
       const data = res.data?.data || res.data?.appointments || res.data;
@@ -199,13 +194,19 @@ const AppointmentManagement = () => {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await api.post('/appointments', form);
-      setAlert({ type: 'success', message: 'Appointment created successfully.' });
+      await api.post("/appointments", form);
+      setAlert({
+        type: "success",
+        message: "Appointment created successfully.",
+      });
       setShowModal(false);
       setForm({ ...EMPTY_FORM });
       fetchAppointments();
     } catch {
-      setAlert({ type: 'success', message: 'Appointment created successfully.' });
+      setAlert({
+        type: "success",
+        message: "Appointment created successfully.",
+      });
       // Add mock entry
       const newAppt = {
         id: Date.now(),
@@ -214,7 +215,7 @@ const AppointmentManagement = () => {
         patient_name: `Patient ${form.patient_id}`,
         doctor_name: `Doctor ${form.doctor_id}`,
         type: form.type,
-        color: 'purple',
+        color: "purple",
       };
       setAppointments((prev) => [...prev, newAppt]);
       setShowModal(false);
@@ -251,7 +252,7 @@ const AppointmentManagement = () => {
         <AlertBanner
           type={alert.type}
           message={alert.message}
-          onDismiss={() => setAlert({ type: '', message: '' })}
+          onDismiss={() => setAlert({ type: "", message: "" })}
         />
       )}
 
@@ -284,7 +285,9 @@ const AppointmentManagement = () => {
                 >
                   <ChevronRight size={18} />
                 </button>
-                <h5 className="mb-0 fw-bold ms-2">{formatMonthYear(year, month)}</h5>
+                <h5 className="mb-0 fw-bold ms-2">
+                  {formatMonthYear(year, month)}
+                </h5>
               </div>
 
               {/* Right: View Toggle */}
@@ -293,7 +296,7 @@ const AppointmentManagement = () => {
                   <button
                     key={view}
                     type="button"
-                    className={`btn ${activeView === view ? 'btn-primary' : 'btn-outline-primary'}`}
+                    className={`btn ${activeView === view ? "btn-primary" : "btn-outline-primary"}`}
                     onClick={() => setActiveView(view)}
                   >
                     {view}
@@ -334,17 +337,17 @@ const AppointmentManagement = () => {
                       style={
                         todayHighlight
                           ? {
-                              background: 'var(--mc-primary)',
-                              color: '#fff',
-                              borderRadius: '50%',
+                              background: "var(--mc-primary)",
+                              color: "#fff",
+                              borderRadius: "50%",
                               width: 26,
                               height: 26,
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              fontSize: '0.8rem',
+                              display: "inline-flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              fontSize: "0.8rem",
                             }
-                          : { fontSize: '0.8rem' }
+                          : { fontSize: "0.8rem" }
                       }
                     >
                       {cell.day}
@@ -353,7 +356,7 @@ const AppointmentManagement = () => {
                   {events.map((evt) => (
                     <div
                       key={evt.id}
-                      className={`calendar-event ${evt.color || 'purple'}`}
+                      className={`calendar-event ${evt.color || "purple"}`}
                       title={`${evt.time} — ${evt.patient_name}`}
                     >
                       {evt.time} {evt.patient_name}
@@ -412,7 +415,7 @@ const AppointmentManagement = () => {
                 className="form-control"
                 placeholder="e.g. PT-00124"
                 value={form.patient_id}
-                onChange={(e) => handleFormChange('patient_id', e.target.value)}
+                onChange={(e) => handleFormChange("patient_id", e.target.value)}
                 required
               />
             </div>
@@ -427,7 +430,7 @@ const AppointmentManagement = () => {
                 className="form-control"
                 placeholder="e.g. DR-001"
                 value={form.doctor_id}
-                onChange={(e) => handleFormChange('doctor_id', e.target.value)}
+                onChange={(e) => handleFormChange("doctor_id", e.target.value)}
                 required
               />
             </div>
@@ -442,7 +445,7 @@ const AppointmentManagement = () => {
                 type="date"
                 className="form-control"
                 value={form.date}
-                onChange={(e) => handleFormChange('date', e.target.value)}
+                onChange={(e) => handleFormChange("date", e.target.value)}
                 required
               />
             </div>
@@ -457,7 +460,7 @@ const AppointmentManagement = () => {
                 type="time"
                 className="form-control"
                 value={form.time}
-                onChange={(e) => handleFormChange('time', e.target.value)}
+                onChange={(e) => handleFormChange("time", e.target.value)}
                 required
               />
             </div>
@@ -471,7 +474,7 @@ const AppointmentManagement = () => {
                 id="apt-type"
                 className="form-select"
                 value={form.type}
-                onChange={(e) => handleFormChange('type', e.target.value)}
+                onChange={(e) => handleFormChange("type", e.target.value)}
               >
                 {APPOINTMENT_TYPES.map((t) => (
                   <option key={t} value={t}>
@@ -490,7 +493,7 @@ const AppointmentManagement = () => {
                 rows={3}
                 placeholder="Additional notes…"
                 value={form.notes}
-                onChange={(e) => handleFormChange('notes', e.target.value)}
+                onChange={(e) => handleFormChange("notes", e.target.value)}
               />
             </div>
           </div>

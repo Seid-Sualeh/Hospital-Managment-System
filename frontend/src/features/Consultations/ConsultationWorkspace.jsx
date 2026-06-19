@@ -4,6 +4,7 @@ import PageShell from "../../components/Common/PageShell";
 import StatusBadge from "../../components/Common/StatusBadge";
 import Loader from "../../components/Common/Loader";
 import AlertBanner from "../../components/Common/AlertBanner";
+import ConsultationAIPanels from "../../components/AI/ConsultationAIPanels";
 import api from "../../services/api";
 import { User, Thermometer, Activity, Heart, Weight } from "lucide-react";
 
@@ -408,6 +409,8 @@ const ConsultationWorkspace = () => {
                   </div>
                 </div>
               </div>
+
+              <ConsultationAIPanels patient={selected} form={form} />
             </>
           ) : (
             <div className="mc-card">

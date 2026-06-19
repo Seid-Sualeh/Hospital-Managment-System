@@ -12,7 +12,7 @@ const SearchInput = ({ value, onChange, placeholder = 'Search...', className = '
         className="form-control"
         placeholder={placeholder}
         value={value}
-        onChange={onChange}
+        onChange={(e) => onChange(e.target.value)}
       />
     </div>
   );

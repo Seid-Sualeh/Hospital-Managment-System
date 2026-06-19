@@ -2,9 +2,14 @@ const jwt = require("jsonwebtoken");
 const db = require("../config/db");
 const { APIError } = require("./error");
 
-const JWT_SECRET =
-  process.env.JWT_SECRET ||
-  "super_secret_cryptographic_signing_key_for_cms_token_security_v1";
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET && process.env.NODE_ENV === "production") {
+  throw new Error("JWT_SECRET environment variable is required in production.");
+}
+
+const EFFECTIVE_JWT_SECRET =
+  JWT_SECRET || "dev_only_jwt_secret_change_before_production";
 
 /**
  * Authentication check: Verifies JWT token and binds user details to the request context.
@@ -24,7 +29,7 @@ async function authenticateUser(req, res, next) {
     let decoded;
 
     try {
-      decoded = jwt.verify(token, JWT_SECRET);
+      decoded = jwt.verify(token, EFFECTIVE_JWT_SECRET);
     } catch (err) {
       if (err.name === "TokenExpiredError") {
         throw new APIError(

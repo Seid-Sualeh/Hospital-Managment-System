@@ -1,7 +1,9 @@
 const mysql = require("mysql2/promise");
+const path = require("path");
 const dotenv = require("dotenv");
 
-dotenv.config({ override: true });
+const envPath = path.resolve(__dirname, "../../.env");
+dotenv.config({ path: envPath, override: true });
 
 const sslMode = (
   process.env.SSL_MODE ||

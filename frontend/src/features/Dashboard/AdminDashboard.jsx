@@ -5,6 +5,7 @@ import StatCard from "../../components/Common/StatCard";
 import ChartLine from "../../components/Common/ChartLine";
 import ChartDonut from "../../components/Common/ChartDonut";
 import Loader from "../../components/Common/Loader";
+import DashboardAIInsights from "../../components/AI/DashboardAIInsights";
 import api from "../../services/api";
 import { ROLE_IDS } from "../../constants/roles";
 import {
@@ -54,7 +55,7 @@ const AdminDashboard = () => {
             completedToday: 11,
           });
         } else if (roleId === ROLE_IDS.LAB_TECHNICIAN) {
-          res = await api.get("/labs?status=ordered");
+          res = await api.get("/labs/requests", { params: { status: "pending" } });
           setStats({
             awaitingCollection: res.data?.data?.length || 4,
             pendingApproval: 2,
@@ -920,8 +921,11 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* AI Business Insights widget */}
-      {s.aiInsights && (
+      {/* AI Business Insights */}
+      <DashboardAIInsights metrics={s} />
+
+      {/* Legacy static insight fallback */}
+      {s.aiInsights && !s.totalPatients && (
         <div className="mc-card mb-4 bg-light border-start border-primary border-4 rounded">
           <div className="mc-card-body d-flex align-items-center gap-3">
             <div className="stat-card-icon bg-primary text-white">
