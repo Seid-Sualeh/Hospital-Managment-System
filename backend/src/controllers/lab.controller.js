@@ -2,12 +2,49 @@ const db = require('../config/db');
 const { APIError } = require('../middlewares/error');
 const visitService = require('../services/visit.service');
 
+const STATUS_TO_UI = {
+  ordered: 'pending',
+  samples_collected: 'in_progress',
+  in_progress: 'in_progress',
+  completed: 'completed',
+  cancelled: 'cancelled',
+};
+
+const STATUS_FROM_UI = {
+  pending: 'ordered',
+  in_progress: 'in_progress',
+  completed: 'completed',
+  cancelled: 'cancelled',
+};
+
+const formatLabRequest = (row) => {
+  let testNames = [];
+  try {
+    testNames = typeof row.test_names === 'string'
+      ? JSON.parse(row.test_names)
+      : row.test_names || [];
+  } catch {
+    testNames = [];
+  }
+
+  return {
+    ...row,
+    request_uid: `LAB-${String(row.id).padStart(5, '0')}`,
+    patient_uid: row.patient_mrn,
+    patient_name: `${row.patient_first_name || ''} ${row.patient_last_name || ''}`.trim(),
+    doctor: `Dr. ${row.doctor_first_name || ''} ${row.doctor_last_name || ''}`.trim(),
+    test_name: testNames.join(', ') || row.test_name || '—',
+    date: row.request_date,
+    status: STATUS_TO_UI[row.status] || row.status,
+  };
+};
+
 const labController = {
   // 1. List lab requests (filtered by status and tenant)
   listRequests: async (req, res, next) => {
     try {
       const tenantId = req.tenantId;
-      const { status } = req.query;
+      const { status, search } = req.query;
 
       let sql = `
         SELECT lr.*, 
@@ -21,8 +58,15 @@ const labController = {
       const params = [tenantId];
 
       if (status) {
+        const dbStatus = STATUS_FROM_UI[status] || status;
         sql += ' AND lr.status = ?';
-        params.push(status);
+        params.push(dbStatus);
+      }
+
+      if (search) {
+        const wildcard = `%${search}%`;
+        sql += ' AND (p.mrn LIKE ? OR p.first_name LIKE ? OR p.last_name LIKE ? OR lr.test_names LIKE ?)';
+        params.push(wildcard, wildcard, wildcard, wildcard);
       }
 
       sql += ' ORDER BY lr.request_date DESC';
@@ -30,8 +74,139 @@ const labController = {
       const requests = await db.query(sql, params);
       res.status(200).json({
         success: true,
-        data: requests
+        data: requests.map(formatLabRequest),
       });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  getRequest: async (req, res, next) => {
+    try {
+      const tenantId = req.tenantId;
+      const requestId = req.params.id;
+
+      const [request] = await db.query(
+        `SELECT lr.*, 
+                p.first_name as patient_first_name, p.last_name as patient_last_name, p.mrn as patient_mrn,
+                u.first_name as doctor_first_name, u.last_name as doctor_last_name
+         FROM lab_requests lr
+         JOIN patients p ON lr.patient_id = p.id
+         JOIN users u ON lr.doctor_id = u.id
+         WHERE lr.id = ? AND lr.clinic_id = ?
+         LIMIT 1`,
+        [requestId, tenantId],
+      );
+
+      if (!request) {
+        throw new APIError('Lab request not found.', 404, 'LAB_REQUEST_NOT_FOUND');
+      }
+
+      res.status(200).json({
+        success: true,
+        data: formatLabRequest(request),
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  createRequest: async (req, res, next) => {
+    try {
+      const tenantId = req.tenantId;
+      const actorId = req.user.id;
+      const { patient_uid, patient_id, test_name, test_names, doctor_id, notes, priority } = req.body;
+
+      const tests = test_names || (test_name ? [test_name] : []);
+      if (!tests.length) {
+        throw new APIError('At least one test name is required.', 400, 'BAD_REQUEST');
+      }
+
+      let patientId = patient_id;
+      if (!patientId && patient_uid) {
+        const [patient] = await db.query(
+          'SELECT id FROM patients WHERE clinic_id = ? AND mrn = ? LIMIT 1',
+          [tenantId, patient_uid],
+        );
+        if (!patient) {
+          throw new APIError('Patient not found for the provided UID.', 404, 'PATIENT_NOT_FOUND');
+        }
+        patientId = patient.id;
+      }
+
+      if (!patientId) {
+        throw new APIError('Patient ID or UID is required.', 400, 'BAD_REQUEST');
+      }
+
+      let doctorId = doctor_id || (req.user.roleId === 2 ? actorId : null);
+      if (!doctorId) {
+        const [doctor] = await db.query(
+          'SELECT id FROM users WHERE clinic_id = ? AND role_id = 2 AND is_active = TRUE LIMIT 1',
+          [tenantId],
+        );
+        if (!doctor) {
+          throw new APIError('No active doctor found to assign this lab request.', 400, 'DOCTOR_REQUIRED');
+        }
+        doctorId = doctor.id;
+      }
+
+      const consultSql = `
+        INSERT INTO consultations (
+          clinic_id, patient_id, doctor_id, consultation_datetime,
+          chief_complaints, clinical_notes, status
+        ) VALUES (?, ?, ?, NOW(), ?, ?, 'completed')
+      `;
+      const consultResult = await db.query(consultSql, [
+        tenantId,
+        patientId,
+        doctorId,
+        notes || 'Lab order',
+        priority === 'urgent' ? 'Urgent lab request' : null,
+      ]);
+      const consultationId = consultResult.insertId;
+
+      const labSql = `
+        INSERT INTO lab_requests (
+          clinic_id, consultation_id, patient_id, doctor_id, request_date, test_names, status
+        ) VALUES (?, ?, ?, ?, NOW(), ?, 'ordered')
+      `;
+      const labResult = await db.query(labSql, [
+        tenantId,
+        consultationId,
+        patientId,
+        doctorId,
+        JSON.stringify(tests),
+      ]);
+
+      await db.query(
+        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, "LAB_REQUEST_CREATED", "lab_requests", ?, ?)',
+        [tenantId, actorId, labResult.insertId, `Ordered: ${tests.join(', ')}`],
+      );
+
+      res.status(201).json({
+        success: true,
+        message: 'Lab request created successfully.',
+        data: { id: labResult.insertId },
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  enterResultSimple: async (req, res, next) => {
+    try {
+      const { result, interpretation, test_name } = req.body;
+      if (!result) {
+        throw new APIError('Result text is required.', 400, 'BAD_REQUEST');
+      }
+
+      req.body = {
+        test_name: test_name || 'General',
+        results_json: { result, interpretation: interpretation || null },
+        technician_notes: interpretation || null,
+      };
+
+      return labController.enterResults(req, res, next);
     } catch (error) {
       next(error);
     }

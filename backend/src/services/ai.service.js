@@ -214,6 +214,137 @@ const renderGeminiOrFallback = async (promptText, fallbackText) => {
   return response || fallbackText;
 };
 
+const AI_DISCLAIMER =
+  "This AI output is for clinical decision support only. The licensed clinician remains the final decision maker.";
+
+const parseStructuredSections = (text) => {
+  if (!text) return { summary: "", sections: [] };
+  const sections = [];
+  const lines = text.split("\n").filter(Boolean);
+  let current = { title: "Summary", items: [] };
+
+  lines.forEach((line) => {
+    const heading = line.match(/^\*\*(.+?)\*\*:?$/) || line.match(/^([A-Z][^:]+):$/);
+    if (heading) {
+      if (current.items.length) sections.push(current);
+      current = { title: heading[1].trim(), items: [] };
+      return;
+    }
+    if (line.startsWith("- ") || line.startsWith("• ")) {
+      current.items.push(line.replace(/^[-•]\s*/, "").trim());
+    } else {
+      current.items.push(line.trim());
+    }
+  });
+  if (current.items.length) sections.push(current);
+  return { summary: text, sections };
+};
+
+const buildDiagnosisSupportPrompt = (patient, consultation) => {
+  return `You are a clinical decision support assistant for licensed physicians.
+Provide differential diagnosis suggestions ONLY — never a final diagnosis.
+Structure your response with these sections:
+**Possible Differential Diagnoses**
+**Clinical Reasoning**
+**Recommended Investigations**
+**Red Flag Warnings**
+
+Patient: ${patient?.full_name || "[PATIENT]"}, Age: ${patient?.age || "unknown"}, Gender: ${patient?.gender || "unknown"}
+Chief Complaint: ${consultation?.complaint || consultation?.chief_complaints || "Not provided"}
+Vitals: ${JSON.stringify(consultation?.vitals || {})}
+History/Notes: ${consultation?.history || consultation?.clinical_notes || consultation?.notes || "None"}
+Physical Exam: ${consultation?.physical_exam || "Not documented"}
+Working Diagnosis (doctor entered): ${consultation?.diagnosis || "None yet"}
+
+Remember: These are suggestions for clinical decision support only.`;
+};
+
+const buildMedicationAssistancePrompt = (patient, payload) => {
+  return `You are a clinical pharmacist providing decision support to a licensed prescriber.
+Never prescribe a final treatment plan. Structure response as:
+**Common Treatment Options**
+**Drug Interaction Warnings**
+**Contraindications**
+**Follow-up Suggestions**
+
+Patient: ${patient?.full_name || "[PATIENT]"}, Age: ${patient?.age || "unknown"}, Gender: ${patient?.gender || "unknown"}
+Diagnosis: ${payload?.diagnosis || "Not specified"}
+Current Medications: ${payload?.current_medications || payload?.prescription || "None listed"}
+Proposed Medication: ${payload?.medication_name || payload?.prescription || "Not specified"}
+Allergies: ${payload?.allergies || "None recorded"}`;
+};
+
+const buildLabSummaryPrompt = (patient, labResult) => {
+  return `You are a laboratory medicine specialist assisting a clinician.
+Write a one-paragraph lab interpretation summary, then list:
+**Key Abnormalities**
+**Suggested Physician Review Points**
+
+Do not provide a final diagnosis. Patient: ${patient?.full_name || "[PATIENT]"}
+Test: ${labResult?.test_name || "Unknown"}
+Results: ${labResult?.result || JSON.stringify(labResult?.results_json || {})}
+Notes: ${labResult?.interpretation || labResult?.technician_notes || "None"}`;
+};
+
+const detectAbnormalitiesFromText = (resultText = "") => {
+  const text = resultText.toLowerCase();
+  const findings = [];
+
+  const rules = [
+    { pattern: /critical|panic|life.?threat/i, severity: "critical", label: "Critical value flagged" },
+    { pattern: /high|elevated|increased|above normal|↑/i, severity: "moderate", label: "Elevated parameter detected" },
+    { pattern: /low|decreased|below normal|↓/i, severity: "moderate", label: "Depressed parameter detected" },
+    { pattern: /abnormal|positive|reactive/i, severity: "mild", label: "Abnormal finding noted" },
+    { pattern: /normal|within range|negative|non-reactive/i, severity: "normal", label: "Values within expected range" },
+  ];
+
+  rules.forEach((rule) => {
+    if (rule.pattern.test(text)) {
+      findings.push({ parameter: "General", finding: rule.label, severity: rule.severity });
+    }
+  });
+
+  if (!findings.length) {
+    findings.push({ parameter: "General", finding: "No explicit abnormality keywords detected", severity: "normal" });
+  }
+
+  return findings;
+};
+
+const buildDashboardInsightsPrompt = (metrics) => {
+  return `You are a healthcare operations analyst for a clinic in Ethiopia.
+Analyze the metrics and provide structured insights in these sections:
+**Revenue Trends**
+**Patient Trends**
+**Operational Recommendations**
+
+Be specific and actionable. Do not invent data not in the metrics.
+
+Clinic Metrics:
+${JSON.stringify(metrics, null, 2)}`;
+};
+
+const buildPharmacyInsightsPrompt = (medicines, safetyContext) => {
+  const inventory = medicines
+    .slice(0, 30)
+    .map((m) => `${m.name}: stock ${m.stock ?? m.quantity_in_stock}, status ${m.status || "unknown"}, expiry ${m.expiry_date || "N/A"}`)
+    .join("\n");
+
+  return `You are a pharmacy operations AI assistant.
+Provide sections:
+**Low Stock Predictions**
+**Expiry Warnings**
+**Fast Moving Medicines**
+**Slow Moving Medicines**
+**Prescription Safety Notes**
+
+Inventory:
+${inventory}
+
+Safety Context:
+${JSON.stringify(safetyContext || {})}`;
+};
+
 const parseJsonSafely = (value) => {
   if (!value) return null;
   if (typeof value === "object") return value;
@@ -222,6 +353,117 @@ const parseJsonSafely = (value) => {
   } catch {
     return null;
   }
+};
+
+const diagnosisSupport = async ({ tenantId, req, patient, consultation, userId }) => {
+  const safePatient = {
+    full_name: patient?.full_name || `${patient?.first_name || ""} ${patient?.last_name || ""}`.trim(),
+    first_name: patient?.first_name || "",
+    last_name: patient?.last_name || "",
+    mrn: patient?.mrn || "",
+    gender: patient?.gender || "",
+    age: patient?.age || "",
+  };
+  const prompt = buildDiagnosisSupportPrompt(safePatient, consultation || {});
+  const { text: redactedPrompt, mapping } = redactPHI(prompt, safePatient);
+  const generated = await renderGeminiOrFallback(
+    redactedPrompt,
+    `**Possible Differential Diagnoses**\n- Consider conditions aligned with chief complaint and vitals\n\n**Clinical Reasoning**\n- Correlate symptoms with examination findings\n\n**Recommended Investigations**\n- Order targeted labs based on presentation\n\n**Red Flag Warnings**\n- Monitor for deterioration; escalate if vital signs unstable`,
+  );
+  const answer = rehydrateText(generated, mapping);
+  const structured = parseStructuredSections(answer);
+  await logAiAudit({ clinicId: tenantId, userId, actionType: "AI_DIAGNOSIS_SUPPORT", affectedTable: "consultations", affectedRecordId: consultation?.id, newValues: { support: answer }, req });
+  return { support: answer, sections: structured.sections, disclaimer: AI_DISCLAIMER };
+};
+
+const medicationAssistance = async ({ tenantId, req, patient, payload, userId }) => {
+  const safePatient = {
+    full_name: patient?.full_name || `${patient?.first_name || ""} ${patient?.last_name || ""}`.trim(),
+    first_name: patient?.first_name || "",
+    last_name: patient?.last_name || "",
+    mrn: patient?.mrn || "",
+    gender: patient?.gender || "",
+    age: patient?.age || "",
+  };
+  const prompt = buildMedicationAssistancePrompt(safePatient, payload || {});
+  const { text: redactedPrompt, mapping } = redactPHI(prompt, safePatient);
+  const generated = await renderGeminiOrFallback(
+    redactedPrompt,
+    `**Common Treatment Options**\n- Review standard formulary options for the documented diagnosis\n\n**Drug Interaction Warnings**\n- Cross-check current medications for interactions\n\n**Contraindications**\n- Verify allergies and comorbidities\n\n**Follow-up Suggestions**\n- Schedule review based on treatment response`,
+  );
+  const answer = rehydrateText(generated, mapping);
+  const structured = parseStructuredSections(answer);
+  await logAiAudit({ clinicId: tenantId, userId, actionType: "AI_MEDICATION_ASSISTANCE", affectedTable: "prescriptions", newValues: { assistance: answer }, req });
+  return { assistance: answer, sections: structured.sections, disclaimer: AI_DISCLAIMER };
+};
+
+const labSummary = async ({ tenantId, req, patient, labResult, userId }) => {
+  const safePatient = {
+    full_name: patient?.full_name || `${patient?.first_name || ""} ${patient?.last_name || ""}`.trim(),
+    first_name: patient?.first_name || "",
+    last_name: patient?.last_name || "",
+    mrn: patient?.mrn || "",
+    gender: patient?.gender || "",
+    age: patient?.age || "",
+  };
+  const prompt = buildLabSummaryPrompt(safePatient, labResult || {});
+  const { text: redactedPrompt, mapping } = redactPHI(prompt, safePatient);
+  const generated = await renderGeminiOrFallback(
+    redactedPrompt,
+    `Laboratory findings should be interpreted in clinical context. Review abnormal parameters against reference ranges and correlate with patient symptoms.`,
+  );
+  const answer = rehydrateText(generated, mapping);
+  const structured = parseStructuredSections(answer);
+  await logAiAudit({ clinicId: tenantId, userId, actionType: "AI_LAB_SUMMARY", affectedTable: "lab_results", affectedRecordId: labResult?.id, newValues: { summary: answer }, req });
+  return { summary: answer, sections: structured.sections, disclaimer: AI_DISCLAIMER };
+};
+
+const detectLabAbnormalities = async ({ labResult }) => {
+  const resultText = [
+    labResult?.result,
+    labResult?.interpretation,
+    typeof labResult?.results_json === "string" ? labResult.results_json : JSON.stringify(labResult?.results_json || {}),
+  ].filter(Boolean).join(" ");
+  const abnormalities = detectAbnormalitiesFromText(resultText);
+  return { abnormalities, disclaimer: AI_DISCLAIMER };
+};
+
+const dashboardInsights = async ({ tenantId, req, metrics, userId }) => {
+  const prompt = buildDashboardInsightsPrompt(metrics || {});
+  const generated = await renderGeminiOrFallback(
+    prompt,
+    `**Revenue Trends**\n- Review daily and monthly collection patterns\n\n**Patient Trends**\n- Monitor registration volume and peak hours\n\n**Operational Recommendations**\n- Address queue bottlenecks and inventory risks`,
+  );
+  const structured = parseStructuredSections(generated);
+  await logAiAudit({ clinicId: tenantId, userId, actionType: "AI_DASHBOARD_INSIGHTS", affectedTable: "dashboard_metrics", newValues: { insights: generated }, req });
+  return {
+    insights: generated,
+    revenueTrends: structured.sections.find((s) => s.title.toLowerCase().includes("revenue")) || null,
+    patientTrends: structured.sections.find((s) => s.title.toLowerCase().includes("patient")) || null,
+    recommendations: structured.sections.find((s) => s.title.toLowerCase().includes("operational") || s.title.toLowerCase().includes("recommend")) || null,
+    sections: structured.sections,
+    disclaimer: AI_DISCLAIMER,
+  };
+};
+
+const pharmacyInsights = async ({ tenantId, req, medicines, safetyContext, userId }) => {
+  const safeMedicines = Array.isArray(medicines)
+    ? medicines.map((m) => ({
+        name: m.name,
+        stock: m.stock ?? m.quantity_in_stock,
+        status: m.status,
+        expiry_date: m.expiry_date,
+        category: m.category ?? m.dosage_form,
+      }))
+    : [];
+  const prompt = buildPharmacyInsightsPrompt(safeMedicines, safetyContext);
+  const generated = await renderGeminiOrFallback(
+    prompt,
+    `**Low Stock Predictions**\n- Reorder items below reorder level\n\n**Expiry Warnings**\n- Prioritize near-expiry batches\n\n**Fast Moving Medicines**\n- Maintain buffer stock for high-demand items\n\n**Slow Moving Medicines**\n- Review slow movers for wastage risk`,
+  );
+  const structured = parseStructuredSections(generated);
+  await logAiAudit({ clinicId: tenantId, userId, actionType: "AI_PHARMACY_INSIGHTS", affectedTable: "medicines", newValues: { insights: generated }, req });
+  return { insights: generated, sections: structured.sections, disclaimer: AI_DISCLAIMER };
 };
 
 const labAnalysis = async ({ tenantId, req, patient, labResult, userId }) => {
@@ -474,4 +716,11 @@ module.exports = {
   generateClinicalSummary,
   checkPrescription,
   summarizeMedicalReport,
+  diagnosisSupport,
+  medicationAssistance,
+  labSummary,
+  detectLabAbnormalities,
+  dashboardInsights,
+  pharmacyInsights,
+  AI_DISCLAIMER,
 };

@@ -1,20 +1,38 @@
-const mysql = require('mysql2/promise');
-const dotenv = require('dotenv');
+const mysql = require("mysql2/promise");
+const path = require("path");
+const dotenv = require("dotenv");
 
-dotenv.config();
+const envPath = path.resolve(__dirname, "../../.env");
+dotenv.config({ path: envPath, override: true });
+
+const sslMode = (
+  process.env.SSL_MODE ||
+  process.env.SSLMODE ||
+  ""
+).toUpperCase();
+const useSsl = sslMode === "REQUIRED";
+const sslRejectUnauthorized = String(
+  process.env.DB_SSL_REJECT_UNAUTHORIZED ??
+    process.env.SSL_REJECT_UNAUTHORIZED ??
+    "false",
+).toLowerCase();
 
 // Create connection pool
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || '127.0.0.1',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD !== undefined ? process.env.DB_PASSWORD : '',
-  database: process.env.DB_NAME || 'ethiopia_cms',
-  port: parseInt(process.env.DB_PORT || '3306', 10),
+  host: process.env.DB_HOST || "127.0.0.1",
+  user: process.env.DB_USER || "root",
+  password:
+    process.env.DB_PASSWORD !== undefined ? process.env.DB_PASSWORD : "",
+  database: process.env.DB_NAME || "ethiopia_cms",
+  port: parseInt(process.env.DB_PORT || "3306", 10),
+  ssl: useSsl
+    ? { rejectUnauthorized: sslRejectUnauthorized !== "true" ? false : true }
+    : undefined,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
   enableKeepAlive: true,
-  keepAliveInitialDelay: 10000
+  keepAliveInitialDelay: 10000,
 });
 
 // Test connection helper
@@ -22,10 +40,14 @@ async function testConnection() {
   let connection;
   try {
     connection = await pool.getConnection();
-    console.log(`[Database] Successfully connected to MySQL at ${process.env.DB_HOST}:${process.env.DB_PORT} (DB: ${process.env.DB_NAME})`);
+    console.log(
+      `[Database] Successfully connected to MySQL at ${process.env.DB_HOST}:${process.env.DB_PORT} (DB: ${process.env.DB_NAME})`,
+    );
     return true;
   } catch (error) {
-    console.error('[Database] Connection failed! Verify that your MySQL server is running and configuration is correct.');
+    console.error(
+      "[Database] Connection failed! Verify that your MySQL server is running and configuration is correct.",
+    );
     console.error(`[Database Error] Details: ${error.message}`);
     return false;
   } finally {
@@ -48,5 +70,5 @@ async function query(sql, params) {
 module.exports = {
   pool,
   query,
-  testConnection
+  testConnection,
 };

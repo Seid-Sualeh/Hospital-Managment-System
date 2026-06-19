@@ -12,6 +12,7 @@ const STATUS_MAP = {
   in_progress: 'in_progress',
   checked_in: 'checked_in',
   partially_paid: 'pending',
+  partial: 'pending',
   cancelled: 'cancelled',
   void: 'void',
   out_of_stock: 'out_of_stock',

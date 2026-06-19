@@ -7,7 +7,6 @@ const {
   requireRole,
 } = require("../middlewares/auth");
 
-// Protect all routes with JWT auth middleware
 router.use(authenticateUser);
 
 router.get(
@@ -22,6 +21,32 @@ router.post(
   requirePermission("MANAGE_STOCK"),
   pharmacyController.addMedicine,
 );
+
+router.get(
+  "/medicines",
+  requireRole(1, 5),
+  requirePermission("MANAGE_STOCK"),
+  pharmacyController.listMedicines,
+);
+router.post(
+  "/medicines",
+  requireRole(1, 5),
+  requirePermission("MANAGE_STOCK"),
+  pharmacyController.addMedicine,
+);
+router.put(
+  "/medicines/:id",
+  requireRole(1, 5),
+  requirePermission("MANAGE_STOCK"),
+  pharmacyController.updateMedicine,
+);
+router.delete(
+  "/medicines/:id",
+  requireRole(1, 5),
+  requirePermission("MANAGE_STOCK"),
+  pharmacyController.deactivateMedicine,
+);
+
 router.post(
   "/inventory/transaction",
   requireRole(1, 5),
@@ -31,8 +56,14 @@ router.post(
 router.post(
   "/inventory/dispense",
   requireRole(1, 5),
-  requirePermission("MANAGE_STOCK"),
+  requirePermission("DISPENSE_MEDICINE"),
   pharmacyController.dispenseMedicine,
+);
+router.post(
+  "/dispense",
+  requireRole(1, 5),
+  requirePermission("DISPENSE_MEDICINE"),
+  pharmacyController.dispenseFromUI,
 );
 
 module.exports = router;

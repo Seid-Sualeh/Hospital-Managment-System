@@ -1,43 +1,71 @@
-import axios from 'axios';
+import axios from "axios";
 
 const getSubdomain = () => {
   const host = window.location.host;
-  const parts = host.split('.');
+  const hostname = host.split(":")[0].toLowerCase().trim();
+
+  // Treat localhost and loopback IPs as no tenant subdomain
+  if (
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname === "::1" ||
+    /^127\.[0-9]+\.[0-9]+\.[0-9]+$/.test(hostname)
+  ) {
+    return "";
+  }
+
+  const parts = hostname.split(".");
   if (parts.length >= 2) {
     return parts[0].toLowerCase().trim();
   }
-  return '';
+  return "";
 };
 
 const getBaseURL = () => {
-  return import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1';
+  return import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api/v1";
 };
 
 const api = axios.create({
   baseURL: getBaseURL(),
   timeout: 15000,
+  withCredentials: true,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
+
+const getTenantHeader = () => {
+  const host = window.location.host;
+  const hostname = host.split(":")[0].toLowerCase().trim();
+  if (
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname === "::1" ||
+    /^127\.[0-9]+\.[0-9]+\.[0-9]+$/.test(hostname)
+  ) {
+    return "yared";
+  }
+  const parts = hostname.split(".");
+  return parts.length >= 2 ? parts[0].toLowerCase().trim() : "yared";
+};
 
 api.interceptors.request.use(
   (config) => {
     const subdomain = getSubdomain();
-    if (subdomain && subdomain !== 'www' && subdomain !== 'localhost') {
-      config.headers['X-Tenant-ID'] = subdomain;
+    if (subdomain && subdomain !== "www" && subdomain !== "localhost") {
+      config.headers["X-Tenant-ID"] = subdomain;
     } else {
-      config.headers['X-Tenant-ID'] = 'yared';
+      config.headers["X-Tenant-ID"] = "yared";
     }
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 const handleApiError = (error) => {
@@ -45,7 +73,7 @@ const handleApiError = (error) => {
     error.response?.data?.error?.message ||
     error.response?.data?.message ||
     error.message ||
-    'Request failed';
+    "Request failed";
   const code = error.response?.data?.error?.code;
   return { message, code, status: error.response?.status };
 };
@@ -57,7 +85,7 @@ api.interceptors.response.use(
 
     if (
       error.response?.status === 401 &&
-      error.response?.data?.error?.code === 'TOKEN_EXPIRED' &&
+      error.response?.data?.error?.code === "TOKEN_EXPIRED" &&
       originalRequest &&
       !originalRequest._retry
     ) {
@@ -66,34 +94,40 @@ api.interceptors.response.use(
         const refreshResponse = await axios.post(
           `${getBaseURL()}/auth/refresh`,
           {},
-          { withCredentials: true }
+          {
+            withCredentials: true,
+            headers: { "X-Tenant-ID": getTenantHeader() },
+          },
         );
 
         if (refreshResponse.data?.accessToken) {
           const newToken = refreshResponse.data.accessToken;
-          localStorage.setItem('token', newToken);
+          localStorage.setItem("token", newToken);
           originalRequest.headers.Authorization = `Bearer ${newToken}`;
           return api(originalRequest);
         }
       } catch {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        if (!window.location.pathname.includes('/login')) {
-          window.location.href = '/login';
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        if (!window.location.pathname.includes("/login")) {
+          window.location.href = "/login";
         }
       }
     }
 
-    if (error.response?.status === 401 && !originalRequest?.url?.includes('/auth/login')) {
-      const stored = localStorage.getItem('token');
-      if (!stored && !window.location.pathname.includes('/login')) {
-        window.location.href = '/login';
+    if (
+      error.response?.status === 401 &&
+      !originalRequest?.url?.includes("/auth/login")
+    ) {
+      const stored = localStorage.getItem("token");
+      if (!stored && !window.location.pathname.includes("/login")) {
+        window.location.href = "/login";
       }
     }
 
     error.apiError = handleApiError(error);
     return Promise.reject(error);
-  }
+  },
 );
 
 export { handleApiError, getBaseURL };

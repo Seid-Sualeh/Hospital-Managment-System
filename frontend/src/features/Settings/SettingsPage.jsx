@@ -101,16 +101,21 @@ const SettingsPage = () => {
     setSaving(true);
     try {
       if (logoFile) {
-        const fd = new FormData();
-        fd.append("logo", logoFile);
-        await api.post("/settings/logo", fd, {
-          headers: { "Content-Type": "multipart/form-data" },
+        const reader = new FileReader();
+        const logoData = await new Promise((resolve, reject) => {
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(logoFile);
         });
+        await api.post("/settings/logo", { logo_data: logoData });
       }
       await api.put("/settings", { clinic: clinicForm });
       setAlert({ type: "success", msg: "Clinic settings saved." });
-    } catch {
-      setAlert({ type: "success", msg: "Clinic settings saved." });
+    } catch (err) {
+      setAlert({
+        type: "danger",
+        msg: err.apiError?.message || "Failed to save clinic settings.",
+      });
     } finally {
       setSaving(false);
     }

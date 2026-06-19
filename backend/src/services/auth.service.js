@@ -4,8 +4,18 @@ const crypto = require('crypto');
 const db = require('../config/db');
 const { APIError } = require('../middlewares/error');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_cryptographic_signing_key_for_cms_token_security_v1';
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'another_super_secret_refresh_cryptographic_key_v1';
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
+
+if (!JWT_SECRET && process.env.NODE_ENV === 'production') {
+  throw new Error('JWT_SECRET environment variable is required in production.');
+}
+if (!JWT_REFRESH_SECRET && process.env.NODE_ENV === 'production') {
+  throw new Error('JWT_REFRESH_SECRET environment variable is required in production.');
+}
+
+const EFFECTIVE_JWT_SECRET = JWT_SECRET || 'dev_only_jwt_secret_change_before_production';
+const EFFECTIVE_JWT_REFRESH_SECRET = JWT_REFRESH_SECRET || 'dev_only_refresh_secret_change_before_production';
 const ACCESS_EXPIRY = process.env.JWT_ACCESS_EXPIRY || '15m';
 const REFRESH_EXPIRY = process.env.JWT_REFRESH_EXPIRY || '7d';
 
@@ -48,7 +58,7 @@ class AuthService {
         email: user.email,
         permissions: permissions
       },
-      JWT_SECRET,
+      EFFECTIVE_JWT_SECRET,
       { expiresIn: ACCESS_EXPIRY }
     );
 
@@ -57,7 +67,7 @@ class AuthService {
         userId: user.id,
         clinicId: user.clinic_id
       },
-      JWT_REFRESH_SECRET,
+      EFFECTIVE_JWT_REFRESH_SECRET,
       { expiresIn: REFRESH_EXPIRY }
     );
 

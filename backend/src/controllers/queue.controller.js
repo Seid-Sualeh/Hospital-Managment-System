@@ -1,5 +1,5 @@
-const queueService = require('../services/queue.service');
-const { APIError } = require('../middlewares/error');
+const queueService = require("../services/queue.service");
+const { APIError } = require("../middlewares/error");
 
 const queueController = {
   getQueueByType: async (req, res, next) => {
@@ -16,8 +16,8 @@ const queueController = {
   listAllQueues: async (req, res, next) => {
     try {
       const clinicId = req.tenantId;
-      const { status } = req.query;
-      const queue = await queueService.listAllQueues(clinicId, status);
+      const { type, status } = req.query;
+      const queue = await queueService.listAllQueues(clinicId, type, status);
       res.status(200).json({ success: true, count: queue.length, data: queue });
     } catch (error) {
       next(error);
@@ -30,10 +30,19 @@ const queueController = {
       const { visit_id, queue_type, assigned_to } = req.body;
 
       if (!visit_id || !queue_type) {
-        throw new APIError('Visit ID and queue type are required', 400, 'BAD_REQUEST');
+        throw new APIError(
+          "Visit ID and queue type are required",
+          400,
+          "BAD_REQUEST",
+        );
       }
 
-      const result = await queueService.createQueueEntry(visit_id, clinicId, queue_type, assigned_to || null);
+      const result = await queueService.createQueueEntry(
+        visit_id,
+        clinicId,
+        queue_type,
+        assigned_to || null,
+      );
       res.status(201).json({ success: true, data: result });
     } catch (error) {
       next(error);
@@ -47,15 +56,20 @@ const queueController = {
       const { status, assigned_to } = req.body;
 
       if (!status) {
-        throw new APIError('Status is required', 400, 'BAD_REQUEST');
+        throw new APIError("Status is required", 400, "BAD_REQUEST");
       }
 
-      const result = await queueService.updateQueueEntryStatus(id, clinicId, status, assigned_to || null);
+      const result = await queueService.updateQueueEntryStatus(
+        id,
+        clinicId,
+        status,
+        assigned_to || null,
+      );
       res.status(200).json({ success: true, data: result });
     } catch (error) {
       next(error);
     }
-  }
+  },
 };
 
 module.exports = queueController;

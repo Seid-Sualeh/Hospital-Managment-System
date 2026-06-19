@@ -16,6 +16,7 @@ import ReportsWorkspace from '../features/Reports/ReportsWorkspace';
 import UsersManagement from '../features/Users/UsersManagement';
 import SettingsPage from '../features/Settings/SettingsPage';
 import WorkforceWorkspace from '../features/Workforce/WorkforceWorkspace';
+import TriageDesk from '../features/Triage/TriageDesk';
 import { ROLE_IDS } from '../constants/roles';
 import Loader from '../components/Common/Loader';
 
@@ -145,6 +146,17 @@ const AppRoutes = () => {
           ]}>
             <MainLayout>
               <WorkforceWorkspace />
+            </MainLayout>
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/triage"
+        element={
+          <PrivateRoute allowedRoles={[ROLE_IDS.ADMIN, ROLE_IDS.TRIAGE_NURSE]}>
+            <MainLayout>
+              <TriageDesk />
             </MainLayout>
           </PrivateRoute>
         }

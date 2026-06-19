@@ -1,11 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
+const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
+const path = require("path");
 const dotenv = require("dotenv");
+const rateLimit = require("express-rate-limit");
 
 // Configs and Helpers
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, ".env"), override: true });
 const logger = require("./src/config/logger");
 const db = require("./src/config/db");
 
@@ -31,12 +34,36 @@ const queueRoutes = require("./src/routes/queue.routes");
 const shiftRoutes = require("./src/routes/shift.routes");
 const leaveRoutes = require("./src/routes/leave.routes");
 const attendanceRoutes = require("./src/routes/attendance.routes");
+const settingsRoutes = require("./src/routes/settings.routes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Security and HTTP Headers
 app.use(helmet());
+app.use(cookieParser());
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    error: {
+      message: "Too many requests. Please try again later.",
+      code: "RATE_LIMITED",
+    },
+  },
+});
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 1000,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use("/api/v1/auth", authLimiter);
+app.use("/api/v1", apiLimiter);
 
 // Dynamic CORS whitelist
 // Allow common local dev ports (Vite:5173, CRA/React:3000)
@@ -102,6 +129,7 @@ app.use("/api/v1/certificates", certificateRoutes);
 app.use("/api/v1/shifts", shiftRoutes);
 app.use("/api/v1/leaves", leaveRoutes);
 app.use("/api/v1/attendance", attendanceRoutes);
+app.use("/api/v1/settings", settingsRoutes);
 
 // Health Check API
 app.get("/api/v1/health", (req, res) => {
@@ -121,24 +149,22 @@ app.use(errorHandler);
 // Database connection diagnostics and server startup
 const SKIP_DB = String(process.env.SKIP_DB || "").toLowerCase() === "true";
 
+const startServer = () => {
+  app.listen(PORT, () => {
+    logger.info(`[Server] CMS SaaS Engine listening at:${PORT}`);
+  });
+};
+
 if (SKIP_DB) {
   logger.warn(
     "[Server] SKIP_DB=true — skipping database connection check. Server will start without verifying DB.",
   );
-  app.listen(PORT, () => {
-    logger.info(
-      `[Server] CMS SaaS Engine listening at http://localhost:${PORT} (DB check skipped)`,
-    );
-  });
+  startServer();
 } else {
   db.testConnection()
     .then((connected) => {
       if (connected) {
-        app.listen(PORT, () => {
-          logger.info(
-            `[Server] CMS SaaS Engine listening at http://localhost:${PORT}`,
-          );
-        });
+        startServer();
       } else {
         logger.error(
           "[Server] Critical Error: Unable to verify database connection. Server startup aborted.",

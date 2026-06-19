@@ -1,5 +1,4 @@
 const authService = require("../services/auth.service");
-const mockAuthService = require("../services/mock-auth.service");
 const db = require("../config/db");
 const { APIError } = require("../middlewares/error");
 
@@ -8,9 +7,8 @@ const authController = {
   login: async (req, res, next) => {
     try {
       const { email, password } = req.body;
+
       const tenantId = req.tenantId;
-      const SKIP_DB =
-        String(process.env.SKIP_DB || "").toLowerCase() === "true";
 
       if (!tenantId) {
         throw new APIError(
@@ -20,101 +18,69 @@ const authController = {
         );
       }
 
-      let loginResult;
+      // Fetch user with role information
+      const userSql = `
+        SELECT u.*, r.name as role_name
+        FROM users u
+        JOIN roles r ON u.role_id = r.id
+        WHERE u.email = ? AND u.clinic_id = ? AND u.is_active = TRUE
+        LIMIT 1`;
+      const users = await db.query(userSql, [email, tenantId]);
+      const user = users && users.length > 0 ? users[0] : null;
 
-      // Use mock auth when SKIP_DB=true (dev/testing mode)
-      if (SKIP_DB) {
-        try {
-          loginResult = await mockAuthService.mockLogin(email, password);
-        } catch (mockError) {
-          throw new APIError(mockError.message, 401, "INVALID_CREDENTIALS");
-        }
-      } else {
-        // Fetch user from DB, enforcing tenant clinic_id
-        const querySql = `
-          SELECT u.*, r.name as role_name 
-          FROM users u
-          JOIN roles r ON u.role_id = r.id
-          WHERE u.clinic_id = ? AND u.email = ?
-          LIMIT 1
-        `;
-        const users = await db.query(querySql, [tenantId, email.trim()]);
-
-        if (!users || users.length === 0) {
-          throw new APIError(
-            "Invalid email or password credentials.",
-            401,
-            "INVALID_CREDENTIALS",
-          );
-        }
-
-        const user = users[0];
-
-        if (!user.is_active) {
-          throw new APIError(
-            "This account has been deactivated. Contact your clinic administrator.",
-            403,
-            "USER_DEACTIVATED",
-          );
-        }
-
-        // Validate password via Service
-        const isMatch = await authService.comparePasswords(
-          password,
-          user.password_hash,
+      if (!user) {
+        throw new APIError(
+          "Invalid email or password credentials.",
+          401,
+          "INVALID_CREDENTIALS",
         );
-        if (!isMatch) {
-          throw new APIError(
-            "Invalid email or password credentials.",
-            401,
-            "INVALID_CREDENTIALS",
-          );
-        }
-
-        // Generate tokens via Service
-        const { accessToken, refreshToken, permissions } =
-          await authService.generateTokens(user);
-
-        loginResult = {
-          accessToken,
-          refreshToken,
-          user: {
-            id: user.id,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            email: user.email,
-            phone_number: user.phone_number,
-            permissions,
-            role: {
-              id: user.role_id,
-              name: user.role_name,
-            },
-          },
-        };
       }
 
-      // Save refresh token in HTTP-Only secure cookie
-      res.cookie("refreshToken", loginResult.refreshToken, {
+      const passwordValid = await authService.comparePasswords(
+        password,
+        user.password_hash,
+      );
+      if (!passwordValid) {
+        throw new APIError(
+          "Invalid email or password credentials.",
+          401,
+          "INVALID_CREDENTIALS",
+        );
+      }
+
+      const { accessToken, refreshToken, permissions } =
+        await authService.generateTokens(user);
+
+      // Set refresh token cookie
+      res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in ms
+        sameSite: "none",
+        path: "/",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
-      // Audit Log entry (skip if mock mode)
-      if (!SKIP_DB) {
-        const ip =
-          req.ip || req.headers["x-forwarded-for"] || req.socket.remoteAddress;
-        await db.query(
-          'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, ip_address) VALUES (?, ?, "LOGIN", "users", ?)',
-          [tenantId, loginResult.user.id, ip],
-        );
-      }
+      // Audit login activity
+      const ip =
+        req.ip || req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+      await db.query(
+        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, ip_address) VALUES (?, ?, "LOGIN", "users", ?)',
+        [tenantId, user.id, ip],
+      );
 
       res.status(200).json({
         success: true,
-        accessToken: loginResult.accessToken,
-        user: loginResult.user,
+        accessToken,
+        user: {
+          id: user.id,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          email: user.email,
+          phone_number: user.phone_number,
+          role_id: user.role_id,
+          role_name: user.role_name,
+          permissions,
+        },
       });
     } catch (error) {
       next(error);
@@ -156,7 +122,17 @@ const authController = {
       const jwt = require("jsonwebtoken");
       const JWT_REFRESH_SECRET =
         process.env.JWT_REFRESH_SECRET ||
-        "another_super_secret_refresh_cryptographic_key_v1";
+        (process.env.NODE_ENV === "production"
+          ? null
+          : "dev_only_refresh_secret_change_before_production");
+
+      if (!JWT_REFRESH_SECRET) {
+        throw new APIError(
+          "Refresh token secret is not configured.",
+          500,
+          "AUTH_MISCONFIGURED",
+        );
+      }
 
       let refreshToken = req.cookies?.refreshToken;
       if (!refreshToken && req.body.refreshToken) {
@@ -204,6 +180,15 @@ const authController = {
       }
 
       const user = users[0];
+
+      if (req.tenantId && decoded.clinicId !== req.tenantId) {
+        throw new APIError(
+          "Cross-tenant session violation during token refresh.",
+          403,
+          "CROSS_TENANT_VIOLATION",
+        );
+      }
+
       const { accessToken: newAccessToken } =
         await authService.generateTokens(user);
 
@@ -291,7 +276,8 @@ const authController = {
       res.clearCookie("refreshToken", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: "none",
+        path: "/",
       });
       res.status(200).json({
         success: true,

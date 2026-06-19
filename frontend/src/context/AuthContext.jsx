@@ -1,28 +1,42 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import authService from "../services/authService";
-import { ROLE_IDS } from "../constants/roles";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [viewAsRole, setViewAsRole] = useState(null); // For role-based view switching
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const storedToken = localStorage.getItem("token");
+    const restoreSession = async () => {
+      const storedUser = localStorage.getItem("user");
+      const storedToken = localStorage.getItem("token");
 
-    if (storedUser && storedToken) {
+      if (!storedUser || !storedToken) {
+        setLoading(false);
+        return;
+      }
+
       try {
-        setUser(JSON.parse(storedUser));
+        const profile = await authService.getProfile();
+        const userData = profile?.user || profile?.data?.user;
+        if (userData) {
+          localStorage.setItem("user", JSON.stringify(userData));
+          setUser(userData);
+        } else {
+          setUser(JSON.parse(storedUser));
+        }
       } catch {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
+        setUser(null);
+      } finally {
+        setLoading(false);
       }
-    }
-    setLoading(false);
+    };
+
+    restoreSession();
   }, []);
 
   const login = async (email, password) => {
@@ -37,7 +51,6 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem("token", accessToken);
         localStorage.setItem("user", JSON.stringify(userData));
         setUser(userData);
-        setViewAsRole(null); // Reset view-as when logging in
         return userData;
       }
       throw new Error(data?.error?.message || "Login failed.");
@@ -60,96 +73,36 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       setUser(null);
-      setViewAsRole(null);
     }
   };
 
   /**
-   * For Admins: Switch to viewing the interface as a different role
+   * Get the user's actual role
    */
-  const switchViewRole = (roleId, roleName) => {
-    if (!user || user.role?.id !== ROLE_IDS.ADMIN) return;
-    setViewAsRole({ roleId, roleName });
-  };
-
-  /**
-   * Reset view back to actual admin role
-   */
-  const resetViewRole = () => {
-    setViewAsRole(null);
-  };
-
-  /**
-   * Get the effective role being displayed (either view-as role or actual role)
-   */
-  const getEffectiveRole = () => {
-    if (viewAsRole) {
-      return viewAsRole;
-    }
+  const getUserRole = () => {
+    if (!user) return null;
     return {
       roleId: user?.role?.id || user?.role_id,
       roleName: user?.role?.name || user?.role_name,
     };
   };
 
-  const getEffectiveUser = () => {
-    if (!user) return null;
-    const effectiveRole = getEffectiveRole();
-    return {
-      ...user,
-      role: {
-        id: effectiveRole.roleId,
-        name: effectiveRole.roleName,
-      },
-      role_id: effectiveRole.roleId,
-      role_name: effectiveRole.roleName,
-    };
-  };
-
-  const effectiveUser = getEffectiveUser();
-
   const hasPermission = (permissionCode) => {
-    if (!effectiveUser) return false;
+    if (!user) return false;
 
-    const effectiveRole = getEffectiveRole();
-
-    // Admin always has all permissions
-    if (effectiveRole.roleId === ROLE_IDS.ADMIN) return true;
-
-    // If viewing as a role, simulate that role's permissions
-    if (viewAsRole) {
-      // Mock permissions for demo roles
-      const mockRolePerms = {
-        2: [
-          "view:dashboard",
-          "manage:consultations",
-          "view:patients",
-          "manage:prescriptions",
-        ], // Doctor
-        4: [
-          "view:dashboard",
-          "manage:appointments",
-          "view:patients",
-          "manage:billing",
-        ], // Receptionist
-      };
-      return (mockRolePerms[viewAsRole.roleId] || []).includes(permissionCode);
-    }
-
+    // Check actual user permissions from backend
     const userPerms = user.permissions || [];
     return userPerms.includes(permissionCode);
   };
 
   const hasRole = (...roleIds) => {
     if (!user) return false;
-    const effectiveRole = getEffectiveRole();
-    if (effectiveRole.roleId === ROLE_IDS.ADMIN) return true;
-    return roleIds.includes(effectiveRole.roleId);
+    const userRoleId = user?.role?.id || user?.role_id;
+    return roleIds.includes(userRoleId);
   };
 
   const value = {
     user,
-    effectiveUser,
     loading,
     error,
     login,
@@ -157,10 +110,6 @@ export const AuthProvider = ({ children }) => {
     hasPermission,
     hasRole,
     isAuthenticated: !!user,
-    viewAsRole,
-    switchViewRole,
-    resetViewRole,
-    getEffectiveRole,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

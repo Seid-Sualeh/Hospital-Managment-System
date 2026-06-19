@@ -3,6 +3,7 @@ import {
   Users,
   Calendar,
   Stethoscope,
+  Activity,
   FlaskConical,
   Pill,
   Receipt,
@@ -36,9 +37,6 @@ export const NAV_ITEMS = [
       ROLE_IDS.DOCTOR,
       ROLE_IDS.TRIAGE_NURSE,
       ROLE_IDS.RECEPTIONIST,
-      ROLE_IDS.CASHIER,
-      ROLE_IDS.LAB_TECHNICIAN,
-      ROLE_IDS.PHARMACIST,
     ],
   },
   {
@@ -46,6 +44,12 @@ export const NAV_ITEMS = [
     path: "/appointments",
     icon: Calendar,
     roles: [ROLE_IDS.ADMIN, ROLE_IDS.DOCTOR, ROLE_IDS.RECEPTIONIST],
+  },
+  {
+    name: "Triage",
+    path: "/triage",
+    icon: Activity,
+    roles: [ROLE_IDS.ADMIN, ROLE_IDS.TRIAGE_NURSE],
   },
   {
     name: "Consultations",
