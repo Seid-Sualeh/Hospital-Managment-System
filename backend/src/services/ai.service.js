@@ -103,7 +103,7 @@ const logAiAudit = async ({
 }) => {
   try {
     await db.query(
-      "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, old_values, new_values, ip_address, user_agent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, old_values, new_values, ip_address, user_agent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [
         clinicId || null,
         userId || null,

@@ -19,6 +19,13 @@ import WorkforceWorkspace from '../features/Workforce/WorkforceWorkspace';
 import TriageDesk from '../features/Triage/TriageDesk';
 import { ROLE_IDS } from '../constants/roles';
 import Loader from '../components/Common/Loader';
+import PublicLayout from '../features/Public/PublicLayout';
+import LandingPage from '../features/Public/LandingPage';
+import AboutPage from '../features/Public/AboutPage';
+import FeaturesPage from '../features/Public/FeaturesPage';
+import ServicesPage from '../features/Public/ServicesPage';
+import ContactPage from '../features/Public/ContactPage';
+
 
 const PublicLoginRoute = () => {
   const { isAuthenticated, loading } = useAuth();
@@ -184,7 +191,15 @@ const AppRoutes = () => {
         }
       />
 
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      {/* Public Landing Pages */}
+      <Route path="/" element={<PublicLayout />}>
+        <Route index element={<LandingPage />} />
+        <Route path="about" element={<AboutPage />} />
+        <Route path="features" element={<FeaturesPage />} />
+        <Route path="services" element={<ServicesPage />} />
+        <Route path="contact" element={<ContactPage />} />
+      </Route>
+
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );

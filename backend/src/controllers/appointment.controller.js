@@ -87,7 +87,7 @@ const appointmentController = {
 
       // Audit Log
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, "CREATE_APPOINTMENT", "appointments", ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, 'CREATE_APPOINTMENT', 'appointments', ?)",
         [tenantId, actorId, appointmentId]
       );
 
@@ -124,7 +124,7 @@ const appointmentController = {
 
       // Audit
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, old_values, new_values) VALUES (?, ?, "RESCHEDULE_APPOINTMENT", "appointments", ?, ?, ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, old_values, new_values) VALUES (?, ?, 'RESCHEDULE_APPOINTMENT', 'appointments', ?, ?, ?)",
         [
           tenantId, 
           actorId, 
@@ -161,7 +161,7 @@ const appointmentController = {
 
       // Audit
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, "CANCEL_APPOINTMENT", "appointments", ?, "Status toggled to cancelled")',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, 'CANCEL_APPOINTMENT', 'appointments', ?, 'Status toggled to cancelled')",
         [tenantId, actorId, appointmentId]
       );
 
@@ -196,7 +196,7 @@ const appointmentController = {
 
       // Audit
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, "UPDATE_APPOINTMENT_STATUS", "appointments", ?, ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, 'UPDATE_APPOINTMENT_STATUS', 'appointments', ?, ?)",
         [tenantId, actorId, appointmentId, `Status updated to ${status}`]
       );
 

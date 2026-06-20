@@ -1,7 +1,10 @@
 const fs = require("fs");
 const path = require("path");
+const dotenv = require("dotenv");
 const mysql = require("mysql2/promise");
 const { APIError } = require("../middlewares/error");
+
+dotenv.config({ path: path.resolve(__dirname, "../../.env"), override: true });
 
 const INSTALL_SQL_DIR = path.join(__dirname, "../config");
 
@@ -35,7 +38,6 @@ function getInstallConnectionConfig() {
     user: process.env.DB_USER || "root",
     password:
       process.env.DB_PASSWORD !== undefined ? process.env.DB_PASSWORD : "",
-    database: process.env.DB_NAME || "ethiopia_cms",
     port: parseInt(process.env.DB_PORT || "3306", 10),
     ssl: useSsl
       ? { rejectUnauthorized: sslRejectUnauthorized !== "true" ? false : true }
@@ -58,33 +60,34 @@ async function installDatabase() {
   try {
     await connection.beginTransaction();
 
-    const initSql = prepareSqlForDb(loadSqlFile("db_init.sql"));
-    const seedSql = prepareSqlForDb(loadSqlFile("db_seed.sql"));
+    const sqlFiles = [
+      "db_init.sql",
+      "db_seed.sql",
+      "db_attendance_migration.sql",
+      "db_settings_migration.sql",
+    ];
 
-    if (!initSql.trim()) {
-      throw new APIError(
-        "Database initialization SQL file contains no statements.",
-        500,
-        "EMPTY_INIT_SQL",
-      );
+    const results = [];
+    for (const fileName of sqlFiles) {
+      const sql = prepareSqlForDb(loadSqlFile(fileName));
+      if (!sql.trim()) {
+        throw new APIError(
+          `SQL file ${fileName} contains no statements.`,
+          500,
+          "EMPTY_SQL_FILE",
+        );
+      }
+
+      results.push({ fileName, statementCount: sql.split(";").length });
+      await connection.query(sql);
     }
-
-    if (!seedSql.trim()) {
-      throw new APIError(
-        "Database seed SQL file contains no statements.",
-        500,
-        "EMPTY_SEED_SQL",
-      );
-    }
-
-    await connection.query(initSql);
-    await connection.query(seedSql);
 
     await connection.commit();
     return {
-      message: "Database schema created and seed data inserted successfully.",
-      initSqlSize: initSql.length,
-      seedSqlSize: seedSql.length,
+      message: "Database schema created, migrations applied, and seed data inserted successfully.",
+      executedFiles: sqlFiles,
+      executedFilesCount: sqlFiles.length,
+      results,
     };
   } catch (error) {
     await connection.rollback().catch(() => {

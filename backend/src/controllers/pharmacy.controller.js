@@ -120,7 +120,7 @@ const pharmacyController = {
 
         // Insert batch record for EFDA compliance
         await db.query(
-          'INSERT INTO medicine_batches (clinic_id, medicine_id, batch_number, expiry_date, quantity_received, quantity_remaining, unit_cost) VALUES (?, ?, ?, ?, ?, ?, ?)',
+          "INSERT INTO medicine_batches (clinic_id, medicine_id, batch_number, expiry_date, quantity_received, quantity_remaining, unit_cost) VALUES (?, ?, ?, ?, ?, ?, ?)",
           [tenantId, medicineId, bNum, expDate, initialQty, initialQty, uCost]
         );
 
@@ -134,7 +134,7 @@ const pharmacyController = {
 
       // Audit Log
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, "ADD_MEDICINE", "medicines", ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, 'ADD_MEDICINE', 'medicines', ?)",
         [tenantId, actorId, medicineId]
       );
 
@@ -182,7 +182,7 @@ const pharmacyController = {
       );
 
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, "UPDATE_MEDICINE", "medicines", ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, 'UPDATE_MEDICINE', 'medicines', ?)",
         [tenantId, actorId, medicineId],
       );
 
@@ -215,7 +215,7 @@ const pharmacyController = {
       );
 
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, "DEACTIVATE_MEDICINE", "medicines", ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, 'DEACTIVATE_MEDICINE', 'medicines', ?)",
         [tenantId, actorId, medicineId],
       );
 
@@ -288,13 +288,13 @@ const pharmacyController = {
 
       // Record transaction
       await db.query(
-        'INSERT INTO inventory_transactions (clinic_id, medicine_id, transaction_type, quantity, remarks, performed_by) VALUES (?, ?, ?, ?, ?, ?)',
+        "INSERT INTO inventory_transactions (clinic_id, medicine_id, transaction_type, quantity, remarks, performed_by) VALUES (?, ?, ?, ?, ?, ?)",
         [tenantId, medicine_id, transaction_type, txQty, remarks ? remarks.trim() : null, actorId]
       );
 
       // Audit
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, "UPDATE_STOCK", "medicines", ?, ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, 'UPDATE_STOCK', 'medicines', ?, ?)",
         [tenantId, actorId, medicine_id, `Stock updated via transaction type: ${transaction_type}`]
       );
 
@@ -390,7 +390,7 @@ const pharmacyController = {
         : `Over-the-counter dispense (${batchDeductions.map(b => `${b.batch_number}:${b.deducted}`).join(', ')})`;
         
       const [txResult] = await db.query(
-        'INSERT INTO inventory_transactions (clinic_id, medicine_id, transaction_type, quantity, remarks, performed_by) VALUES (?, ?, "dispense", ?, ?, ?)',
+        "INSERT INTO inventory_transactions (clinic_id, medicine_id, transaction_type, quantity, remarks, performed_by) VALUES (?, ?, 'dispense', ?, ?, ?)",
         [tenantId, medicine_id, -dispenseQty, remarks, actorId]
       );
 
@@ -411,7 +411,7 @@ const pharmacyController = {
 
       // Audit Log
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, "DISPENSE_MEDICINE", "medicines", ?, ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, 'DISPENSE_MEDICINE', 'medicines', ?, ?)",
         [tenantId, actorId, medicine_id, `Dispensed ${dispenseQty} units of ${medicine.name}`]
       );
 

@@ -160,7 +160,7 @@ const billingController = {
         }
 
         // Audit Trail log
-        await db.query('INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, "COLLECT_PAYMENT", "invoices", ?)', [tenantId, cashierId, invoice_id]);
+        await db.query("INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, 'COLLECT_PAYMENT', 'invoices', ?)", [tenantId, cashierId, invoice_id]);
 
         return res.status(200).json({
           success: true,
@@ -254,7 +254,7 @@ const billingController = {
         }
 
         // Write to audit log
-        await db.query('INSERT INTO audit_logs (clinic_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, "PAYMENT_WEBHOOK_RECEIVED", "payments", ?, ?)', [
+        await db.query("INSERT INTO audit_logs (clinic_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, 'PAYMENT_WEBHOOK_RECEIVED', 'payments', ?, ?)", [
           payment.clinic_id,
           payment.id,
           `Webhook success for ${payment.payment_method}`
@@ -270,7 +270,6 @@ const billingController = {
     }
   },
 
-  // List all invoices for the clinic tenant
   listInvoices: async (req, res, next) => {
     try {
       const tenantId = req.tenantId;

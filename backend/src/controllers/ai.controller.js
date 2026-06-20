@@ -179,7 +179,7 @@ Explain the findings:`;
 
       // Write to audit log
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, "AI_LAB_EXPLAIN", "lab_results", ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, 'AI_LAB_EXPLAIN', 'lab_results', ?)",
         [tenantId, req.user.id, lab_result_id],
       );
 

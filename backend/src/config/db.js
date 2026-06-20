@@ -29,11 +29,25 @@ const pool = mysql.createPool({
     ? { rejectUnauthorized: sslRejectUnauthorized !== "true" ? false : true }
     : undefined,
   waitForConnections: true,
-  connectionLimit: 10,
+  connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT || "10", 10),
   queueLimit: 0,
+  connectTimeout: parseInt(process.env.DB_CONNECT_TIMEOUT || "10000", 10),
   enableKeepAlive: true,
   keepAliveInitialDelay: 10000,
 });
+
+function isTransientDbError(error) {
+  const transientCodes = [
+    "PROTOCOL_CONNECTION_LOST",
+    "ECONNRESET",
+    "ETIMEDOUT",
+    "EHOSTUNREACH",
+    "ENETUNREACH",
+    "ECONNREFUSED",
+    "ER_CON_COUNT_ERROR",
+  ];
+  return transientCodes.includes(error.code);
+}
 
 // Test connection helper
 async function testConnection() {
@@ -55,15 +69,48 @@ async function testConnection() {
   }
 }
 
-// Global execution wrapper
+// Global execution wrapper with transient retry handling
 async function query(sql, params) {
-  try {
-    const [results] = await pool.execute(sql, params);
-    return results;
-  } catch (error) {
-    console.error(`[Database Query Error] SQL: ${sql}`);
-    console.error(`[Database Query Error] Details: ${error.message}`);
-    throw error;
+  let connection;
+  let attempt = 0;
+  const maxAttempts = 2;
+
+  while (attempt < maxAttempts) {
+    attempt += 1;
+    try {
+      connection = await pool.getConnection();
+      const [results] = await connection.execute(sql, params);
+      return results;
+    } catch (error) {
+      console.error(`[Database Query Error] SQL: ${sql}`);
+      console.error(`[Database Query Error] Details: ${error.message}`);
+
+      if (connection) {
+        try {
+          connection.release();
+        } catch (releaseError) {
+          console.error("[Database] Failed to release connection:", releaseError.message);
+        }
+        connection = null;
+      }
+
+      if (attempt >= maxAttempts || !isTransientDbError(error)) {
+        throw error;
+      }
+
+      console.warn(
+        `[Database] Retrying transient error (${error.code || error.message}). Attempt ${attempt + 1}/${maxAttempts}...`,
+      );
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    } finally {
+      if (connection) {
+        try {
+          connection.release();
+        } catch (releaseError) {
+          console.error("[Database] Failed to release connection:", releaseError.message);
+        }
+      }
+    }
   }
 }
 

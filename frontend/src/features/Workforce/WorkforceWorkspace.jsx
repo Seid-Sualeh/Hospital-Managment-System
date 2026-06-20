@@ -8,6 +8,7 @@ import Loader from '../../components/Common/Loader';
 import EmptyState from '../../components/Common/EmptyState';
 import AlertBanner from '../../components/Common/AlertBanner';
 import ChartLine from '../../components/Common/ChartLine';
+import StatCard from '../../components/Common/StatCard';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 import { ROLE_IDS } from '../../constants/roles';

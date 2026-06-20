@@ -69,7 +69,7 @@ const triageController = {
 
       // Audit Log
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, "WRITE_VITALS", "triage_records", ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, 'WRITE_VITALS', 'triage_records', ?)",
         [tenantId, nurseId, result.insertId]
       );
 
