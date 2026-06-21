@@ -66,14 +66,15 @@ const WorkflowTimeline = () => {
   return (
     <div className="timeline-container">
       {/* Connector Line */}
+
       <div className="timeline-line"></div>
 
       {/* Timeline Steps (Nodes) */}
       <div className="timeline-steps mb-5">
         {steps.map((step, index) => (
-          <div 
-            key={index} 
-            className={`timeline-step ${index === activeStep ? "active" : ""}`}
+          <div
+            key={index}
+            className={`timeline-step  ${index === activeStep ? "active" : ""}`}
             onClick={() => setActiveStep(index)}
           >
             <div className="timeline-node">
@@ -91,8 +92,13 @@ const WorkflowTimeline = () => {
             <span className="badge bg-primary-soft text-primary mb-2 px-3 py-2 rounded-pill fw-semibold small">
               STEP 0{activeStep + 1} — {steps[activeStep].role}
             </span>
-            <h3 className="fw-bold public-display-font text-dark mb-3">{steps[activeStep].label}</h3>
-            <p className="text-secondary mb-0 lead" style={{ fontSize: "1.05rem", lineHeight: "1.6" }}>
+            <h3 className="fw-bold public-display-font text-dark mb-3">
+              {steps[activeStep].label}
+            </h3>
+            <p
+              className="text-secondary mb-0 lead"
+              style={{ fontSize: "1.05rem", lineHeight: "1.6" }}
+            >
               {steps[activeStep].desc}
             </p>
           </div>

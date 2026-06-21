@@ -738,3 +738,7 @@
 {"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T16:21:51.821Z"}
 {"level":"error","message":"[Server] Critical Error: Unable to verify database connection. Server startup aborted.","timestamp":"2026-06-20T16:38:15.732Z"}
 {"level":"error","message":"[Server] Critical Error: Unable to verify database connection. Server startup aborted.","timestamp":"2026-06-20T16:38:17.963Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/auth/me","timestamp":"2026-06-21T07:14:47.076Z"}
+{"level":"error","message":"Error: getaddrinfo ENOTFOUND mysql-1baa60-seidsualeh123.a.aivencloud.com\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)","timestamp":"2026-06-21T07:14:47.077Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/auth/me","timestamp":"2026-06-21T07:14:47.100Z"}
+{"level":"error","message":"Error: getaddrinfo ENOTFOUND mysql-1baa60-seidsualeh123.a.aivencloud.com\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)","timestamp":"2026-06-21T07:14:47.102Z"}

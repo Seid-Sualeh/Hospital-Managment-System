@@ -67,8 +67,42 @@ const FeaturesPage = () => {
         </div>
       </section>
 
+      {/* Featured App Showcase */}
+      <section className="py-5 bg-white">
+        <div className="container">
+          <div className="row g-5 align-items-center">
+            <div className="col-lg-6">
+              <span className="badge bg-teal-soft text-teal mb-2 px-3 py-2 rounded-pill fw-semibold">EMR WORKSPACE</span>
+              <h2 className="fw-bold public-display-font text-dark mb-4">
+                Unified Electronic Medical Records & Intelligence
+              </h2>
+              <p className="text-secondary mb-4" style={{ lineHeight: "1.7" }}>
+                Our Electronic Medical Records (EMR) interface puts critical insights at a physician's fingertips. From initial intake files and triage logs to pharmacy records and lab histories, everything flows together dynamically.
+              </p>
+              <div className="d-flex flex-column gap-2 mb-0">
+                {["ICD-10 Diagnostic Registry Search", "Automatic drug interaction warnings", "Direct LIS integration and electronic orders"].map((f, i) => (
+                  <div key={i} className="d-flex align-items-center gap-2 small text-dark fw-semibold">
+                    <CheckCircle2 size={16} className="text-success" />
+                    <span>{f}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="col-lg-6">
+              <div style={{ position: "relative", borderRadius: "16px", overflow: "hidden", boxShadow: "0 20px 45px rgba(0,0,0,0.1)", border: "1px solid rgba(0,0,0,0.06)" }}>
+                <img
+                  src="/emr_features.png"
+                  alt="EMR Features Tablet Mockup"
+                  style={{ width: "100%", height: "auto", display: "block" }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Grid of Modules */}
-      <section className="py-5">
+      <section className="py-5 bg-light">
         <div className="container">
           <div className="row g-4">
             {modules.map((m, index) => (
