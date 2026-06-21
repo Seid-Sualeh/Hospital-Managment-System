@@ -1,5 +1,6 @@
 const db = require('../config/db');
 const { APIError } = require('../middlewares/error');
+const cache = require('../utils/cache');
 
 const DEFAULT_SETTINGS = {
   clinic: {
@@ -36,6 +37,11 @@ const settingsController = {
   getSettings: async (req, res, next) => {
     try {
       const tenantId = req.tenantId;
+      const cacheKey = `settings_${tenantId}`;
+      const cached = cache.get(cacheKey);
+      if (cached) {
+        return res.status(200).json({ success: true, data: cached });
+      }
 
       const [clinic] = await db.query(
         'SELECT id, name, license_number FROM clinics WHERE id = ? LIMIT 1',
@@ -68,6 +74,8 @@ const settingsController = {
           license_number: clinic?.license_number || stored.clinic?.license_number || '',
         },
       };
+
+      cache.set(cacheKey, data, 10 * 60 * 1000); // cache for 10 minutes
 
       res.status(200).json({ success: true, data });
     } catch (error) {
@@ -123,6 +131,8 @@ const settingsController = {
           'SETTINGS_STORAGE_UNAVAILABLE',
         );
       }
+      
+      cache.delete(`settings_${tenantId}`);
 
       res.status(200).json({
         success: true,
@@ -157,6 +167,8 @@ const settingsController = {
           'SETTINGS_STORAGE_UNAVAILABLE',
         );
       }
+
+      cache.delete(`settings_${tenantId}`);
 
       res.status(200).json({
         success: true,

@@ -2271,3 +2271,821 @@
 {"level":"info","message":"GET /api/v1/attendance/my-attendance 200 376 - 742.085 ms","timestamp":"2026-06-19T19:24:04.045Z"}
 {"level":"info","message":"GET /api/v1/auth/me 200 259 - 1051.836 ms","timestamp":"2026-06-19T19:24:14.308Z"}
 {"level":"info","message":"GET /api/v1/auth/me 304 - - 496.387 ms","timestamp":"2026-06-19T19:24:14.808Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T08:47:23.898Z"}
+{"level":"info","message":"POST /api/v1/auth/login 200 1108 - 3779.824 ms","timestamp":"2026-06-20T08:47:37.799Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 200 274 - 2644.025 ms","timestamp":"2026-06-20T08:47:40.559Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1484.535 ms","timestamp":"2026-06-20T08:47:42.048Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 200 382 - 4993.944 ms","timestamp":"2026-06-20T08:47:45.576Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1338.900 ms","timestamp":"2026-06-20T08:47:46.921Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 4221.694 ms","timestamp":"2026-06-20T08:47:49.969Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 4560.075 ms","timestamp":"2026-06-20T08:47:51.513Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 6089.709 ms","timestamp":"2026-06-20T08:47:51.846Z"}
+{"level":"info","message":"GET /api/v1/settings 200 778 - 1444.339 ms","timestamp":"2026-06-20T08:48:06.262Z"}
+{"level":"info","message":"GET /api/v1/settings 304 - - 623.631 ms","timestamp":"2026-06-20T08:48:06.890Z"}
+{"level":"warn","message":"[413 API Warning] Path: POST /api/v1/settings/logo - Code: INTERNAL_SERVER_ERROR - Message: request entity too large","timestamp":"2026-06-20T08:49:11.871Z"}
+{"level":"error","message":"[500 Server Error] Path: PUT /api/v1/settings","timestamp":"2026-06-20T08:50:32.027Z"}
+{"level":"error","message":"Error: Settings storage is not initialized. Run db_settings_migration.sql.\n    at updateSettings (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\settings.controller.js:120:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-06-20T08:50:32.028Z"}
+{"level":"info","message":"PUT /api/v1/settings 500 197 - 1930.995 ms","timestamp":"2026-06-20T08:50:32.030Z"}
+{"level":"error","message":"[500 Server Error] Path: PUT /api/v1/settings","timestamp":"2026-06-20T08:50:50.859Z"}
+{"level":"error","message":"Error: Settings storage is not initialized. Run db_settings_migration.sql.\n    at updateSettings (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\settings.controller.js:120:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-06-20T08:50:50.861Z"}
+{"level":"info","message":"PUT /api/v1/settings 500 197 - 1090.272 ms","timestamp":"2026-06-20T08:50:50.865Z"}
+{"level":"error","message":"[500 Server Error] Path: PUT /api/v1/settings","timestamp":"2026-06-20T08:50:57.437Z"}
+{"level":"error","message":"Error: Settings storage is not initialized. Run db_settings_migration.sql.\n    at updateSettings (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\settings.controller.js:120:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-06-20T08:50:57.437Z"}
+{"level":"info","message":"PUT /api/v1/settings 500 197 - 1654.136 ms","timestamp":"2026-06-20T08:50:57.438Z"}
+{"level":"error","message":"[500 Server Error] Path: POST /api/v1/settings/logo","timestamp":"2026-06-20T08:51:18.221Z"}
+{"level":"error","message":"Error: Settings storage is not initialized. Run db_settings_migration.sql.\n    at uploadLogo (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\settings.controller.js:154:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-06-20T08:51:18.222Z"}
+{"level":"info","message":"POST /api/v1/settings/logo 500 197 - 586.290 ms","timestamp":"2026-06-20T08:51:18.223Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 1015.795 ms","timestamp":"2026-06-20T08:51:42.665Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 619.503 ms","timestamp":"2026-06-20T08:51:43.291Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 2272.126 ms","timestamp":"2026-06-20T08:52:00.464Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1261.749 ms","timestamp":"2026-06-20T08:52:01.749Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1286.113 ms","timestamp":"2026-06-20T08:52:01.765Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 2666.234 ms","timestamp":"2026-06-20T08:52:04.512Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 3130.123 ms","timestamp":"2026-06-20T08:52:04.996Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 2282.836 ms","timestamp":"2026-06-20T08:52:06.829Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 6396.841 ms","timestamp":"2026-06-20T08:52:08.272Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/auth/me - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T08:52:37.545Z"}
+{"level":"info","message":"GET /api/v1/auth/me 401 167 - 8.820 ms","timestamp":"2026-06-20T08:52:37.549Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/auth/me - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T08:52:37.566Z"}
+{"level":"info","message":"GET /api/v1/auth/me 401 167 - 14.928 ms","timestamp":"2026-06-20T08:52:37.572Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 394 - 1549.807 ms","timestamp":"2026-06-20T08:52:39.155Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 394 - 1573.206 ms","timestamp":"2026-06-20T08:52:39.165Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 1623.517 ms","timestamp":"2026-06-20T08:52:40.793Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 683.138 ms","timestamp":"2026-06-20T08:52:41.483Z"}
+{"level":"warn","message":"[403 API Warning] Path: GET /api/v1/billing/invoices?status=unpaid - Code: INSUFFICIENT_ROLE - Message: Access denied. Role not authorized for this route.","timestamp":"2026-06-20T08:52:41.615Z"}
+{"level":"info","message":"GET /api/v1/billing/invoices?status=unpaid 403 169 - 6.014 ms","timestamp":"2026-06-20T08:52:41.617Z"}
+{"level":"warn","message":"[403 API Warning] Path: GET /api/v1/billing/invoices?status=unpaid - Code: INSUFFICIENT_ROLE - Message: Access denied. Role not authorized for this route.","timestamp":"2026-06-20T08:52:41.629Z"}
+{"level":"info","message":"GET /api/v1/billing/invoices?status=unpaid 403 169 - 6.082 ms","timestamp":"2026-06-20T08:52:41.634Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 623.148 ms","timestamp":"2026-06-20T08:53:00.399Z"}
+{"level":"warn","message":"[403 API Warning] Path: GET /api/v1/billing/invoices - Code: INSUFFICIENT_ROLE - Message: Access denied. Role not authorized for this route.","timestamp":"2026-06-20T08:53:00.489Z"}
+{"level":"info","message":"GET /api/v1/billing/invoices 403 169 - 4.709 ms","timestamp":"2026-06-20T08:53:00.502Z"}
+{"level":"warn","message":"[403 API Warning] Path: GET /api/v1/billing/invoices - Code: INSUFFICIENT_ROLE - Message: Access denied. Role not authorized for this route.","timestamp":"2026-06-20T08:53:00.517Z"}
+{"level":"info","message":"GET /api/v1/billing/invoices 403 169 - 14.513 ms","timestamp":"2026-06-20T08:53:00.527Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 641.665 ms","timestamp":"2026-06-20T08:53:01.045Z"}
+{"level":"warn","message":"[403 API Warning] Path: GET /api/v1/billing/invoices?status=unpaid - Code: INSUFFICIENT_ROLE - Message: Access denied. Role not authorized for this route.","timestamp":"2026-06-20T08:53:04.586Z"}
+{"level":"info","message":"GET /api/v1/billing/invoices?status=unpaid 403 169 - 3.833 ms","timestamp":"2026-06-20T08:53:04.590Z"}
+{"level":"warn","message":"[403 API Warning] Path: GET /api/v1/billing/invoices?status=unpaid - Code: INSUFFICIENT_ROLE - Message: Access denied. Role not authorized for this route.","timestamp":"2026-06-20T08:53:04.597Z"}
+{"level":"info","message":"GET /api/v1/billing/invoices?status=unpaid 403 169 - 4.497 ms","timestamp":"2026-06-20T08:53:04.600Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 700.196 ms","timestamp":"2026-06-20T08:53:24.320Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 691.023 ms","timestamp":"2026-06-20T08:53:25.014Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1400.022 ms","timestamp":"2026-06-20T08:53:25.858Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1521.762 ms","timestamp":"2026-06-20T08:53:27.384Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 3144.113 ms","timestamp":"2026-06-20T08:53:29.023Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1430.720 ms","timestamp":"2026-06-20T08:53:30.457Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 3041.492 ms","timestamp":"2026-06-20T08:53:32.298Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 3465.138 ms","timestamp":"2026-06-20T08:53:32.715Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 2349.861 ms","timestamp":"2026-06-20T08:53:32.841Z"}
+{"level":"info","message":"GET /api/v1/leaves/types 304 - - 672.135 ms","timestamp":"2026-06-20T08:53:44.823Z"}
+{"level":"info","message":"GET /api/v1/attendance/my-attendance 304 - - 682.962 ms","timestamp":"2026-06-20T08:53:44.828Z"}
+{"level":"info","message":"GET /api/v1/leaves/types 304 - - 618.047 ms","timestamp":"2026-06-20T08:53:45.450Z"}
+{"level":"info","message":"GET /api/v1/attendance/my-attendance 304 - - 619.790 ms","timestamp":"2026-06-20T08:53:45.457Z"}
+{"level":"info","message":"GET /api/v1/leaves/my-leaves 304 - - 742.260 ms","timestamp":"2026-06-20T08:53:45.654Z"}
+{"level":"info","message":"GET /api/v1/leaves/my-leaves 304 - - 361.377 ms","timestamp":"2026-06-20T08:53:46.020Z"}
+{"level":"info","message":"POST /api/v1/attendance/check-in 201 169 - 4163.550 ms","timestamp":"2026-06-20T08:53:49.501Z"}
+{"level":"info","message":"GET /api/v1/attendance/my-attendance 200 701 - 765.954 ms","timestamp":"2026-06-20T08:53:50.276Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 5103.390 ms","timestamp":"2026-06-20T08:54:10.637Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 1295.018 ms","timestamp":"2026-06-20T08:54:25.063Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 710.470 ms","timestamp":"2026-06-20T08:54:25.778Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 2278.208 ms","timestamp":"2026-06-20T08:54:27.430Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1490.163 ms","timestamp":"2026-06-20T08:54:28.924Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 200 545 - 2813.135 ms","timestamp":"2026-06-20T08:54:30.260Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1325.613 ms","timestamp":"2026-06-20T08:54:31.589Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 2544.424 ms","timestamp":"2026-06-20T08:54:32.904Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 3068.454 ms","timestamp":"2026-06-20T08:54:33.432Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 2303.552 ms","timestamp":"2026-06-20T08:54:33.917Z"}
+{"level":"info","message":"GET /api/v1/reports/summary?startDate=2026-06-01&endDate=2026-06-20 404 161 - 5.206 ms","timestamp":"2026-06-20T08:55:41.583Z"}
+{"level":"info","message":"GET /api/v1/reports/summary?startDate=2026-06-01&endDate=2026-06-20 404 161 - 2.089 ms","timestamp":"2026-06-20T08:55:41.589Z"}
+{"level":"warn","message":"[403 API Warning] Path: GET /api/v1/billing/invoices?status=unpaid - Code: INSUFFICIENT_ROLE - Message: Access denied. Role not authorized for this route.","timestamp":"2026-06-20T08:55:53.163Z"}
+{"level":"info","message":"GET /api/v1/billing/invoices?status=unpaid 403 169 - 3.507 ms","timestamp":"2026-06-20T08:55:53.164Z"}
+{"level":"warn","message":"[403 API Warning] Path: GET /api/v1/billing/invoices?status=unpaid - Code: INSUFFICIENT_ROLE - Message: Access denied. Role not authorized for this route.","timestamp":"2026-06-20T08:55:53.174Z"}
+{"level":"info","message":"GET /api/v1/billing/invoices?status=unpaid 403 169 - 6.008 ms","timestamp":"2026-06-20T08:55:53.176Z"}
+{"level":"info","message":"GET /api/v1/reports/patients?startDate=2026-06-01&endDate=2026-06-20 200 274 - 2574.079 ms","timestamp":"2026-06-20T08:55:54.239Z"}
+{"level":"info","message":"GET /api/v1/reports/revenue?startDate=2026-06-01&endDate=2026-06-20 200 326 - 4170.330 ms","timestamp":"2026-06-20T08:55:54.553Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 609.173 ms","timestamp":"2026-06-20T08:56:01.933Z"}
+{"level":"warn","message":"[403 API Warning] Path: GET /api/v1/billing/invoices - Code: INSUFFICIENT_ROLE - Message: Access denied. Role not authorized for this route.","timestamp":"2026-06-20T08:56:02.000Z"}
+{"level":"info","message":"GET /api/v1/billing/invoices 403 169 - 4.301 ms","timestamp":"2026-06-20T08:56:02.002Z"}
+{"level":"warn","message":"[403 API Warning] Path: GET /api/v1/billing/invoices - Code: INSUFFICIENT_ROLE - Message: Access denied. Role not authorized for this route.","timestamp":"2026-06-20T08:56:02.010Z"}
+{"level":"info","message":"GET /api/v1/billing/invoices 403 169 - 5.345 ms","timestamp":"2026-06-20T08:56:02.013Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 648.739 ms","timestamp":"2026-06-20T08:56:02.586Z"}
+{"level":"warn","message":"[403 API Warning] Path: POST /api/v1/billing/payments/initiate - Code: INSUFFICIENT_ROLE - Message: Access denied. Role not authorized for this route.","timestamp":"2026-06-20T08:56:33.289Z"}
+{"level":"info","message":"POST /api/v1/billing/payments/initiate 403 169 - 6.406 ms","timestamp":"2026-06-20T08:56:33.291Z"}
+{"level":"info","message":"GET /api/v1/reports/summary?startDate=2026-06-01&endDate=2026-06-20 404 161 - 1.979 ms","timestamp":"2026-06-20T08:57:11.164Z"}
+{"level":"info","message":"GET /api/v1/reports/summary?startDate=2026-06-01&endDate=2026-06-20 404 161 - 1.242 ms","timestamp":"2026-06-20T08:57:11.171Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 818.699 ms","timestamp":"2026-06-20T08:57:17.579Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 329.605 ms","timestamp":"2026-06-20T08:57:17.914Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 795.980 ms","timestamp":"2026-06-20T08:57:21.187Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 382.789 ms","timestamp":"2026-06-20T08:57:21.572Z"}
+{"level":"warn","message":"[404 API Warning] Path: GET /api/v1/consultations/queue - Code: EMR_NOT_FOUND - Message: Consultation record not found.","timestamp":"2026-06-20T08:57:25.976Z"}
+{"level":"info","message":"GET /api/v1/consultations/queue 404 145 - 787.241 ms","timestamp":"2026-06-20T08:57:25.980Z"}
+{"level":"warn","message":"[404 API Warning] Path: GET /api/v1/consultations/queue - Code: EMR_NOT_FOUND - Message: Consultation record not found.","timestamp":"2026-06-20T08:57:26.383Z"}
+{"level":"info","message":"GET /api/v1/consultations/queue 404 145 - 401.805 ms","timestamp":"2026-06-20T08:57:26.386Z"}
+{"level":"warn","message":"[400 API Warning] Path: POST /api/v1/consultations - Code: BAD_REQUEST - Message: Patient ID and Chief Complaints are required fields.","timestamp":"2026-06-20T08:58:53.425Z"}
+{"level":"info","message":"POST /api/v1/consultations 400 165 - 828.076 ms","timestamp":"2026-06-20T08:58:53.427Z"}
+{"level":"warn","message":"[404 API Warning] Path: POST /api/v1/ai/clinical-summary - Code: PATIENT_NOT_FOUND - Message: Patient record not found.","timestamp":"2026-06-20T08:59:14.826Z"}
+{"level":"info","message":"POST /api/v1/ai/clinical-summary 404 144 - 686.139 ms","timestamp":"2026-06-20T08:59:14.827Z"}
+{"level":"warn","message":"[404 API Warning] Path: POST /api/v1/ai/clinical-summary - Code: PATIENT_NOT_FOUND - Message: Patient record not found.","timestamp":"2026-06-20T08:59:20.868Z"}
+{"level":"info","message":"POST /api/v1/ai/clinical-summary 404 144 - 386.913 ms","timestamp":"2026-06-20T08:59:20.870Z"}
+{"level":"info","message":"POST /api/v1/ai/diagnosis-support 200 915 - 1379.002 ms","timestamp":"2026-06-20T08:59:24.187Z"}
+{"level":"info","message":"POST /api/v1/ai/medication-assistance 200 876 - 1837.046 ms","timestamp":"2026-06-20T08:59:51.524Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T09:00:31.539Z"}
+{"level":"info","message":"POST /api/v1/ai/diagnosis-support 200 915 - 2085.823 ms","timestamp":"2026-06-20T09:00:37.065Z"}
+{"level":"info","message":"POST /api/v1/ai/diagnosis-support 200 915 - 723.223 ms","timestamp":"2026-06-20T09:00:40.758Z"}
+{"level":"info","message":"POST /api/v1/ai/diagnosis-support 200 915 - 815.962 ms","timestamp":"2026-06-20T09:00:42.481Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2026&month=6 200 26 - 702.116 ms","timestamp":"2026-06-20T09:01:03.686Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2026&month=6 304 - - 384.705 ms","timestamp":"2026-06-20T09:01:04.087Z"}
+{"level":"warn","message":"[404 API Warning] Path: GET /api/v1/consultations/queue - Code: EMR_NOT_FOUND - Message: Consultation record not found.","timestamp":"2026-06-20T09:01:07.584Z"}
+{"level":"info","message":"GET /api/v1/consultations/queue 404 145 - 698.019 ms","timestamp":"2026-06-20T09:01:07.587Z"}
+{"level":"warn","message":"[404 API Warning] Path: GET /api/v1/consultations/queue - Code: EMR_NOT_FOUND - Message: Consultation record not found.","timestamp":"2026-06-20T09:01:07.976Z"}
+{"level":"info","message":"GET /api/v1/consultations/queue 404 145 - 387.065 ms","timestamp":"2026-06-20T09:01:07.979Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 690.989 ms","timestamp":"2026-06-20T09:01:11.255Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 404.447 ms","timestamp":"2026-06-20T09:01:11.665Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 3007.585 ms","timestamp":"2026-06-20T09:01:47.303Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1540.693 ms","timestamp":"2026-06-20T09:01:48.847Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 4846.902 ms","timestamp":"2026-06-20T09:01:52.169Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1686.355 ms","timestamp":"2026-06-20T09:01:53.860Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 3786.289 ms","timestamp":"2026-06-20T09:01:56.040Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 4475.349 ms","timestamp":"2026-06-20T09:01:58.357Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 6454.604 ms","timestamp":"2026-06-20T09:01:58.717Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 2226.777 ms","timestamp":"2026-06-20T09:02:01.760Z"}
+{"level":"warn","message":"[404 API Warning] Path: GET /api/v1/consultations/queue - Code: EMR_NOT_FOUND - Message: Consultation record not found.","timestamp":"2026-06-20T09:02:11.397Z"}
+{"level":"info","message":"GET /api/v1/consultations/queue 404 145 - 709.946 ms","timestamp":"2026-06-20T09:02:11.399Z"}
+{"level":"warn","message":"[404 API Warning] Path: GET /api/v1/consultations/queue - Code: EMR_NOT_FOUND - Message: Consultation record not found.","timestamp":"2026-06-20T09:02:11.772Z"}
+{"level":"info","message":"GET /api/v1/consultations/queue 404 145 - 370.962 ms","timestamp":"2026-06-20T09:02:11.774Z"}
+{"level":"warn","message":"[404 API Warning] Path: POST /api/v1/ai/clinical-summary - Code: PATIENT_NOT_FOUND - Message: Patient record not found.","timestamp":"2026-06-20T09:02:21.516Z"}
+{"level":"info","message":"POST /api/v1/ai/clinical-summary 404 144 - 673.549 ms","timestamp":"2026-06-20T09:02:21.519Z"}
+{"level":"info","message":"POST /api/v1/ai/diagnosis-support 200 915 - 862.400 ms","timestamp":"2026-06-20T09:02:24.673Z"}
+{"level":"info","message":"POST /api/v1/ai/medication-assistance 200 876 - 712.388 ms","timestamp":"2026-06-20T09:02:29.261Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T09:07:11.810Z"}
+{"level":"info","message":"GET /api/v1/patients 401 167 - 5.876 ms","timestamp":"2026-06-20T09:07:11.820Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T09:07:11.833Z"}
+{"level":"info","message":"GET /api/v1/patients 401 167 - 12.003 ms","timestamp":"2026-06-20T09:07:11.840Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/patients - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T09:07:20.693Z"}
+{"level":"info","message":"GET /api/v1/patients 401 167 - 4.053 ms","timestamp":"2026-06-20T09:07:20.694Z"}
+{"level":"error","message":"[500 Server Error] Path: POST /api/v1/auth/refresh","timestamp":"2026-06-20T09:07:22.952Z"}
+{"level":"error","message":"Error: getaddrinfo ENOTFOUND mysql-1baa60-seidsualeh123.a.aivencloud.com\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)","timestamp":"2026-06-20T09:07:22.953Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 500 176 - 11098.746 ms","timestamp":"2026-06-20T09:07:22.955Z"}
+{"level":"error","message":"[500 Server Error] Path: POST /api/v1/auth/refresh","timestamp":"2026-06-20T09:07:22.958Z"}
+{"level":"error","message":"Error: getaddrinfo ENOTFOUND mysql-1baa60-seidsualeh123.a.aivencloud.com\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)","timestamp":"2026-06-20T09:07:22.958Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 500 176 - 2252.045 ms","timestamp":"2026-06-20T09:07:22.960Z"}
+{"level":"error","message":"[500 Server Error] Path: POST /api/v1/auth/refresh","timestamp":"2026-06-20T09:07:22.962Z"}
+{"level":"error","message":"Error: getaddrinfo ENOTFOUND mysql-1baa60-seidsualeh123.a.aivencloud.com\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)","timestamp":"2026-06-20T09:07:22.963Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 500 176 - 11094.935 ms","timestamp":"2026-06-20T09:07:22.967Z"}
+{"level":"error","message":"[500 Server Error] Path: POST /api/v1/auth/login","timestamp":"2026-06-20T09:07:27.684Z"}
+{"level":"error","message":"Error: getaddrinfo ENOTFOUND mysql-1baa60-seidsualeh123.a.aivencloud.com\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)","timestamp":"2026-06-20T09:07:27.685Z"}
+{"level":"info","message":"POST /api/v1/auth/login 500 176 - 9.857 ms","timestamp":"2026-06-20T09:07:27.687Z"}
+{"level":"info","message":"POST /api/v1/auth/login 200 1108 - 6101.981 ms","timestamp":"2026-06-20T09:23:46.622Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 2590.139 ms","timestamp":"2026-06-20T09:23:49.344Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1273.272 ms","timestamp":"2026-06-20T09:23:50.621Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 4970.256 ms","timestamp":"2026-06-20T09:23:54.365Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1358.450 ms","timestamp":"2026-06-20T09:23:55.727Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 3566.510 ms","timestamp":"2026-06-20T09:23:58.322Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 4063.946 ms","timestamp":"2026-06-20T09:23:59.825Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 5697.652 ms","timestamp":"2026-06-20T09:24:00.459Z"}
+{"level":"info","message":"GET /api/v1/consultations/queue - - - - ms","timestamp":"2026-06-20T09:24:22.036Z"}
+{"level":"info","message":"GET /api/v1/consultations/queue - - - - ms","timestamp":"2026-06-20T09:24:22.057Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/consultations/queue","timestamp":"2026-06-20T09:24:44.855Z"}
+{"level":"error","message":"Error: read ECONNRESET\n    at TLSWrap.onStreamRead (node:internal/stream_base_commons:216:20)","timestamp":"2026-06-20T09:24:44.855Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/consultations/queue","timestamp":"2026-06-20T09:24:45.913Z"}
+{"level":"error","message":"Error: read ECONNRESET\n    at TLSWrap.onStreamRead (node:internal/stream_base_commons:216:20)","timestamp":"2026-06-20T09:24:45.914Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T09:29:05.755Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 1535.388 ms","timestamp":"2026-06-20T09:32:02.132Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 326.040 ms","timestamp":"2026-06-20T09:32:02.467Z"}
+{"level":"warn","message":"[404 API Warning] Path: GET /api/v1/consultations/queue - Code: EMR_NOT_FOUND - Message: Consultation record not found.","timestamp":"2026-06-20T09:32:03.618Z"}
+{"level":"info","message":"GET /api/v1/consultations/queue 404 145 - 686.208 ms","timestamp":"2026-06-20T09:32:03.624Z"}
+{"level":"warn","message":"[404 API Warning] Path: GET /api/v1/consultations/queue - Code: EMR_NOT_FOUND - Message: Consultation record not found.","timestamp":"2026-06-20T09:32:03.970Z"}
+{"level":"info","message":"GET /api/v1/consultations/queue 404 145 - 342.411 ms","timestamp":"2026-06-20T09:32:03.976Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2026&month=6 304 - - 901.088 ms","timestamp":"2026-06-20T09:32:10.418Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2026&month=6 304 - - 367.939 ms","timestamp":"2026-06-20T09:32:10.790Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients","timestamp":"2026-06-20T09:32:12.584Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T09:32:12.586Z"}
+{"level":"info","message":"GET /api/v1/patients 500 162 - 787.817 ms","timestamp":"2026-06-20T09:32:12.596Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients","timestamp":"2026-06-20T09:32:13.640Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T09:32:13.642Z"}
+{"level":"info","message":"GET /api/v1/patients 500 162 - 1034.624 ms","timestamp":"2026-06-20T09:32:13.646Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 200 36 - 693.990 ms","timestamp":"2026-06-20T09:32:45.894Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 360.914 ms","timestamp":"2026-06-20T09:32:46.264Z"}
+{"level":"info","message":"GET /api/v1/patients - - - - ms","timestamp":"2026-06-20T09:33:17.362Z"}
+{"level":"info","message":"GET /api/v1/patients - - - - ms","timestamp":"2026-06-20T09:33:17.368Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients","timestamp":"2026-06-20T09:33:21.585Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T09:33:21.586Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients","timestamp":"2026-06-20T09:33:25.753Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T09:33:25.753Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 650.478 ms","timestamp":"2026-06-20T09:33:32.066Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 532.400 ms","timestamp":"2026-06-20T09:33:32.601Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients","timestamp":"2026-06-20T09:33:37.744Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T09:33:37.745Z"}
+{"level":"info","message":"GET /api/v1/patients 500 162 - 336.505 ms","timestamp":"2026-06-20T09:33:37.748Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients","timestamp":"2026-06-20T09:33:38.106Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T09:33:38.107Z"}
+{"level":"info","message":"GET /api/v1/patients 500 162 - 355.629 ms","timestamp":"2026-06-20T09:33:38.110Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2026&month=6 304 - - 644.836 ms","timestamp":"2026-06-20T09:33:39.059Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2026&month=6 304 - - 318.289 ms","timestamp":"2026-06-20T09:33:39.381Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 619.604 ms","timestamp":"2026-06-20T09:33:41.641Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 309.911 ms","timestamp":"2026-06-20T09:33:41.955Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 663.583 ms","timestamp":"2026-06-20T09:33:44.708Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 411.782 ms","timestamp":"2026-06-20T09:33:45.124Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 2535.985 ms","timestamp":"2026-06-20T09:33:49.006Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1341.928 ms","timestamp":"2026-06-20T09:33:50.352Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 2872.244 ms","timestamp":"2026-06-20T09:33:51.900Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1529.072 ms","timestamp":"2026-06-20T09:33:53.432Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 3851.747 ms","timestamp":"2026-06-20T09:33:55.910Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 4080.012 ms","timestamp":"2026-06-20T09:33:57.541Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 974 - 5768.190 ms","timestamp":"2026-06-20T09:33:57.834Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 645.467 ms","timestamp":"2026-06-20T09:34:16.805Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 367.468 ms","timestamp":"2026-06-20T09:34:17.176Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T09:41:58.494Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T09:42:07.944Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/queues/CONSULTATION - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T09:42:27.216Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 401 167 - 878.394 ms","timestamp":"2026-06-20T09:42:27.223Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/queues/CONSULTATION - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T09:42:27.235Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 401 167 - 8.949 ms","timestamp":"2026-06-20T09:42:27.239Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 1360.460 ms","timestamp":"2026-06-20T09:42:28.640Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 649.265 ms","timestamp":"2026-06-20T09:42:29.301Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 2882.916 ms","timestamp":"2026-06-20T09:42:30.168Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 678.807 ms","timestamp":"2026-06-20T09:42:30.859Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 652.182 ms","timestamp":"2026-06-20T09:44:04.159Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 364.233 ms","timestamp":"2026-06-20T09:44:04.527Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 626.048 ms","timestamp":"2026-06-20T09:44:05.938Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 327.362 ms","timestamp":"2026-06-20T09:44:06.269Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 384.924 ms","timestamp":"2026-06-20T09:44:17.313Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 346.713 ms","timestamp":"2026-06-20T09:44:17.665Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/pharmacy-insights - Code: AI_SERVICE_OFFLINE - Message: Gemini API key is not configured. Clinical AI features are temporarily unavailable.","timestamp":"2026-06-20T09:44:23.204Z"}
+{"level":"info","message":"POST /api/v1/ai/pharmacy-insights 503 203 - 5.076 ms","timestamp":"2026-06-20T09:44:23.206Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/pharmacy-insights - Code: AI_SERVICE_OFFLINE - Message: Gemini API key is not configured. Clinical AI features are temporarily unavailable.","timestamp":"2026-06-20T09:44:49.435Z"}
+{"level":"info","message":"POST /api/v1/ai/pharmacy-insights 503 203 - 8.397 ms","timestamp":"2026-06-20T09:44:49.437Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/pharmacy-insights - Code: AI_SERVICE_OFFLINE - Message: Gemini API key is not configured. Clinical AI features are temporarily unavailable.","timestamp":"2026-06-20T09:44:52.750Z"}
+{"level":"info","message":"POST /api/v1/ai/pharmacy-insights 503 203 - 2.926 ms","timestamp":"2026-06-20T09:44:52.751Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/pharmacy-insights - Code: AI_SERVICE_OFFLINE - Message: Gemini API key is not configured. Clinical AI features are temporarily unavailable.","timestamp":"2026-06-20T09:44:54.199Z"}
+{"level":"info","message":"POST /api/v1/ai/pharmacy-insights 503 203 - 4.031 ms","timestamp":"2026-06-20T09:44:54.201Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/pharmacy-insights - Code: AI_SERVICE_OFFLINE - Message: Gemini API key is not configured. Clinical AI features are temporarily unavailable.","timestamp":"2026-06-20T09:44:55.090Z"}
+{"level":"info","message":"POST /api/v1/ai/pharmacy-insights 503 203 - 7.236 ms","timestamp":"2026-06-20T09:44:55.092Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/pharmacy-insights - Code: AI_SERVICE_OFFLINE - Message: Gemini API key is not configured. Clinical AI features are temporarily unavailable.","timestamp":"2026-06-20T09:44:55.659Z"}
+{"level":"info","message":"POST /api/v1/ai/pharmacy-insights 503 203 - 3.606 ms","timestamp":"2026-06-20T09:44:55.660Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/pharmacy-insights - Code: AI_SERVICE_OFFLINE - Message: Gemini API key is not configured. Clinical AI features are temporarily unavailable.","timestamp":"2026-06-20T09:44:56.024Z"}
+{"level":"info","message":"POST /api/v1/ai/pharmacy-insights 503 203 - 5.911 ms","timestamp":"2026-06-20T09:44:56.029Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T09:45:10.252Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/pharmacy-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily offline.","timestamp":"2026-06-20T09:45:18.031Z"}
+{"level":"info","message":"POST /api/v1/ai/pharmacy-insights 503 163 - 5074.608 ms","timestamp":"2026-06-20T09:45:18.042Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/pharmacy-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily offline.","timestamp":"2026-06-20T09:48:06.862Z"}
+{"level":"info","message":"POST /api/v1/ai/pharmacy-insights 503 163 - 4415.475 ms","timestamp":"2026-06-20T09:48:06.865Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 659.944 ms","timestamp":"2026-06-20T09:48:17.383Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 328.324 ms","timestamp":"2026-06-20T09:48:17.722Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 3257.432 ms","timestamp":"2026-06-20T09:48:23.234Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2026&month=6 304 - - 5244.551 ms","timestamp":"2026-06-20T09:48:36.877Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2026&month=6 304 - - 309.942 ms","timestamp":"2026-06-20T09:48:37.197Z"}
+{"level":"info","message":"GET /api/v1/patients - - - - ms","timestamp":"2026-06-20T09:48:37.488Z"}
+{"level":"info","message":"GET /api/v1/patients - - - - ms","timestamp":"2026-06-20T09:48:37.495Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients","timestamp":"2026-06-20T09:48:38.143Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T09:48:38.144Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients","timestamp":"2026-06-20T09:48:38.556Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T09:48:38.557Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T09:48:38.710Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T09:48:38.710Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 162 - 5310.597 ms","timestamp":"2026-06-20T09:48:38.714Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T09:48:39.169Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T09:48:39.169Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 162 - 452.315 ms","timestamp":"2026-06-20T09:48:39.171Z"}
+{"level":"warn","message":"[400 API Warning] Path: POST /api/v1/patients - Code: BAD_REQUEST - Message: First name, last name, gender, and Date of Birth (Gregorian) are required.","timestamp":"2026-06-20T09:49:01.016Z"}
+{"level":"info","message":"POST /api/v1/patients 400 187 - 7.043 ms","timestamp":"2026-06-20T09:49:01.018Z"}
+{"level":"warn","message":"[400 API Warning] Path: POST /api/v1/patients - Code: BAD_REQUEST - Message: First name, last name, gender, and Date of Birth (Gregorian) are required.","timestamp":"2026-06-20T09:49:41.821Z"}
+{"level":"info","message":"POST /api/v1/patients 400 187 - 6.509 ms","timestamp":"2026-06-20T09:49:41.824Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 743.876 ms","timestamp":"2026-06-20T09:50:03.778Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 402.268 ms","timestamp":"2026-06-20T09:50:04.185Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 719.889 ms","timestamp":"2026-06-20T09:50:05.476Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 322.164 ms","timestamp":"2026-06-20T09:50:05.802Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 694.630 ms","timestamp":"2026-06-20T09:50:07.878Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 323.719 ms","timestamp":"2026-06-20T09:50:08.206Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/pharmacy-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily offline.","timestamp":"2026-06-20T09:50:15.983Z"}
+{"level":"info","message":"POST /api/v1/ai/pharmacy-insights 503 163 - 4447.379 ms","timestamp":"2026-06-20T09:50:15.986Z"}
+{"level":"info","message":"GET /api/v1/users 304 - - 828.147 ms","timestamp":"2026-06-20T09:50:23.230Z"}
+{"level":"info","message":"GET /api/v1/users 304 - - 325.444 ms","timestamp":"2026-06-20T09:50:23.560Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/auth/me - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T10:24:33.356Z"}
+{"level":"info","message":"GET /api/v1/auth/me 401 167 - 2630.309 ms","timestamp":"2026-06-20T10:24:33.382Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/auth/me - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T10:24:33.460Z"}
+{"level":"info","message":"GET /api/v1/auth/me 401 167 - 17.322 ms","timestamp":"2026-06-20T10:24:33.463Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 1346.794 ms","timestamp":"2026-06-20T10:24:34.850Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 1741.624 ms","timestamp":"2026-06-20T10:24:36.620Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 3195.586 ms","timestamp":"2026-06-20T10:24:36.675Z"}
+{"level":"info","message":"GET /api/v1/users 304 - - 720.445 ms","timestamp":"2026-06-20T10:24:37.725Z"}
+{"level":"info","message":"GET /api/v1/users 304 - - 376.807 ms","timestamp":"2026-06-20T10:24:38.108Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 1350.156 ms","timestamp":"2026-06-20T10:24:38.359Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 1213.996 ms","timestamp":"2026-06-20T10:24:44.654Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 324.041 ms","timestamp":"2026-06-20T10:24:44.981Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T10:24:55.171Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T10:24:55.173Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 162 - 657.075 ms","timestamp":"2026-06-20T10:24:55.175Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T10:24:55.498Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T10:24:55.499Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 162 - 320.697 ms","timestamp":"2026-06-20T10:24:55.501Z"}
+{"level":"info","message":"GET /api/v1/patients/1/visits 404 163 - 6.997 ms","timestamp":"2026-06-20T10:25:03.635Z"}
+{"level":"info","message":"GET /api/v1/patients/1/visits 404 163 - 7.733 ms","timestamp":"2026-06-20T10:25:03.670Z"}
+{"level":"info","message":"GET /api/v1/patients/1 200 526 - 870.688 ms","timestamp":"2026-06-20T10:25:04.486Z"}
+{"level":"info","message":"GET /api/v1/patients/1 304 - - 316.418 ms","timestamp":"2026-06-20T10:25:04.805Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 1143.049 ms","timestamp":"2026-06-20T10:25:50.062Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 332.521 ms","timestamp":"2026-06-20T10:25:50.400Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 756.539 ms","timestamp":"2026-06-20T10:25:50.543Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 336.515 ms","timestamp":"2026-06-20T10:25:50.887Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 1447.734 ms","timestamp":"2026-06-20T10:25:54.719Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 312.014 ms","timestamp":"2026-06-20T10:25:55.036Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/pharmacy-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily offline.","timestamp":"2026-06-20T10:26:19.401Z"}
+{"level":"info","message":"POST /api/v1/ai/pharmacy-insights 503 163 - 5105.077 ms","timestamp":"2026-06-20T10:26:19.403Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 691.457 ms","timestamp":"2026-06-20T10:29:17.888Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 373.394 ms","timestamp":"2026-06-20T10:29:18.265Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 320.700 ms","timestamp":"2026-06-20T10:29:20.845Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 316.120 ms","timestamp":"2026-06-20T10:29:21.165Z"}
+{"level":"info","message":"GET /api/v1/labs/requests?status=pending 200 26 - 621.899 ms","timestamp":"2026-06-20T10:29:24.986Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 352.001 ms","timestamp":"2026-06-20T10:29:27.472Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 354.525 ms","timestamp":"2026-06-20T10:29:27.830Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/pharmacy-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily offline.","timestamp":"2026-06-20T10:30:04.610Z"}
+{"level":"info","message":"POST /api/v1/ai/pharmacy-insights 503 163 - 4232.157 ms","timestamp":"2026-06-20T10:30:04.612Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T10:30:35.942Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/pharmacy-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily offline.","timestamp":"2026-06-20T10:30:46.465Z"}
+{"level":"info","message":"POST /api/v1/ai/pharmacy-insights 503 163 - 5775.341 ms","timestamp":"2026-06-20T10:30:46.475Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 2634.254 ms","timestamp":"2026-06-20T10:31:28.988Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1284.740 ms","timestamp":"2026-06-20T10:31:30.278Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 4578.370 ms","timestamp":"2026-06-20T10:31:33.607Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1272.862 ms","timestamp":"2026-06-20T10:31:34.888Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily offline.","timestamp":"2026-06-20T10:31:41.346Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 503 163 - 7583.609 ms","timestamp":"2026-06-20T10:31:41.350Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily offline.","timestamp":"2026-06-20T10:31:42.004Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 503 163 - 7082.334 ms","timestamp":"2026-06-20T10:31:42.011Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily offline.","timestamp":"2026-06-20T10:31:42.960Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 503 163 - 9187.057 ms","timestamp":"2026-06-20T10:31:42.962Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily offline.","timestamp":"2026-06-20T10:34:48.757Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 503 163 - 6191.742 ms","timestamp":"2026-06-20T10:34:48.759Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T10:43:12.406Z"}
+{"level":"error","message":"Error: getaddrinfo ENOTFOUND mysql-1baa60-seidsualeh123.a.aivencloud.com\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)","timestamp":"2026-06-20T10:43:12.407Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 176 - 5.711 ms","timestamp":"2026-06-20T10:43:12.409Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T10:43:12.416Z"}
+{"level":"error","message":"Error: getaddrinfo ENOTFOUND mysql-1baa60-seidsualeh123.a.aivencloud.com\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)","timestamp":"2026-06-20T10:43:12.416Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 176 - 5.862 ms","timestamp":"2026-06-20T10:43:12.418Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/appointments?year=2026&month=6","timestamp":"2026-06-20T10:43:13.784Z"}
+{"level":"error","message":"Error: getaddrinfo ENOTFOUND mysql-1baa60-seidsualeh123.a.aivencloud.com\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)","timestamp":"2026-06-20T10:43:13.785Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2026&month=6 500 176 - 5.243 ms","timestamp":"2026-06-20T10:43:13.787Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/appointments?year=2026&month=6","timestamp":"2026-06-20T10:43:13.793Z"}
+{"level":"error","message":"Error: getaddrinfo ENOTFOUND mysql-1baa60-seidsualeh123.a.aivencloud.com\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)","timestamp":"2026-06-20T10:43:13.794Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2026&month=6 500 176 - 5.735 ms","timestamp":"2026-06-20T10:43:13.795Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T10:43:15.194Z"}
+{"level":"error","message":"Error: getaddrinfo ENOTFOUND mysql-1baa60-seidsualeh123.a.aivencloud.com\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)","timestamp":"2026-06-20T10:43:15.194Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 176 - 3.864 ms","timestamp":"2026-06-20T10:43:15.195Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T10:43:15.200Z"}
+{"level":"error","message":"Error: getaddrinfo ENOTFOUND mysql-1baa60-seidsualeh123.a.aivencloud.com\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)","timestamp":"2026-06-20T10:43:15.201Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 176 - 5.028 ms","timestamp":"2026-06-20T10:43:15.202Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients/1","timestamp":"2026-06-20T10:43:17.557Z"}
+{"level":"error","message":"Error: getaddrinfo ENOTFOUND mysql-1baa60-seidsualeh123.a.aivencloud.com\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)","timestamp":"2026-06-20T10:43:17.558Z"}
+{"level":"info","message":"GET /api/v1/patients/1 500 176 - 5.135 ms","timestamp":"2026-06-20T10:43:17.559Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients/1/visits","timestamp":"2026-06-20T10:43:17.566Z"}
+{"level":"error","message":"Error: getaddrinfo ENOTFOUND mysql-1baa60-seidsualeh123.a.aivencloud.com\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)","timestamp":"2026-06-20T10:43:17.567Z"}
+{"level":"info","message":"GET /api/v1/patients/1/visits 500 176 - 6.637 ms","timestamp":"2026-06-20T10:43:17.569Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients/1","timestamp":"2026-06-20T10:43:17.579Z"}
+{"level":"error","message":"Error: getaddrinfo ENOTFOUND mysql-1baa60-seidsualeh123.a.aivencloud.com\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)","timestamp":"2026-06-20T10:43:17.579Z"}
+{"level":"info","message":"GET /api/v1/patients/1 500 176 - 9.084 ms","timestamp":"2026-06-20T10:43:17.581Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients/1/visits","timestamp":"2026-06-20T10:43:17.589Z"}
+{"level":"error","message":"Error: getaddrinfo ENOTFOUND mysql-1baa60-seidsualeh123.a.aivencloud.com\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)","timestamp":"2026-06-20T10:43:17.590Z"}
+{"level":"info","message":"GET /api/v1/patients/1/visits 500 176 - 7.010 ms","timestamp":"2026-06-20T10:43:17.591Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T10:43:43.620Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/reports/patients - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T10:43:58.678Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 401 167 - 7459.489 ms","timestamp":"2026-06-20T10:43:58.682Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/reports/patients - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T10:43:58.689Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 401 167 - 4.539 ms","timestamp":"2026-06-20T10:43:58.691Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 1278.470 ms","timestamp":"2026-06-20T10:43:59.999Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 2834.750 ms","timestamp":"2026-06-20T10:44:01.562Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 7454.990 ms","timestamp":"2026-06-20T10:44:07.469Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1290.762 ms","timestamp":"2026-06-20T10:44:08.762Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 2726.973 ms","timestamp":"2026-06-20T10:44:10.205Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1236.578 ms","timestamp":"2026-06-20T10:44:11.443Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T10:44:26.201Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily offline.","timestamp":"2026-06-20T10:44:46.286Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 503 163 - 8531.258 ms","timestamp":"2026-06-20T10:44:46.288Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T10:49:25.451Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T12:18:54.951Z"}
+{"level":"info","message":"POST /api/v1/auth/login 200 1108 - 3455.876 ms","timestamp":"2026-06-20T12:18:58.567Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 2304.705 ms","timestamp":"2026-06-20T12:19:00.953Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 2057.110 ms","timestamp":"2026-06-20T12:19:03.014Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 5665.717 ms","timestamp":"2026-06-20T12:19:06.634Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1018.998 ms","timestamp":"2026-06-20T12:19:07.656Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily unavailable.","timestamp":"2026-06-20T12:19:20.995Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 503 167 - 14271.031 ms","timestamp":"2026-06-20T12:19:20.996Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights - - - - ms","timestamp":"2026-06-20T12:19:21.728Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights - - - - ms","timestamp":"2026-06-20T12:19:22.692Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily unavailable.","timestamp":"2026-06-20T12:19:23.063Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily unavailable.","timestamp":"2026-06-20T12:19:23.171Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T12:26:51.220Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily offline.","timestamp":"2026-06-20T12:27:12.003Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 503 163 - 7539.109 ms","timestamp":"2026-06-20T12:27:12.012Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T12:34:35.141Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T12:36:37.676Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 401 167 - 517.955 ms","timestamp":"2026-06-20T12:36:37.681Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 996.739 ms","timestamp":"2026-06-20T12:36:38.691Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily offline.","timestamp":"2026-06-20T12:36:45.138Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 503 163 - 6444.091 ms","timestamp":"2026-06-20T12:36:45.143Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T12:40:18.708Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T12:40:24.241Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T12:40:26.832Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T12:41:46.715Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T12:43:37.374Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T12:44:08.058Z"}
+{"level":"error","message":"[500 Server Error] Path: POST /api/v1/ai/dashboard-insights","timestamp":"2026-06-20T12:44:20.711Z"}
+{"level":"error","message":"ReferenceError: getGeminiModel is not defined\n    at callGemini (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\services\\ai.service.js:75:17)\n    at renderGeminiOrFallback (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\services\\ai.service.js:305:26)\n    at Object.dashboardInsights (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\services\\ai.service.js:545:27)\n    at dashboardInsights (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\ai.controller.js:590:40)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-06-20T12:44:20.715Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 500 152 - 2843.736 ms","timestamp":"2026-06-20T12:44:20.718Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T12:46:52.768Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T12:46:59.832Z"}
+{"level":"error","message":"[500 Server Error] Path: POST /api/v1/ai/dashboard-insights","timestamp":"2026-06-20T12:47:09.717Z"}
+{"level":"error","message":"TypeError: aiService.dashboardInsights is not a function\n    at dashboardInsights (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\ai.controller.js:590:40)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2026-06-20T12:47:09.718Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 500 168 - 2915.559 ms","timestamp":"2026-06-20T12:47:09.726Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T13:35:05.212Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/auth/me - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T13:35:59.469Z"}
+{"level":"info","message":"GET /api/v1/auth/me 401 167 - 564.606 ms","timestamp":"2026-06-20T13:35:59.484Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/auth/me - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T13:35:59.510Z"}
+{"level":"info","message":"GET /api/v1/auth/me 401 167 - 17.592 ms","timestamp":"2026-06-20T13:35:59.514Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 984.329 ms","timestamp":"2026-06-20T13:36:00.726Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 1070.093 ms","timestamp":"2026-06-20T13:36:01.827Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 2327.122 ms","timestamp":"2026-06-20T13:36:02.081Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 541.373 ms","timestamp":"2026-06-20T13:36:02.678Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 2217.929 ms","timestamp":"2026-06-20T13:36:04.345Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1028.176 ms","timestamp":"2026-06-20T13:36:05.378Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 2034.655 ms","timestamp":"2026-06-20T13:36:06.477Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1049.305 ms","timestamp":"2026-06-20T13:36:07.556Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily unavailable.","timestamp":"2026-06-20T13:36:17.564Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 503 167 - 10803.355 ms","timestamp":"2026-06-20T13:36:17.569Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily unavailable.","timestamp":"2026-06-20T13:36:18.153Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 503 167 - 10549.390 ms","timestamp":"2026-06-20T13:36:18.168Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily unavailable.","timestamp":"2026-06-20T13:36:18.539Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 503 167 - 11766.684 ms","timestamp":"2026-06-20T13:36:18.543Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T13:38:49.041Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily unavailable.","timestamp":"2026-06-20T13:39:03.531Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 503 167 - 12141.954 ms","timestamp":"2026-06-20T13:39:03.536Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T13:45:54.241Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T13:45:58.320Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily unavailable.","timestamp":"2026-06-20T13:46:27.528Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 503 167 - 11428.889 ms","timestamp":"2026-06-20T13:46:27.535Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T13:50:30.228Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily offline.","timestamp":"2026-06-20T13:50:45.643Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 503 163 - 9492.101 ms","timestamp":"2026-06-20T13:50:45.649Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T13:55:14.042Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T13:55:27.789Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T13:55:38.365Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T13:55:46.035Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 401 167 - 798.489 ms","timestamp":"2026-06-20T13:55:46.057Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 3660.654 ms","timestamp":"2026-06-20T13:55:49.735Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily unavailable.","timestamp":"2026-06-20T13:56:03.350Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 503 167 - 13606.499 ms","timestamp":"2026-06-20T13:56:03.353Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T13:56:53.067Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily unavailable.","timestamp":"2026-06-20T13:57:21.024Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 503 167 - 13055.123 ms","timestamp":"2026-06-20T13:57:21.038Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T13:58:14.768Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily unavailable.","timestamp":"2026-06-20T13:58:33.252Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 503 167 - 13543.291 ms","timestamp":"2026-06-20T13:58:33.258Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:02:52.916Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights - - - - ms","timestamp":"2026-06-20T14:03:15.963Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily unavailable.","timestamp":"2026-06-20T14:03:19.217Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:03:56.353Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights - - - - ms","timestamp":"2026-06-20T14:04:14.228Z"}
+{"level":"warn","message":"[503 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service is temporarily unavailable.","timestamp":"2026-06-20T14:04:16.653Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:13:05.315Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:16:04.169Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T14:16:29.700Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 401 167 - 494.770 ms","timestamp":"2026-06-20T14:16:29.703Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 985.960 ms","timestamp":"2026-06-20T14:16:30.700Z"}
+{"level":"warn","message":"[404 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_OFFLINE - Message: Clinical AI service error (404).","timestamp":"2026-06-20T14:16:37.855Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 404 152 - 7153.801 ms","timestamp":"2026-06-20T14:16:37.864Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:17:32.184Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_UNAUTHORIZED - Message: Clinical AI unauthorized (401). Check API key or OAuth token. Reason: Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.","timestamp":"2026-06-20T14:18:13.604Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 401 403 - 6896.493 ms","timestamp":"2026-06-20T14:18:13.608Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:19:47.812Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_UNAUTHORIZED - Message: Clinical AI unauthorized (401). Check API key or OAuth token. Reason: Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.","timestamp":"2026-06-20T14:20:13.682Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 401 403 - 7196.789 ms","timestamp":"2026-06-20T14:20:13.690Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:20:38.215Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_UNAUTHORIZED - Message: Clinical AI unauthorized (401). Check API key or OAuth token. Reason: Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.","timestamp":"2026-06-20T14:20:48.023Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 401 403 - 6712.795 ms","timestamp":"2026-06-20T14:20:48.027Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:23:24.719Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:24:02.110Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:24:39.937Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:24:52.907Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:26:55.337Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:34:15.969Z"}
+{"level":"error","message":"[Server] Critical Error: Unable to verify database connection. Server startup aborted.","timestamp":"2026-06-20T14:34:57.109Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:35:42.482Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T14:35:47.702Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 401 167 - 493.547 ms","timestamp":"2026-06-20T14:35:47.711Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 931.631 ms","timestamp":"2026-06-20T14:35:48.653Z"}
+{"level":"warn","message":"[400 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_INVALID_ARGUMENT - Message: Clinical AI invalid request (400): {\"error\":{\"code\":400,\"message\":\"* GenerateContentRequest.contents: contents is not specified\\n\",\"status\":\"INVALID_ARGUMENT\"}}","timestamp":"2026-06-20T14:35:52.146Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 400 302 - 3488.944 ms","timestamp":"2026-06-20T14:35:52.147Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:36:37.544Z"}
+{"level":"warn","message":"[400 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_INVALID_ARGUMENT - Message: Clinical AI invalid request (400): {\"error\":{\"code\":400,\"message\":\"* GenerateContentRequest.contents: contents is not specified\\n\",\"status\":\"INVALID_ARGUMENT\"}}","timestamp":"2026-06-20T14:36:49.633Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 400 302 - 3299.998 ms","timestamp":"2026-06-20T14:36:49.636Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:37:32.024Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:37:47.509Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:38:48.560Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:39:18.127Z"}
+{"level":"warn","message":"[400 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_INVALID_ARGUMENT - Message: Clinical AI invalid request (400): {\"error\":{\"code\":400,\"message\":\"* GenerateContentRequest.contents: contents is not specified\\n\",\"status\":\"INVALID_ARGUMENT\"}}","timestamp":"2026-06-20T14:39:29.837Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 400 302 - 3848.216 ms","timestamp":"2026-06-20T14:39:29.842Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:42:06.489Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:42:13.300Z"}
+{"level":"warn","message":"[400 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_INVALID_ARGUMENT - Message: Clinical AI invalid request (400): {\"error\":{\"code\":400,\"message\":\"* GenerateContentRequest.contents: contents is not specified\\n\",\"status\":\"INVALID_ARGUMENT\"}}","timestamp":"2026-06-20T14:42:46.995Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 400 302 - 8231.263 ms","timestamp":"2026-06-20T14:42:47.011Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:50:23.630Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T14:53:06.715Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 401 167 - 514.797 ms","timestamp":"2026-06-20T14:53:06.721Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 2245.757 ms","timestamp":"2026-06-20T14:53:08.996Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights - - - - ms","timestamp":"2026-06-20T14:53:24.020Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T14:53:59.108Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights - - - - ms","timestamp":"2026-06-20T14:54:27.951Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights - - - - ms","timestamp":"2026-06-20T14:58:18.362Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 8873 - 10704.473 ms","timestamp":"2026-06-20T14:58:53.278Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T15:09:23.428Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T15:19:25.755Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T15:19:30.449Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T15:19:34.453Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:4000","timestamp":"2026-06-20T15:24:25.224Z"}
+{"level":"warn","message":"[401 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T15:24:39.355Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 401 167 - 492.695 ms","timestamp":"2026-06-20T15:24:39.360Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 1007.808 ms","timestamp":"2026-06-20T15:24:40.384Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 503.368 ms","timestamp":"2026-06-20T15:24:47.186Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 239.281 ms","timestamp":"2026-06-20T15:24:47.431Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights - - - - ms","timestamp":"2026-06-20T15:24:55.397Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1747.974 ms","timestamp":"2026-06-20T15:24:55.414Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 984.926 ms","timestamp":"2026-06-20T15:24:56.401Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1953.309 ms","timestamp":"2026-06-20T15:25:02.132Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1703.626 ms","timestamp":"2026-06-20T15:25:03.838Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights - - - - ms","timestamp":"2026-06-20T15:25:17.942Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights - - - - ms","timestamp":"2026-06-20T15:25:17.947Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 10971 - 14654.503 ms","timestamp":"2026-06-20T15:25:18.505Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-2.5-flash\\nPlease retry in 26.78255348s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"5\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"26s\"}]}}","timestamp":"2026-06-20T15:25:33.450Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 1249 - 5596.310 ms","timestamp":"2026-06-20T15:25:33.451Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 16.139472629s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"16s\"}]}}","timestamp":"2026-06-20T15:25:44.089Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 1249 - 5447.920 ms","timestamp":"2026-06-20T15:25:44.090Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 54.846025898s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"54s\"}]}}","timestamp":"2026-06-20T15:26:05.495Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 1249 - 6891.962 ms","timestamp":"2026-06-20T15:26:05.497Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 28.382833872s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"28s\"}]}}","timestamp":"2026-06-20T15:26:31.856Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 1249 - 5402.267 ms","timestamp":"2026-06-20T15:26:31.857Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/auth/me - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T15:28:35.874Z"}
+{"level":"info","message":"GET /api/v1/auth/me 401 167 - 5.846 ms","timestamp":"2026-06-20T15:28:35.881Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/auth/me - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T15:28:35.888Z"}
+{"level":"info","message":"GET /api/v1/auth/me 401 167 - 6.561 ms","timestamp":"2026-06-20T15:28:35.896Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 394 - 946.128 ms","timestamp":"2026-06-20T15:28:36.952Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 394 - 987.499 ms","timestamp":"2026-06-20T15:28:36.972Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 952.132 ms","timestamp":"2026-06-20T15:28:37.995Z"}
+{"level":"warn","message":"[403 API Warning] Path: GET /api/v1/billing/invoices - Code: INSUFFICIENT_ROLE - Message: Access denied. Role not authorized for this route.","timestamp":"2026-06-20T15:28:38.142Z"}
+{"level":"info","message":"GET /api/v1/billing/invoices 403 169 - 7.943 ms","timestamp":"2026-06-20T15:28:38.145Z"}
+{"level":"warn","message":"[403 API Warning] Path: GET /api/v1/billing/invoices - Code: INSUFFICIENT_ROLE - Message: Access denied. Role not authorized for this route.","timestamp":"2026-06-20T15:28:38.152Z"}
+{"level":"info","message":"GET /api/v1/billing/invoices 403 169 - 4.796 ms","timestamp":"2026-06-20T15:28:38.160Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 463.538 ms","timestamp":"2026-06-20T15:28:38.463Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 479.986 ms","timestamp":"2026-06-20T15:28:59.750Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 475.451 ms","timestamp":"2026-06-20T15:29:00.229Z"}
+{"level":"warn","message":"[403 API Warning] Path: GET /api/v1/billing/invoices?status=unpaid - Code: INSUFFICIENT_ROLE - Message: Access denied. Role not authorized for this route.","timestamp":"2026-06-20T15:29:04.958Z"}
+{"level":"info","message":"GET /api/v1/billing/invoices?status=unpaid 403 169 - 8.825 ms","timestamp":"2026-06-20T15:29:04.960Z"}
+{"level":"warn","message":"[403 API Warning] Path: GET /api/v1/billing/invoices?status=unpaid - Code: INSUFFICIENT_ROLE - Message: Access denied. Role not authorized for this route.","timestamp":"2026-06-20T15:29:04.966Z"}
+{"level":"info","message":"GET /api/v1/billing/invoices?status=unpaid 403 169 - 3.868 ms","timestamp":"2026-06-20T15:29:04.972Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 484.146 ms","timestamp":"2026-06-20T15:30:32.111Z"}
+{"level":"warn","message":"[403 API Warning] Path: GET /api/v1/billing/invoices - Code: INSUFFICIENT_ROLE - Message: Access denied. Role not authorized for this route.","timestamp":"2026-06-20T15:30:32.240Z"}
+{"level":"info","message":"GET /api/v1/billing/invoices 403 169 - 3.577 ms","timestamp":"2026-06-20T15:30:32.252Z"}
+{"level":"warn","message":"[403 API Warning] Path: GET /api/v1/billing/invoices - Code: INSUFFICIENT_ROLE - Message: Access denied. Role not authorized for this route.","timestamp":"2026-06-20T15:30:32.257Z"}
+{"level":"info","message":"GET /api/v1/billing/invoices 403 169 - 4.391 ms","timestamp":"2026-06-20T15:30:32.261Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 594.992 ms","timestamp":"2026-06-20T15:30:32.709Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 558.862 ms","timestamp":"2026-06-20T15:30:34.055Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 499.110 ms","timestamp":"2026-06-20T15:30:34.559Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1718.390 ms","timestamp":"2026-06-20T15:30:36.116Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1037.322 ms","timestamp":"2026-06-20T15:30:37.157Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1955.050 ms","timestamp":"2026-06-20T15:30:38.135Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 934.320 ms","timestamp":"2026-06-20T15:30:39.081Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 16.521029812s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.5-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"16s\"}]}}","timestamp":"2026-06-20T15:30:43.716Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 1249 - 5365.059 ms","timestamp":"2026-06-20T15:30:43.717Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 16.459755632s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"16s\"}]}}","timestamp":"2026-06-20T15:30:43.771Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 1249 - 5428.432 ms","timestamp":"2026-06-20T15:30:43.774Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 15.952003764s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"15s\"}]}}","timestamp":"2026-06-20T15:30:44.275Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 1249 - 5123.648 ms","timestamp":"2026-06-20T15:30:44.277Z"}
+{"level":"info","message":"POST /api/v1/auth/login 200 755 - 5703.815 ms","timestamp":"2026-06-20T15:31:12.318Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 200 36 - 808.265 ms","timestamp":"2026-06-20T15:31:18.784Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 304 - - 239.374 ms","timestamp":"2026-06-20T15:31:19.027Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T15:32:18.588Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T15:32:18.589Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 162 - 4233.018 ms","timestamp":"2026-06-20T15:32:18.590Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T15:32:18.867Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T15:32:18.868Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 162 - 269.258 ms","timestamp":"2026-06-20T15:32:18.869Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 200 36 - 268.428 ms","timestamp":"2026-06-20T15:32:18.924Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 575.960 ms","timestamp":"2026-06-20T15:32:19.506Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T15:32:23.037Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T15:32:23.037Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 162 - 489.377 ms","timestamp":"2026-06-20T15:32:23.038Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T15:32:23.288Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T15:32:23.290Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 162 - 242.300 ms","timestamp":"2026-06-20T15:32:23.295Z"}
+{"level":"info","message":"GET /api/v1/patients/1/visits 404 163 - 4.738 ms","timestamp":"2026-06-20T15:32:25.097Z"}
+{"level":"info","message":"GET /api/v1/patients/1/visits 404 163 - 6.128 ms","timestamp":"2026-06-20T15:32:25.110Z"}
+{"level":"info","message":"GET /api/v1/patients/1 200 526 - 628.191 ms","timestamp":"2026-06-20T15:32:25.714Z"}
+{"level":"info","message":"GET /api/v1/patients/1 304 - - 244.165 ms","timestamp":"2026-06-20T15:32:25.962Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 251.472 ms","timestamp":"2026-06-20T15:32:37.887Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 325.032 ms","timestamp":"2026-06-20T15:32:38.249Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 200 26 - 503.439 ms","timestamp":"2026-06-20T15:32:41.164Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 248.183 ms","timestamp":"2026-06-20T15:32:41.416Z"}
+{"level":"info","message":"GET /api/v1/attendance/my-attendance 200 26 - 526.389 ms","timestamp":"2026-06-20T15:32:44.044Z"}
+{"level":"info","message":"GET /api/v1/leaves/types 200 966 - 544.852 ms","timestamp":"2026-06-20T15:32:44.059Z"}
+{"level":"info","message":"GET /api/v1/attendance/my-attendance 304 - - 250.789 ms","timestamp":"2026-06-20T15:32:44.297Z"}
+{"level":"info","message":"GET /api/v1/leaves/types 304 - - 401.824 ms","timestamp":"2026-06-20T15:32:44.464Z"}
+{"level":"info","message":"GET /api/v1/leaves/my-leaves 200 26 - 656.051 ms","timestamp":"2026-06-20T15:32:44.726Z"}
+{"level":"info","message":"GET /api/v1/leaves/my-leaves 304 - - 242.506 ms","timestamp":"2026-06-20T15:32:45.014Z"}
+{"level":"info","message":"POST /api/v1/attendance/check-in 201 169 - 1461.894 ms","timestamp":"2026-06-20T15:32:47.118Z"}
+{"level":"info","message":"GET /api/v1/attendance/my-attendance 200 350 - 528.957 ms","timestamp":"2026-06-20T15:32:47.659Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 304 - - 585.948 ms","timestamp":"2026-06-20T15:32:48.931Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 304 - - 241.999 ms","timestamp":"2026-06-20T15:32:49.178Z"}
+{"level":"info","message":"GET /api/v1/auth/me 200 309 - 961.912 ms","timestamp":"2026-06-20T15:32:53.923Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 270.960 ms","timestamp":"2026-06-20T15:32:54.393Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 492.589 ms","timestamp":"2026-06-20T15:32:54.419Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 257.651 ms","timestamp":"2026-06-20T15:32:54.653Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 304 - - 523.916 ms","timestamp":"2026-06-20T15:33:00.671Z"}
+{"level":"info","message":"GET /api/v1/queues?type=CONSULTATION 304 - - 246.456 ms","timestamp":"2026-06-20T15:33:00.920Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 983.000 ms","timestamp":"2026-06-20T15:33:05.045Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 473.252 ms","timestamp":"2026-06-20T15:33:05.520Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T15:33:05.650Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T15:33:05.651Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 162 - 487.088 ms","timestamp":"2026-06-20T15:33:05.652Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T15:33:05.898Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T15:33:05.898Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 162 - 241.441 ms","timestamp":"2026-06-20T15:33:05.901Z"}
+{"level":"info","message":"GET /api/v1/patients/1/visits 404 163 - 4.060 ms","timestamp":"2026-06-20T15:33:13.521Z"}
+{"level":"info","message":"GET /api/v1/patients/1/visits 404 163 - 2.723 ms","timestamp":"2026-06-20T15:33:13.526Z"}
+{"level":"info","message":"GET /api/v1/patients/1 304 - - 509.826 ms","timestamp":"2026-06-20T15:33:14.021Z"}
+{"level":"info","message":"GET /api/v1/patients/1 304 - - 246.856 ms","timestamp":"2026-06-20T15:33:14.270Z"}
+{"level":"warn","message":"[400 API Warning] Path: PUT /api/v1/patients/1 - Code: BAD_REQUEST - Message: First name, last name, gender, and Date of Birth (Gregorian) are required.","timestamp":"2026-06-20T15:33:24.889Z"}
+{"level":"info","message":"PUT /api/v1/patients/1 400 187 - 4.300 ms","timestamp":"2026-06-20T15:33:24.893Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 513.449 ms","timestamp":"2026-06-20T15:33:43.466Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 250.774 ms","timestamp":"2026-06-20T15:33:43.720Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2026&month=6 200 26 - 543.052 ms","timestamp":"2026-06-20T15:34:01.350Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2026&month=6 304 - - 261.339 ms","timestamp":"2026-06-20T15:34:01.615Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T15:34:13.120Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T15:34:13.121Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 162 - 255.852 ms","timestamp":"2026-06-20T15:34:13.123Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T15:34:13.365Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T15:34:13.366Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 162 - 240.639 ms","timestamp":"2026-06-20T15:34:13.368Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 251.265 ms","timestamp":"2026-06-20T15:34:15.245Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 260.624 ms","timestamp":"2026-06-20T15:34:15.521Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T15:34:38.272Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T15:34:38.292Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 162 - 356.455 ms","timestamp":"2026-06-20T15:34:38.352Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T15:34:38.604Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T15:34:38.604Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 162 - 244.722 ms","timestamp":"2026-06-20T15:34:38.606Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients","timestamp":"2026-06-20T15:34:48.933Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T15:34:48.933Z"}
+{"level":"info","message":"GET /api/v1/patients 500 162 - 1031.009 ms","timestamp":"2026-06-20T15:34:48.934Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients","timestamp":"2026-06-20T15:34:49.209Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T15:34:49.210Z"}
+{"level":"info","message":"GET /api/v1/patients 500 162 - 272.681 ms","timestamp":"2026-06-20T15:34:49.211Z"}
+{"level":"info","message":"GET /api/v1/attendance/my-attendance 200 26 - 238.683 ms","timestamp":"2026-06-20T15:34:55.349Z"}
+{"level":"info","message":"GET /api/v1/leaves/types 200 966 - 254.838 ms","timestamp":"2026-06-20T15:34:55.371Z"}
+{"level":"info","message":"GET /api/v1/attendance/my-attendance 304 - - 236.603 ms","timestamp":"2026-06-20T15:34:55.590Z"}
+{"level":"info","message":"GET /api/v1/shifts 200 827 - 477.969 ms","timestamp":"2026-06-20T15:34:55.601Z"}
+{"level":"info","message":"GET /api/v1/leaves/types 304 - - 237.197 ms","timestamp":"2026-06-20T15:34:55.610Z"}
+{"level":"info","message":"GET /api/v1/leaves/my-leaves 304 - - 463.057 ms","timestamp":"2026-06-20T15:34:56.520Z"}
+{"level":"info","message":"GET /api/v1/shifts 304 - - 478.299 ms","timestamp":"2026-06-20T15:34:56.532Z"}
+{"level":"info","message":"GET /api/v1/users 304 - - 475.432 ms","timestamp":"2026-06-20T15:34:56.547Z"}
+{"level":"info","message":"GET /api/v1/leaves/my-leaves 304 - - 233.744 ms","timestamp":"2026-06-20T15:34:56.756Z"}
+{"level":"info","message":"GET /api/v1/users 304 - - 462.764 ms","timestamp":"2026-06-20T15:34:57.317Z"}
+{"level":"info","message":"GET /api/v1/leaves/list 304 - - 478.462 ms","timestamp":"2026-06-20T15:34:57.351Z"}
+{"level":"info","message":"GET /api/v1/leaves/list 304 - - 237.429 ms","timestamp":"2026-06-20T15:34:57.592Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 200 633 - 3277.273 ms","timestamp":"2026-06-20T15:34:58.404Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 949.612 ms","timestamp":"2026-06-20T15:34:59.356Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1981.956 ms","timestamp":"2026-06-20T15:35:03.854Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1005.076 ms","timestamp":"2026-06-20T15:35:04.862Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 2031.629 ms","timestamp":"2026-06-20T15:35:05.913Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1117.140 ms","timestamp":"2026-06-20T15:35:07.032Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 47.485789514s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.5-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"47s\"}]}}","timestamp":"2026-06-20T15:35:12.732Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 1249 - 6715.219 ms","timestamp":"2026-06-20T15:35:12.733Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 47.393157182s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"47s\"}]}}","timestamp":"2026-06-20T15:35:12.833Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 1249 - 5783.204 ms","timestamp":"2026-06-20T15:35:12.835Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 46.696456428s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"46s\"}]}}","timestamp":"2026-06-20T15:35:13.521Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 1249 - 7509.321 ms","timestamp":"2026-06-20T15:35:13.522Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 32.367239543s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"32s\"}]}}","timestamp":"2026-06-20T15:35:28.030Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 1249 - 5557.926 ms","timestamp":"2026-06-20T15:35:28.031Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:4000","timestamp":"2026-06-20T15:38:43.588Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 5.066724524s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"5s\"}]}}","timestamp":"2026-06-20T15:38:55.160Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 1247 - 5651.474 ms","timestamp":"2026-06-20T15:38:55.161Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 46.802152081s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"46s\"}]}}","timestamp":"2026-06-20T15:39:13.426Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 1249 - 5377.114 ms","timestamp":"2026-06-20T15:39:13.428Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/auth/me - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T16:13:05.174Z"}
+{"level":"info","message":"GET /api/v1/auth/me 401 167 - 1858.991 ms","timestamp":"2026-06-20T16:13:05.176Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/auth/me - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T16:13:05.189Z"}
+{"level":"info","message":"GET /api/v1/auth/me 401 167 - 3.541 ms","timestamp":"2026-06-20T16:13:05.191Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 940.120 ms","timestamp":"2026-06-20T16:13:06.142Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 953.983 ms","timestamp":"2026-06-20T16:13:07.107Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 2232.110 ms","timestamp":"2026-06-20T16:13:07.439Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 960.923 ms","timestamp":"2026-06-20T16:13:08.411Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1885.354 ms","timestamp":"2026-06-20T16:13:09.118Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 2931.017 ms","timestamp":"2026-06-20T16:13:12.052Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 4181.715 ms","timestamp":"2026-06-20T16:13:13.316Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 964.710 ms","timestamp":"2026-06-20T16:13:14.283Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 38.608168626s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"38s\"}]}}","timestamp":"2026-06-20T16:13:20.607Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 1249 - 7149.636 ms","timestamp":"2026-06-20T16:13:20.609Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 38.496278984s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"38s\"}]}}","timestamp":"2026-06-20T16:13:20.733Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 1249 - 6423.945 ms","timestamp":"2026-06-20T16:13:20.736Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 37.907389685s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.5-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"37s\"}]}}","timestamp":"2026-06-20T16:13:21.310Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 1249 - 7847.254 ms","timestamp":"2026-06-20T16:13:21.311Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/auth/me - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T16:21:49.355Z"}
+{"level":"info","message":"GET /api/v1/auth/me 401 167 - 6.158 ms","timestamp":"2026-06-20T16:21:49.356Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/auth/me - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T16:21:49.363Z"}
+{"level":"info","message":"GET /api/v1/auth/me 401 167 - 4.881 ms","timestamp":"2026-06-20T16:21:49.371Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 462 - 513.175 ms","timestamp":"2026-06-20T16:21:49.945Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 462 - 1072.281 ms","timestamp":"2026-06-20T16:21:50.499Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 565.608 ms","timestamp":"2026-06-20T16:21:50.538Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 548.437 ms","timestamp":"2026-06-20T16:21:51.092Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T16:21:51.542Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T16:21:51.543Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 162 - 777.085 ms","timestamp":"2026-06-20T16:21:51.544Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-20T16:21:51.821Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-20T16:21:51.822Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 162 - 257.687 ms","timestamp":"2026-06-20T16:21:51.823Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/appointments?year=2026&month=6 - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T16:29:52.592Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2026&month=6 401 167 - 518.481 ms","timestamp":"2026-06-20T16:29:52.594Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/appointments?year=2026&month=6 - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T16:29:52.604Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2026&month=6 401 167 - 9.305 ms","timestamp":"2026-06-20T16:29:52.612Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 534.559 ms","timestamp":"2026-06-20T16:29:53.169Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 554.047 ms","timestamp":"2026-06-20T16:29:53.182Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2026&month=6 200 26 - 500.751 ms","timestamp":"2026-06-20T16:29:53.688Z"}
+{"level":"info","message":"GET /api/v1/appointments?year=2026&month=6 304 - - 248.288 ms","timestamp":"2026-06-20T16:29:53.940Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:4000","timestamp":"2026-06-20T16:36:51.931Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:37:02.378Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:37:02.805Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:4000","timestamp":"2026-06-20T16:37:06.526Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:37:09.677Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:37:10.069Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:4000","timestamp":"2026-06-20T16:37:12.634Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:38:04.726Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:38:04.812Z"}
+{"level":"error","message":"[Server] Critical Error: Unable to verify database connection. Server startup aborted.","timestamp":"2026-06-20T16:38:15.732Z"}
+{"level":"error","message":"[Server] Critical Error: Unable to verify database connection. Server startup aborted.","timestamp":"2026-06-20T16:38:17.964Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:38:35.509Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:38:35.513Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:4000","timestamp":"2026-06-20T16:38:40.505Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:38:43.894Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:38:43.967Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:38:48.657Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:38:48.671Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:4000","timestamp":"2026-06-20T16:38:55.848Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:39:03.605Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:39:03.894Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:4000","timestamp":"2026-06-20T16:39:09.059Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:39:10.104Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:39:10.417Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:39:15.446Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:39:15.496Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:4000","timestamp":"2026-06-20T16:39:19.240Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:44:50.160Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:44:50.628Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:4000","timestamp":"2026-06-20T16:44:52.614Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:44:57.744Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:44:57.864Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:4000","timestamp":"2026-06-20T16:44:59.846Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:45:08.367Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:45:08.659Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:4000","timestamp":"2026-06-20T16:45:10.830Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:46:54.352Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:47:09.373Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:47:09.363Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:4000","timestamp":"2026-06-20T16:47:11.756Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T16:49:10.992Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T16:49:13.119Z"}
+{"level":"info","message":"POST /api/v1/auth/login 200 - - 2916.372 ms","timestamp":"2026-06-20T16:49:32.074Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1995.569 ms","timestamp":"2026-06-20T16:49:35.061Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1011.686 ms","timestamp":"2026-06-20T16:49:36.079Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 3223.997 ms","timestamp":"2026-06-20T16:49:38.316Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1094.657 ms","timestamp":"2026-06-20T16:49:39.416Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 14.073065084s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"14s\"}]}}","timestamp":"2026-06-20T16:49:45.055Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 - - 6503.940 ms","timestamp":"2026-06-20T16:49:45.062Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 13.503882259s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"13s\"}]}}","timestamp":"2026-06-20T16:49:45.656Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 - - 6192.827 ms","timestamp":"2026-06-20T16:49:45.662Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 13.13105979s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"13s\"}]}}","timestamp":"2026-06-20T16:49:45.999Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 - - 7436.977 ms","timestamp":"2026-06-20T16:49:46.004Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-20T17:42:51.314Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-20T17:42:53.898Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/auth/me - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T17:43:12.389Z"}
+{"level":"info","message":"GET /api/v1/auth/me 401 154 - 1027.392 ms","timestamp":"2026-06-20T17:43:12.539Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/auth/me - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-20T17:43:12.612Z"}
+{"level":"info","message":"GET /api/v1/auth/me 401 154 - 59.445 ms","timestamp":"2026-06-20T17:43:12.676Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 1156.644 ms","timestamp":"2026-06-20T17:43:13.936Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 985.095 ms","timestamp":"2026-06-20T17:43:14.938Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 2360.656 ms","timestamp":"2026-06-20T17:43:15.176Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 1006.586 ms","timestamp":"2026-06-20T17:43:16.235Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 2085.559 ms","timestamp":"2026-06-20T17:43:17.518Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1097.794 ms","timestamp":"2026-06-20T17:43:18.620Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 2283.747 ms","timestamp":"2026-06-20T17:43:19.826Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 950.048 ms","timestamp":"2026-06-20T17:43:20.782Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 32.440926987s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"32s\"}]}}","timestamp":"2026-06-20T17:43:26.922Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 - - 6910.955 ms","timestamp":"2026-06-20T17:43:26.931Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 31.918272703s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.5-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"31s\"}]}}","timestamp":"2026-06-20T17:43:27.444Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 - - 7421.155 ms","timestamp":"2026-06-20T17:43:27.449Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 31.614962382s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"31s\"}]}}","timestamp":"2026-06-20T17:43:27.752Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 - - 6926.718 ms","timestamp":"2026-06-20T17:43:27.756Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 1029.276 ms","timestamp":"2026-06-20T17:46:47.606Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 514.977 ms","timestamp":"2026-06-20T17:46:48.124Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1724.471 ms","timestamp":"2026-06-20T17:46:49.807Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1033.031 ms","timestamp":"2026-06-20T17:46:50.843Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 2966.166 ms","timestamp":"2026-06-20T17:46:52.799Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1074.888 ms","timestamp":"2026-06-20T17:46:53.877Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 59.888059023s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-2.5-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"59s\"}]}}","timestamp":"2026-06-20T17:46:59.504Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 - - 5584.609 ms","timestamp":"2026-06-20T17:46:59.507Z"}
+{"level":"warn","message":"[429 API Warning] Path: POST /api/v1/ai/dashboard-insights - Code: AI_SERVICE_RATE_LIMITED - Message: Clinical AI rate limited: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 59.872972052s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-2.5-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"59s\"}]}}","timestamp":"2026-06-20T17:47:00.666Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 429 - - 7687.729 ms","timestamp":"2026-06-20T17:47:00.669Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights - - - - ms","timestamp":"2026-06-20T17:47:07.971Z"}

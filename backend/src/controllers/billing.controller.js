@@ -57,15 +57,14 @@ const billingController = {
       ]);
       const invoiceId = invoiceResult.insertId;
 
-      // Insert invoice details
-      const insertItemSql = `
-        INSERT INTO invoice_items (
-          clinic_id, invoice_id, item_type, item_reference_id, item_description, quantity, unit_price, total_price
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-      `;
-
-      for (const item of processedItems) {
-        await db.query(insertItemSql, [
+      // Insert invoice details in a single bulk INSERT query (minimizing database roundtrips)
+      if (processedItems.length > 0) {
+        const insertItemSql = `
+          INSERT INTO invoice_items (
+            clinic_id, invoice_id, item_type, item_reference_id, item_description, quantity, unit_price, total_price
+          ) VALUES ?
+        `;
+        const values = processedItems.map(item => [
           tenantId,
           invoiceId,
           item.item_type,
@@ -75,6 +74,7 @@ const billingController = {
           item.unit_price,
           item.total_price
         ]);
+        await db.query(insertItemSql, [values]);
       }
 
       res.status(201).json({
@@ -444,7 +444,10 @@ const billingController = {
       `;
       const prescriptions = await db.query(prescriptionsSql, [patientId, tenantId]);
 
-      const billedPrescriptions = [];
+      // Collect all unique medicine IDs from instructions to resolve in a single query
+      const medicineIds = new Set();
+      const prescriptionParsedList = [];
+
       for (const pr of prescriptions) {
         let instructions = [];
         try {
@@ -453,13 +456,32 @@ const billingController = {
         } catch (e) {
           instructions = [];
         }
+        prescriptionParsedList.push({ pr, instructions });
+        for (const rx of instructions) {
+          if (rx.medicine_id) {
+            medicineIds.add(parseInt(rx.medicine_id, 10));
+          }
+        }
+      }
 
+      // Fetch all medicine prices in a single query
+      const medicinePrices = new Map();
+      if (medicineIds.size > 0) {
+        const medicineSql = 'SELECT id, unit_price FROM medicines WHERE id IN (?) AND clinic_id = ?';
+        const medicinesList = await db.query(medicineSql, [Array.from(medicineIds), tenantId]);
+        for (const med of medicinesList) {
+          medicinePrices.set(med.id, parseFloat(med.unit_price));
+        }
+      }
+
+      const billedPrescriptions = [];
+      for (const { pr, instructions } of prescriptionParsedList) {
         for (const rx of instructions) {
           let medPrice = parseFloat(rx.unit_price) || 0;
           if (rx.medicine_id) {
-            const [med] = await db.query('SELECT unit_price FROM medicines WHERE id = ? LIMIT 1', [rx.medicine_id]);
-            if (med) {
-              medPrice = parseFloat(med.unit_price);
+            const resolvedPrice = medicinePrices.get(parseInt(rx.medicine_id, 10));
+            if (resolvedPrice !== undefined) {
+              medPrice = resolvedPrice;
             }
           }
 
