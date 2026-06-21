@@ -179,7 +179,7 @@ const labController = {
       ]);
 
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, "LAB_REQUEST_CREATED", "lab_requests", ?, ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, 'LAB_REQUEST_CREATED', 'lab_requests', ?, ?)",
         [tenantId, actorId, labResult.insertId, `Ordered: ${tests.join(', ')}`],
       );
 
@@ -250,7 +250,7 @@ const labController = {
 
       // Audit Log
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, "LAB_SAMPLE_COLLECTED", "lab_requests", ?, "Samples collected for processing")',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, 'LAB_SAMPLE_COLLECTED', 'lab_requests', ?, 'Samples collected for processing')",
         [tenantId, actorId, requestId]
       );
 
@@ -332,7 +332,7 @@ const labController = {
 
       // Audit Log
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, "LAB_RESULT_ENTERED", "lab_results", ?, ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, 'LAB_RESULT_ENTERED', 'lab_results', ?, ?)",
         [tenantId, technicianId, requestId, `Entered findings for ${test_name}`]
       );
 
@@ -368,7 +368,7 @@ const labController = {
 
       // Audit Log
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, "LAB_RESULT_APPROVED", "lab_requests", ?, "Verified and released results report")',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, 'LAB_RESULT_APPROVED', 'lab_requests', ?, 'Verified and released results report')",
         [tenantId, actorId, requestId]
       );
 

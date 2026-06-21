@@ -64,7 +64,7 @@ const authController = {
       const ip =
         req.ip || req.headers["x-forwarded-for"] || req.socket.remoteAddress;
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, ip_address) VALUES (?, ?, "LOGIN", "users", ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, ip_address) VALUES (?, ?, 'LOGIN', 'users', ?)",
         [tenantId, user.id, ip],
       );
 
@@ -102,7 +102,7 @@ const authController = {
       // Security Audit Trail
       const actorId = req.user ? req.user.id : null;
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, "CREATE_USER", "users", ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, 'CREATE_USER', 'users', ?)",
         [tenantId, actorId, newUser.id],
       );
 

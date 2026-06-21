@@ -76,7 +76,7 @@ const userController = {
 
       // Audit Log
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, "CREATE_USER", "users", ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, 'CREATE_USER', 'users', ?)",
         [tenantId, actorId, newUser.id]
       );
 
@@ -143,7 +143,7 @@ const userController = {
 
       // Audit Log
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, new_values) VALUES (?, ?, "UPDATE_USER", "users", ?, ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, new_values) VALUES (?, ?, 'UPDATE_USER', 'users', ?, ?)",
         [tenantId, actorId, userId, JSON.stringify({ first_name, last_name, email, phone_number, role_id })]
       );
 
@@ -180,7 +180,7 @@ const userController = {
         
         // Audit
         await db.query(
-          'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, "DELETE_USER", "users", ?)',
+          "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, 'DELETE_USER', 'users', ?)",
           [tenantId, actorId, userId]
         );
 
@@ -231,7 +231,7 @@ const userController = {
 
       // Audit Log
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, "TOGGLE_USER_STATUS", "users", ?, ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, 'TOGGLE_USER_STATUS', 'users', ?, ?)",
         [tenantId, actorId, userId, activeBool ? 'Reactivated user' : 'Deactivated user']
       );
 

@@ -19,25 +19,33 @@ const fileFormat = winston.format.combine(
   winston.format.json()
 );
 
-const logger = winston.createLogger({
-  level,
-  transports: [
-    // Console output
-    new winston.transports.Console({
-      format: consoleFormat
-    }),
-    // Write error logs to file
+// Determine transports dynamically based on platform
+const transports = [
+  new winston.transports.Console({
+    format: consoleFormat
+  })
+];
+
+// Serverless read-only filesystem check (e.g. Vercel)
+const isServerless = !!(process.env.VERCEL || process.env.LAMBDA_TASK_ROOT || process.env.AWS_EXECUTION_ENV);
+
+if (!isServerless) {
+  transports.push(
     new winston.transports.File({
       filename: path.join(__dirname, '../../logs/error.log'),
       level: 'error',
       format: fileFormat
     }),
-    // Write all combined logs to file
     new winston.transports.File({
       filename: path.join(__dirname, '../../logs/combined.log'),
       format: fileFormat
     })
-  ]
+  );
+}
+
+const logger = winston.createLogger({
+  level,
+  transports
 });
 
 module.exports = logger;

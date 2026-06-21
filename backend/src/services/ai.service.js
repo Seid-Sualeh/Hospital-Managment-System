@@ -1,12 +1,27 @@
 const db = require("../config/db");
 const { APIError } = require("../middlewares/error");
+const { GoogleGenAI } = require("@google/genai");
 
-const getGeminiModel = () => process.env.GEMINI_MODEL || "gemini-1.5-flash";
+// Initialize SDK client (will use API key or OAuth token from env)
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
 const hasGeminiApiKey = () =>
   Boolean(
     process.env.GEMINI_API_KEY &&
     process.env.GEMINI_API_KEY !== "YOUR_GEMINI_KEY",
   );
+
+const getGeminiModel = () => process.env.GEMINI_MODEL || "gemini-2.5-flash";
+
+// 1. Double check that the environment key is actually loading
+console.log("Is API Key Loaded?:", hasGeminiApiKey());
+// console.log("Gemini Model:", getGeminiModel());
+console.log(
+  "Key Prefix:",
+  process.env.GEMINI_API_KEY
+    ? process.env.GEMINI_API_KEY.substring(0, 3)
+    : "None",
+);
 
 const sanitizePrompt = (text) => {
   if (!text || typeof text !== "string") return "";
@@ -49,46 +64,186 @@ const rehydrateText = (text, mapping = {}) => {
   return result;
 };
 
+// ✅ Refactored callGemini using latest @google/genai SDK
 const callGemini = async (promptText, temperature = 0.2) => {
-  if (!hasGeminiApiKey()) return null;
-  const apiKey = process.env.GEMINI_API_KEY;
-  const model = getGeminiModel();
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        temperature,
-        candidateCount: 1,
-        maxOutputTokens: 400,
-        contents: [
-          {
-            parts: [
-              {
-                text: sanitizePrompt(promptText),
-              },
-            ],
-          },
-        ],
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("[Gemini] API response error", response.status, errorText);
-      return null;
-    }
-
-    const data = await response.json();
-    return data?.candidates?.[0]?.content?.parts?.[0]?.text || null;
-  } catch (error) {
-    console.error("[Gemini] call failed", error?.message || error);
-    return null;
+  if (!hasGeminiApiKey()) {
+    throw new APIError(
+      "Gemini API key is not configured. Clinical AI features are temporarily unavailable.",
+      503,
+      "AI_SERVICE_OFFLINE",
+    );
   }
+
+  const model = getGeminiModel();
+  const maxRetries = 2;
+  let attempt = 0;
+  let delay = 1000;
+
+  // Sanitize the prompt once
+  const sanitizedPrompt = sanitizePrompt(promptText);
+
+  const generationConfig = {
+    temperature,
+    maxOutputTokens: 1000,
+    candidateCount: 1,
+  };
+
+  const safetySettings = [
+    {
+      category: "HARM_CATEGORY_HARASSMENT",
+      threshold: "BLOCK_MEDIUM_AND_ABOVE",
+    },
+    {
+      category: "HARM_CATEGORY_HATE_SPEECH",
+      threshold: "BLOCK_MEDIUM_AND_ABOVE",
+    },
+    {
+      category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+      threshold: "BLOCK_MEDIUM_AND_ABOVE",
+    },
+    {
+      category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+      threshold: "BLOCK_MEDIUM_AND_ABOVE",
+    },
+  ];
+
+  while (attempt <= maxRetries) {
+    try {
+      // ✅ Correct SDK usage: pass properties directly – no 'input' wrapper.
+      // contents can be a plain string or an array of Content objects.
+      const res = await ai.models.generateContent({
+        model,
+        contents: sanitizedPrompt,
+        generationConfig,
+        safetySettings,
+      });
+
+      // Log request/response metadata
+      console.error(
+        `[Gemini SDK] model=${model} | promptLength=${sanitizedPrompt.length} | responseTextLength=${res?.text?.length || 0}`,
+      );
+      console.error(`[Gemini SDK] attempt=${attempt + 1} success`);
+
+      // ✅ Use response.text (the recommended property)
+      if (res?.text) {
+        return res.text;
+      }
+
+      // If no text but no explicit error, treat as unexpected
+      const errMsg =
+        res?.error?.message || res?.error || JSON.stringify(res || {});
+      if (/quota|exceeded/i.test(errMsg)) {
+        throw new APIError(
+          `Clinical AI quota exceeded: ${errMsg}`,
+          429,
+          "AI_SERVICE_QUOTA_EXCEEDED",
+        );
+      }
+      if (/not found|unsupported|model/i.test(errMsg)) {
+        throw new APIError(
+          `Clinical AI model not found or unsupported: ${errMsg}`,
+          404,
+          "AI_SERVICE_MODEL_NOT_FOUND",
+        );
+      }
+      throw new Error(`Unexpected Gemini SDK response: ${errMsg}`);
+    } catch (error) {
+      const msg = error?.message || String(error);
+      console.error(`[Gemini] Attempt ${attempt + 1} failed: ${msg}`);
+
+      // If it's already an APIError, rethrow
+      if (error instanceof APIError) throw error;
+
+      // Map common HTTP status codes (if available) to our custom errors
+      const status =
+        error?.status ||
+        error?.code ||
+        (error?.response && error.response.status) ||
+        null;
+
+      if (status === 400) {
+        throw new APIError(
+          `Clinical AI invalid request (400): ${msg}`,
+          400,
+          "AI_SERVICE_INVALID_ARGUMENT",
+        );
+      }
+      if (status === 401) {
+        throw new APIError(
+          `Clinical AI unauthorized (401): ${msg}`,
+          401,
+          "AI_SERVICE_UNAUTHORIZED",
+        );
+      }
+      if (status === 403) {
+        throw new APIError(
+          `Clinical AI permission denied (403): ${msg}`,
+          403,
+          "AI_SERVICE_FORBIDDEN",
+        );
+      }
+      if (status === 404) {
+        throw new APIError(
+          `Clinical AI model not found (404): ${msg}`,
+          404,
+          "AI_SERVICE_MODEL_NOT_FOUND",
+        );
+      }
+
+      // Rate limit / quota – retry if possible
+      if (status === 429 || /rate limit|quota/i.test(msg)) {
+        if (attempt === maxRetries) {
+          throw new APIError(
+            `Clinical AI rate limited: ${msg}`,
+            429,
+            "AI_SERVICE_RATE_LIMITED",
+          );
+        }
+      }
+
+      // Server errors – retry
+      if (status >= 500 || /internal|server error/i.test(msg)) {
+        if (attempt === maxRetries) {
+          throw new APIError(
+            `Clinical AI server error: ${msg}`,
+            502,
+            "AI_SERVICE_OFFLINE",
+          );
+        }
+      }
+
+      // Timeouts – retry
+      if (/timeout|ETIMEDOUT|ECONNRESET/i.test(msg)) {
+        if (attempt === maxRetries) {
+          throw new APIError(
+            "Clinical AI request timed out.",
+            504,
+            "AI_SERVICE_TIMEOUT",
+          );
+        }
+      }
+
+      // If we have retries left, wait and retry
+      if (attempt === maxRetries) {
+        throw new APIError(
+          "Clinical AI service is temporarily unavailable.",
+          503,
+          "AI_SERVICE_OFFLINE",
+        );
+      }
+
+      await new Promise((r) => setTimeout(r, delay));
+      attempt += 1;
+      delay *= 2;
+    }
+  }
+
+  // Fallback (should never reach here)
+  throw new APIError(
+    "Clinical AI service is temporarily unavailable.",
+    503,
+    "AI_SERVICE_OFFLINE",
+  );
 };
 
 const logAiAudit = async ({
@@ -128,13 +283,20 @@ const buildLabAnalysisPrompt = (patient, labResult) => {
   const patientContext = `Patient: ${patient?.full_name || "[PATIENT_NAME_TOKEN]"}${patient?.age ? `, Age: ${patient.age}` : ""}${patient?.gender ? `, Gender: ${patient.gender}` : ""}${patient?.mrn ? `, MRN: ${patient.mrn}` : ""}`;
   const labFacts = `Lab Test: ${labResult.test_name || "Unknown test"}\nResult Summary: ${labResult.result || "No result available"}\nInterpretation Notes: ${labResult.interpretation || "No interpretation provided"}`;
 
-  return `You are a professional clinical AI assistant helping a licensed provider interpret laboratory findings.
-Use a structured clinical format with clear sections: 'Summary', 'Key Findings', and 'Suggested Next Steps'. Identify any values likely out of range. Do not offer a final medical diagnosis. Remind the clinician to confirm with patient context and vital signs.
+  return `You are a professional Clinical Decision Support System (CDSS) assistant.
+Interpret the laboratory results for the patient and structure your response under these exact headings using bold markdown:
+**Clinical Interpretation**
+**Abnormal Findings**
+**Possible Causes**
+**Recommended Follow-Up**
+
+CRITICAL RULE: For any abnormal laboratory values, you MUST prefix the parameter with one of these exact tags:
+- Use [HIGH] for elevated values (e.g. [HIGH] WBC)
+- Use [LOW] for depressed values (e.g. [LOW] Hemoglobin)
+- Use [CRITICAL] for life-threatening values
 
 ${patientContext}
-${labFacts}
-
-Provide a concise interpretation and practical action guidance:`;
+${labFacts}`;
 };
 
 const buildClinicalSuggestionPrompt = (patient, consultation) => {
@@ -146,17 +308,24 @@ const buildClinicalSuggestionPrompt = (patient, consultation) => {
   const exam =
     consultation?.physical_exam || "No physical exam findings provided";
 
-  return `You are a clinical decision support assistant creating safe suggestions for a provider.
-Summarize the likely clinical priorities, recommended next tests, and possible provisional management options.
-Do not replace clinician judgment. Do not invent diagnoses without supporting data.
+  return `You are a Clinical Decision Support System (CDSS) assistant recommending laboratory and diagnostic tests.
+Recommend targeted laboratory tests. You MUST format each recommended test in this exact format:
+- [Test Name]: [Brief clinical reason/utility]
 
-Patient: ${patient?.full_name || "[PATIENT_NAME_TOKEN]"}${patient?.age ? `, Age: ${patient.age}` : ""}${patient?.gender ? `, Gender: ${patient.gender}` : ""}
+For example:
+- CBC: Evaluate for leukocytosis or anemia.
+- Malaria Smear: Verify Plasmodium parasites due to active fever.
+
+Structure your response into these exact headings using bold markdown:
+**Recommended Tests**
+**Clinical Priorities**
+**Provisional Management**
+
+Patient Profile: Age ${patient?.age || "unknown"}, Gender ${patient?.gender || "unknown"}
 Chief Complaint: ${complaint}
 Vitals: ${vitals}
-History / Notes: ${history}
-Physical Exam: ${exam}
-
-Provide a short clinical suggestion and next step guidance:`;
+History: ${history}
+Physical Exam: ${exam}`;
 };
 
 const buildPatientSummaryPrompt = (patient, visits) => {
@@ -166,19 +335,26 @@ const buildPatientSummaryPrompt = (patient, visits) => {
       ? visits
           .map(
             (v, idx) =>
-              `Visit ${idx + 1}: ${v.date || "unknown date"} — ${v.complaint || v.diagnosis || "no details"}`,
+              `Visit ${idx + 1}: ${v.date || "unknown date"} — Complaint: ${v.complaint || "none"}, Diagnosis: ${v.diagnosis || "none"}`,
           )
           .join("\n")
       : "No recent visit history available.";
 
-  return `You are a medical record summarization assistant.
-Create a clinical summary paragraph that highlights the patient's current presentation, recent visit history, key diagnoses, and next care priorities.
-Keep it concise and suitable for handoff notes.
+  return `You are a clinical Decision Support System (CDSS) assistant.
+Create a comprehensive, structured clinical summary of this patient.
+You MUST format your output under these exact headings using bold markdown:
+**Patient Overview**
+**Current Complaint**
+**Relevant History**
+**Chronic Conditions**
+**Allergies**
+**Risk Factors**
+**Suggested Next Steps**
 
+Data:
 ${patientFacts}
-Recent Visits:\n${visitHistory}
-
-Provide a helpful patient summary:`;
+Recent Visits:
+${visitHistory}`;
 };
 
 const buildPharmacyInsightPrompt = (medicines) => {
@@ -211,7 +387,14 @@ Provide an insight summary:`;
 
 const renderGeminiOrFallback = async (promptText, fallbackText) => {
   const response = await callGemini(promptText);
-  return response || fallbackText;
+  if (!response) {
+    throw new APIError(
+      "Clinical AI service is temporarily offline.",
+      503,
+      "AI_SERVICE_OFFLINE",
+    );
+  }
+  return response;
 };
 
 const AI_DISCLAIMER =
@@ -224,7 +407,8 @@ const parseStructuredSections = (text) => {
   let current = { title: "Summary", items: [] };
 
   lines.forEach((line) => {
-    const heading = line.match(/^\*\*(.+?)\*\*:?$/) || line.match(/^([A-Z][^:]+):$/);
+    const heading =
+      line.match(/^\*\*(.+?)\*\*:?$/) || line.match(/^([A-Z][^:]+):$/);
     if (heading) {
       if (current.items.length) sections.push(current);
       current = { title: heading[1].trim(), items: [] };
@@ -241,49 +425,69 @@ const parseStructuredSections = (text) => {
 };
 
 const buildDiagnosisSupportPrompt = (patient, consultation) => {
-  return `You are a clinical decision support assistant for licensed physicians.
-Provide differential diagnosis suggestions ONLY — never a final diagnosis.
-Structure your response with these sections:
-**Possible Differential Diagnoses**
+  return `You are a Clinical Decision Support System (CDSS) assistant for licensed physicians.
+Analyze the patient presentation and output Suggested Differential Diagnoses.
+For each diagnosis, you must estimate a confidence score (percentage) and brief supporting findings.
+You MUST format each diagnosis in this exact format:
+- [Diagnosis Name] ([Confidence Score]%): [Brief supporting findings]
+
+For example:
+- Malaria (82%): Patient reports high fever and chills in endemic region.
+- Typhoid Fever (71%): Patient has abdominal pain, prolonged fever, and lethargy.
+
+You must structure the entire response under these exact headings using bold markdown:
+**Suggested Differential Diagnoses**
 **Clinical Reasoning**
 **Recommended Investigations**
 **Red Flag Warnings**
 
-Patient: ${patient?.full_name || "[PATIENT]"}, Age: ${patient?.age || "unknown"}, Gender: ${patient?.gender || "unknown"}
+Patient Profile: Age ${patient?.age || "unknown"}, Gender ${patient?.gender || "unknown"}
 Chief Complaint: ${consultation?.complaint || consultation?.chief_complaints || "Not provided"}
 Vitals: ${JSON.stringify(consultation?.vitals || {})}
 History/Notes: ${consultation?.history || consultation?.clinical_notes || consultation?.notes || "None"}
-Physical Exam: ${consultation?.physical_exam || "Not documented"}
-Working Diagnosis (doctor entered): ${consultation?.diagnosis || "None yet"}
-
-Remember: These are suggestions for clinical decision support only.`;
+Physical Exam: ${consultation?.physical_exam || "Not documented"}`;
 };
 
 const buildMedicationAssistancePrompt = (patient, payload) => {
-  return `You are a clinical pharmacist providing decision support to a licensed prescriber.
-Never prescribe a final treatment plan. Structure response as:
-**Common Treatment Options**
-**Drug Interaction Warnings**
-**Contraindications**
-**Follow-up Suggestions**
+  return `You are a Clinical Decision Support System (CDSS) pharmacist.
+Analyze the safety of the proposed medication.
+You MUST structure your response into these exact headings using bold markdown:
+**Safety Level**
+**Interaction Alerts**
+**Medication Counseling**
+**Alternative Medications**
+**Dose Guidance**
+**Patient Education Summary**
 
-Patient: ${patient?.full_name || "[PATIENT]"}, Age: ${patient?.age || "unknown"}, Gender: ${patient?.gender || "unknown"}
-Diagnosis: ${payload?.diagnosis || "Not specified"}
-Current Medications: ${payload?.current_medications || payload?.prescription || "None listed"}
+Under the Safety Level section, you must state one of these options clearly:
+- Green: No interactions detected
+- Yellow: Use caution
+- Red: Severe interaction
+
+Patient: Age ${patient?.age || "unknown"}, Gender ${patient?.gender || "unknown"}
 Proposed Medication: ${payload?.medication_name || payload?.prescription || "Not specified"}
+Diagnosis: ${payload?.diagnosis || "Not specified"}
+Current Medications: ${payload?.current_medications || "None listed"}
 Allergies: ${payload?.allergies || "None recorded"}`;
 };
 
 const buildLabSummaryPrompt = (patient, labResult) => {
   return `You are a laboratory medicine specialist assisting a clinician.
-Write a one-paragraph lab interpretation summary, then list:
-**Key Abnormalities**
-**Suggested Physician Review Points**
+Interpret the patient's laboratory findings and structure your response under these exact headings using bold markdown:
+**Clinical Interpretation**
+**Abnormal Findings**
+**Possible Causes**
+**Recommended Follow-Up**
 
-Do not provide a final diagnosis. Patient: ${patient?.full_name || "[PATIENT]"}
+CRITICAL RULE: For any abnormal laboratory values, you MUST prefix the parameter with one of these exact tags:
+- Use [HIGH] for elevated values (e.g. [HIGH] WBC)
+- Use [LOW] for depressed values (e.g. [LOW] Hemoglobin)
+- Use [CRITICAL] for life-threatening values
+
+Patient: ${patient?.full_name || "[PATIENT]"}
 Test: ${labResult?.test_name || "Unknown"}
 Results: ${labResult?.result || JSON.stringify(labResult?.results_json || {})}
-Notes: ${labResult?.interpretation || labResult?.technician_notes || "None"}`;
+Notes: ${labResult?.interpretation || "None"}`;
 };
 
 const detectAbnormalitiesFromText = (resultText = "") => {
@@ -291,47 +495,84 @@ const detectAbnormalitiesFromText = (resultText = "") => {
   const findings = [];
 
   const rules = [
-    { pattern: /critical|panic|life.?threat/i, severity: "critical", label: "Critical value flagged" },
-    { pattern: /high|elevated|increased|above normal|↑/i, severity: "moderate", label: "Elevated parameter detected" },
-    { pattern: /low|decreased|below normal|↓/i, severity: "moderate", label: "Depressed parameter detected" },
-    { pattern: /abnormal|positive|reactive/i, severity: "mild", label: "Abnormal finding noted" },
-    { pattern: /normal|within range|negative|non-reactive/i, severity: "normal", label: "Values within expected range" },
+    {
+      pattern: /critical|panic|life.?threat/i,
+      severity: "critical",
+      label: "Critical value flagged",
+    },
+    {
+      pattern: /high|elevated|increased|above normal|↑/i,
+      severity: "moderate",
+      label: "Elevated parameter detected",
+    },
+    {
+      pattern: /low|decreased|below normal|↓/i,
+      severity: "moderate",
+      label: "Depressed parameter detected",
+    },
+    {
+      pattern: /abnormal|positive|reactive/i,
+      severity: "mild",
+      label: "Abnormal finding noted",
+    },
+    {
+      pattern: /normal|within range|negative|non-reactive/i,
+      severity: "normal",
+      label: "Values within expected range",
+    },
   ];
 
   rules.forEach((rule) => {
     if (rule.pattern.test(text)) {
-      findings.push({ parameter: "General", finding: rule.label, severity: rule.severity });
+      findings.push({
+        parameter: "General",
+        finding: rule.label,
+        severity: rule.severity,
+      });
     }
   });
 
   if (!findings.length) {
-    findings.push({ parameter: "General", finding: "No explicit abnormality keywords detected", severity: "normal" });
+    findings.push({
+      parameter: "General",
+      finding: "No explicit abnormality keywords detected",
+      severity: "normal",
+    });
   }
 
   return findings;
 };
 
 const buildDashboardInsightsPrompt = (metrics) => {
-  return `You are a healthcare operations analyst for a clinic in Ethiopia.
-Analyze the metrics and provide structured insights in these sections:
+  return `You are a professional healthcare operations and intelligence analyst.
+Analyze the clinic metrics and generate structured insights.
+You MUST structure your response under these exact headings using bold markdown:
 **Revenue Trends**
 **Patient Trends**
+**Disease Trends**
+**Medication Usage Trends**
 **Operational Recommendations**
+**Top Diagnoses**
+**Top Prescriptions**
+**Revenue Growth**
+**Patient Volume**
+**Inventory Warnings**
 
-Be specific and actionable. Do not invent data not in the metrics.
-
-Clinic Metrics:
+Clinic Metrics Data:
 ${JSON.stringify(metrics, null, 2)}`;
 };
 
 const buildPharmacyInsightsPrompt = (medicines, safetyContext) => {
   const inventory = medicines
     .slice(0, 30)
-    .map((m) => `${m.name}: stock ${m.stock ?? m.quantity_in_stock}, status ${m.status || "unknown"}, expiry ${m.expiry_date || "N/A"}`)
+    .map(
+      (m) =>
+        `${m.name}: stock ${m.stock ?? m.quantity_in_stock}, status ${m.status || "unknown"}, expiry ${m.expiry_date || "N/A"}`,
+    )
     .join("\n");
 
   return `You are a pharmacy operations AI assistant.
-Provide sections:
+You MUST structure your response under these exact headings using bold markdown:
 **Low Stock Predictions**
 **Expiry Warnings**
 **Fast Moving Medicines**
@@ -355,9 +596,17 @@ const parseJsonSafely = (value) => {
   }
 };
 
-const diagnosisSupport = async ({ tenantId, req, patient, consultation, userId }) => {
+const diagnosisSupport = async ({
+  tenantId,
+  req,
+  patient,
+  consultation,
+  userId,
+}) => {
   const safePatient = {
-    full_name: patient?.full_name || `${patient?.first_name || ""} ${patient?.last_name || ""}`.trim(),
+    full_name:
+      patient?.full_name ||
+      `${patient?.first_name || ""} ${patient?.last_name || ""}`.trim(),
     first_name: patient?.first_name || "",
     last_name: patient?.last_name || "",
     mrn: patient?.mrn || "",
@@ -366,19 +615,36 @@ const diagnosisSupport = async ({ tenantId, req, patient, consultation, userId }
   };
   const prompt = buildDiagnosisSupportPrompt(safePatient, consultation || {});
   const { text: redactedPrompt, mapping } = redactPHI(prompt, safePatient);
-  const generated = await renderGeminiOrFallback(
-    redactedPrompt,
-    `**Possible Differential Diagnoses**\n- Consider conditions aligned with chief complaint and vitals\n\n**Clinical Reasoning**\n- Correlate symptoms with examination findings\n\n**Recommended Investigations**\n- Order targeted labs based on presentation\n\n**Red Flag Warnings**\n- Monitor for deterioration; escalate if vital signs unstable`,
-  );
+  const generated = await renderGeminiOrFallback(redactedPrompt);
   const answer = rehydrateText(generated, mapping);
   const structured = parseStructuredSections(answer);
-  await logAiAudit({ clinicId: tenantId, userId, actionType: "AI_DIAGNOSIS_SUPPORT", affectedTable: "consultations", affectedRecordId: consultation?.id, newValues: { support: answer }, req });
-  return { support: answer, sections: structured.sections, disclaimer: AI_DISCLAIMER };
+  await logAiAudit({
+    clinicId: tenantId,
+    userId,
+    actionType: "AI_DIAGNOSIS_SUPPORT",
+    affectedTable: "consultations",
+    affectedRecordId: consultation?.id,
+    newValues: { support: answer },
+    req,
+  });
+  return {
+    support: answer,
+    sections: structured.sections,
+    disclaimer: AI_DISCLAIMER,
+  };
 };
 
-const medicationAssistance = async ({ tenantId, req, patient, payload, userId }) => {
+const medicationAssistance = async ({
+  tenantId,
+  req,
+  patient,
+  payload,
+  userId,
+}) => {
   const safePatient = {
-    full_name: patient?.full_name || `${patient?.first_name || ""} ${patient?.last_name || ""}`.trim(),
+    full_name:
+      patient?.full_name ||
+      `${patient?.first_name || ""} ${patient?.last_name || ""}`.trim(),
     first_name: patient?.first_name || "",
     last_name: patient?.last_name || "",
     mrn: patient?.mrn || "",
@@ -387,19 +653,29 @@ const medicationAssistance = async ({ tenantId, req, patient, payload, userId })
   };
   const prompt = buildMedicationAssistancePrompt(safePatient, payload || {});
   const { text: redactedPrompt, mapping } = redactPHI(prompt, safePatient);
-  const generated = await renderGeminiOrFallback(
-    redactedPrompt,
-    `**Common Treatment Options**\n- Review standard formulary options for the documented diagnosis\n\n**Drug Interaction Warnings**\n- Cross-check current medications for interactions\n\n**Contraindications**\n- Verify allergies and comorbidities\n\n**Follow-up Suggestions**\n- Schedule review based on treatment response`,
-  );
+  const generated = await renderGeminiOrFallback(redactedPrompt);
   const answer = rehydrateText(generated, mapping);
   const structured = parseStructuredSections(answer);
-  await logAiAudit({ clinicId: tenantId, userId, actionType: "AI_MEDICATION_ASSISTANCE", affectedTable: "prescriptions", newValues: { assistance: answer }, req });
-  return { assistance: answer, sections: structured.sections, disclaimer: AI_DISCLAIMER };
+  await logAiAudit({
+    clinicId: tenantId,
+    userId,
+    actionType: "AI_MEDICATION_ASSISTANCE",
+    affectedTable: "prescriptions",
+    newValues: { assistance: answer },
+    req,
+  });
+  return {
+    assistance: answer,
+    sections: structured.sections,
+    disclaimer: AI_DISCLAIMER,
+  };
 };
 
 const labSummary = async ({ tenantId, req, patient, labResult, userId }) => {
   const safePatient = {
-    full_name: patient?.full_name || `${patient?.first_name || ""} ${patient?.last_name || ""}`.trim(),
+    full_name:
+      patient?.full_name ||
+      `${patient?.first_name || ""} ${patient?.last_name || ""}`.trim(),
     first_name: patient?.first_name || "",
     last_name: patient?.last_name || "",
     mrn: patient?.mrn || "",
@@ -408,45 +684,79 @@ const labSummary = async ({ tenantId, req, patient, labResult, userId }) => {
   };
   const prompt = buildLabSummaryPrompt(safePatient, labResult || {});
   const { text: redactedPrompt, mapping } = redactPHI(prompt, safePatient);
-  const generated = await renderGeminiOrFallback(
-    redactedPrompt,
-    `Laboratory findings should be interpreted in clinical context. Review abnormal parameters against reference ranges and correlate with patient symptoms.`,
-  );
+  const generated = await renderGeminiOrFallback(redactedPrompt);
   const answer = rehydrateText(generated, mapping);
   const structured = parseStructuredSections(answer);
-  await logAiAudit({ clinicId: tenantId, userId, actionType: "AI_LAB_SUMMARY", affectedTable: "lab_results", affectedRecordId: labResult?.id, newValues: { summary: answer }, req });
-  return { summary: answer, sections: structured.sections, disclaimer: AI_DISCLAIMER };
+  await logAiAudit({
+    clinicId: tenantId,
+    userId,
+    actionType: "AI_LAB_SUMMARY",
+    affectedTable: "lab_results",
+    affectedRecordId: labResult?.id,
+    newValues: { summary: answer },
+    req,
+  });
+  return {
+    summary: answer,
+    sections: structured.sections,
+    disclaimer: AI_DISCLAIMER,
+  };
 };
 
 const detectLabAbnormalities = async ({ labResult }) => {
   const resultText = [
     labResult?.result,
     labResult?.interpretation,
-    typeof labResult?.results_json === "string" ? labResult.results_json : JSON.stringify(labResult?.results_json || {}),
-  ].filter(Boolean).join(" ");
+    typeof labResult?.results_json === "string"
+      ? labResult.results_json
+      : JSON.stringify(labResult?.results_json || {}),
+  ]
+    .filter(Boolean)
+    .join(" ");
   const abnormalities = detectAbnormalitiesFromText(resultText);
   return { abnormalities, disclaimer: AI_DISCLAIMER };
 };
 
 const dashboardInsights = async ({ tenantId, req, metrics, userId }) => {
   const prompt = buildDashboardInsightsPrompt(metrics || {});
-  const generated = await renderGeminiOrFallback(
-    prompt,
-    `**Revenue Trends**\n- Review daily and monthly collection patterns\n\n**Patient Trends**\n- Monitor registration volume and peak hours\n\n**Operational Recommendations**\n- Address queue bottlenecks and inventory risks`,
-  );
+  const generated = await renderGeminiOrFallback(prompt);
   const structured = parseStructuredSections(generated);
-  await logAiAudit({ clinicId: tenantId, userId, actionType: "AI_DASHBOARD_INSIGHTS", affectedTable: "dashboard_metrics", newValues: { insights: generated }, req });
+  await logAiAudit({
+    clinicId: tenantId,
+    userId,
+    actionType: "AI_DASHBOARD_INSIGHTS",
+    affectedTable: "dashboard_metrics",
+    newValues: { insights: generated },
+    req,
+  });
   return {
     insights: generated,
-    revenueTrends: structured.sections.find((s) => s.title.toLowerCase().includes("revenue")) || null,
-    patientTrends: structured.sections.find((s) => s.title.toLowerCase().includes("patient")) || null,
-    recommendations: structured.sections.find((s) => s.title.toLowerCase().includes("operational") || s.title.toLowerCase().includes("recommend")) || null,
+    revenueTrends:
+      structured.sections.find((s) =>
+        s.title.toLowerCase().includes("revenue"),
+      ) || null,
+    patientTrends:
+      structured.sections.find((s) =>
+        s.title.toLowerCase().includes("patient"),
+      ) || null,
+    recommendations:
+      structured.sections.find(
+        (s) =>
+          s.title.toLowerCase().includes("operational") ||
+          s.title.toLowerCase().includes("recommend"),
+      ) || null,
     sections: structured.sections,
     disclaimer: AI_DISCLAIMER,
   };
 };
 
-const pharmacyInsights = async ({ tenantId, req, medicines, safetyContext, userId }) => {
+const pharmacyInsights = async ({
+  tenantId,
+  req,
+  medicines,
+  safetyContext,
+  userId,
+}) => {
   const safeMedicines = Array.isArray(medicines)
     ? medicines.map((m) => ({
         name: m.name,
@@ -457,13 +767,21 @@ const pharmacyInsights = async ({ tenantId, req, medicines, safetyContext, userI
       }))
     : [];
   const prompt = buildPharmacyInsightsPrompt(safeMedicines, safetyContext);
-  const generated = await renderGeminiOrFallback(
-    prompt,
-    `**Low Stock Predictions**\n- Reorder items below reorder level\n\n**Expiry Warnings**\n- Prioritize near-expiry batches\n\n**Fast Moving Medicines**\n- Maintain buffer stock for high-demand items\n\n**Slow Moving Medicines**\n- Review slow movers for wastage risk`,
-  );
+  const generated = await renderGeminiOrFallback(prompt);
   const structured = parseStructuredSections(generated);
-  await logAiAudit({ clinicId: tenantId, userId, actionType: "AI_PHARMACY_INSIGHTS", affectedTable: "medicines", newValues: { insights: generated }, req });
-  return { insights: generated, sections: structured.sections, disclaimer: AI_DISCLAIMER };
+  await logAiAudit({
+    clinicId: tenantId,
+    userId,
+    actionType: "AI_PHARMACY_INSIGHTS",
+    affectedTable: "medicines",
+    newValues: { insights: generated },
+    req,
+  });
+  return {
+    insights: generated,
+    sections: structured.sections,
+    disclaimer: AI_DISCLAIMER,
+  };
 };
 
 const labAnalysis = async ({ tenantId, req, patient, labResult, userId }) => {
@@ -481,10 +799,7 @@ const labAnalysis = async ({ tenantId, req, patient, labResult, userId }) => {
 
   const prompt = buildLabAnalysisPrompt(safePatient, labResult);
   const { text: redactedPrompt, mapping } = redactPHI(prompt, safePatient);
-  const generated = await renderGeminiOrFallback(
-    redactedPrompt,
-    `Draft analysis for ${labResult.test_name || "lab result"}:\n- Review result values and compare to expected ranges.\n- Follow up with confirmatory tests if indicated.\n- Treat in context of patient symptoms and vitals.`,
-  );
+  const generated = await renderGeminiOrFallback(redactedPrompt);
   const answer = rehydrateText(generated, mapping);
 
   await logAiAudit({
@@ -515,10 +830,7 @@ const patientSummary = async ({ tenantId, req, patient, visits, userId }) => {
 
   const prompt = buildPatientSummaryPrompt(safePatient, visits || []);
   const { text: redactedPrompt, mapping } = redactPHI(prompt, safePatient);
-  const generated = await renderGeminiOrFallback(
-    redactedPrompt,
-    `Patient summary for ${safePatient.full_name || "this patient"}:\n- Concise overview of demographics and current status.\n- Recent visit history and care priorities.`,
-  );
+  const generated = await renderGeminiOrFallback(redactedPrompt);
   const answer = rehydrateText(generated, mapping);
 
   await logAiAudit({
@@ -554,10 +866,7 @@ const clinicalSuggestion = async ({
   };
   const prompt = buildClinicalSuggestionPrompt(safePatient, consultation || {});
   const { text: redactedPrompt, mapping } = redactPHI(prompt, safePatient);
-  const generated = await renderGeminiOrFallback(
-    redactedPrompt,
-    `Clinical suggestion draft:\n- Summarize priorities.\n- Recommend next diagnostic or treatment step.\n- Highlight patient safety concerns if any.`,
-  );
+  const generated = await renderGeminiOrFallback(redactedPrompt);
   const answer = rehydrateText(generated, mapping);
 
   await logAiAudit({
@@ -583,10 +892,7 @@ const pharmacyInsight = async ({ tenantId, req, medicines, userId }) => {
       }))
     : [];
   const prompt = buildPharmacyInsightPrompt(safeMedicines);
-  const generated = await renderGeminiOrFallback(
-    prompt,
-    `Pharmacy insight summary:\n- Identify low stock and reorder risk.\n- Call out essential medication gaps.\n- Recommend inventory focus for the next clinic week.`,
-  );
+  const generated = await renderGeminiOrFallback(prompt);
 
   await logAiAudit({
     clinicId: tenantId,
@@ -602,10 +908,7 @@ const pharmacyInsight = async ({ tenantId, req, medicines, userId }) => {
 
 const dashboardInsight = async ({ tenantId, req, metrics, userId }) => {
   const prompt = buildDashboardInsightPrompt(metrics || {});
-  const generated = await renderGeminiOrFallback(
-    prompt,
-    `Dashboard insight summary:\n- Point out operational opportunities.\n- Identify any risk signals from clinic metrics.\n- Recommend next priorities for the manager.`,
-  );
+  const generated = await renderGeminiOrFallback(prompt);
 
   await logAiAudit({
     clinicId: tenantId,
@@ -649,22 +952,28 @@ const checkPrescription = async ({
     gender: patient?.gender || "",
     age: patient?.age || "",
   };
-  const prompt = `You are an expert clinical pharmacist. Analyze whether the proposed medication is safe for this patient. Mention any possible allergy or disease contraindications and suggest alternatives if needed.
+  const prompt = `You are a Clinical Decision Support System (CDSS) pharmacist.
+Analyze the safety of the proposed medication.
+You MUST structure your response into these exact headings using bold markdown:
+**Safety Level**
+**Interaction Alerts**
+**Medication Counseling**
+**Alternative Medications**
+**Dose Guidance**
+**Patient Education Summary**
 
-Patient: ${safePatient.full_name}
-Age: ${safePatient.age || "unknown"}
-Gender: ${safePatient.gender || "unknown"}
+Under the Safety Level section, you must state one of these options clearly:
+- Green: No interactions detected
+- Yellow: Use caution
+- Red: Severe interaction
+
+Patient: ${safePatient.full_name} (Age: ${safePatient.age || "unknown"}, Gender: ${safePatient.gender || "unknown"})
 Proposed Medication: ${medication_name}
-Allergies: ${allergies || "none"}
-Diagnoses: ${diagnoses || "none"}
-
-Provide a concise medication safety check:`;
+Allergies: ${allergies || "None"}
+Diagnoses/Conditions: ${diagnoses || "None"}`;
 
   const { text: redactedPrompt, mapping } = redactPHI(prompt, safePatient);
-  let generated = await renderGeminiOrFallback(
-    redactedPrompt,
-    `Medication safety check:\n- Severity: none or check allergies.\n- Alternative suggestions: ...`,
-  );
+  let generated = await renderGeminiOrFallback(redactedPrompt);
   generated = rehydrateText(generated, mapping);
 
   await logAiAudit({
@@ -690,10 +999,7 @@ const summarizeMedicalReport = async ({
 Report Text:\n${report_text}
 
 Summary:`;
-  const generated = await renderGeminiOrFallback(
-    prompt,
-    `Key Findings:\n- ...\nClinical Recommendations:\n- ...`,
-  );
+  const generated = await renderGeminiOrFallback(prompt);
 
   await logAiAudit({
     clinicId: tenantId,

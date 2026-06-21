@@ -73,7 +73,7 @@ const queueService = {
       queueService.validateQueueType(queueType);
 
       const sql = `
-        SELECT qe.*, v.visit_status, p.first_name AS patient_first_name, p.last_name AS patient_last_name,
+        SELECT qe.*, v.visit_status, p.id AS patient_id, p.gender, p.dob_gregorian, p.first_name AS patient_first_name, p.last_name AS patient_last_name,
                p.mrn AS patient_mrn, u.first_name AS doctor_first_name, u.last_name AS doctor_last_name
         FROM queue_entries qe
         JOIN visits v ON qe.visit_id = v.id
@@ -215,7 +215,7 @@ const queueService = {
   listAllQueues: async (clinicId, queueType = null, status = null) => {
     try {
       let sql = `
-        SELECT qe.*, v.visit_status, p.first_name AS patient_first_name, p.last_name AS patient_last_name,
+        SELECT qe.*, v.visit_status, p.id AS patient_id, p.gender, p.dob_gregorian, p.first_name AS patient_first_name, p.last_name AS patient_last_name,
                p.mrn AS patient_mrn, u.first_name AS doctor_first_name, u.last_name AS doctor_last_name
         FROM queue_entries qe
         JOIN visits v ON qe.visit_id = v.id

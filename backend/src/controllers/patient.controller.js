@@ -101,7 +101,7 @@ const patientController = {
 
       // Audit Log
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, "CREATE_PATIENT", "patients", ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, 'CREATE_PATIENT', 'patients', ?)",
         [tenantId, actorId, patientId]
       );
 
@@ -211,7 +211,7 @@ const patientController = {
 
       // Audit Log
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, new_values) VALUES (?, ?, "UPDATE_PATIENT", "patients", ?, ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, new_values) VALUES (?, ?, 'UPDATE_PATIENT', 'patients', ?, ?)",
         [tenantId, actorId, patientId, JSON.stringify({ first_name, last_name, dob_ethiopian, phone_number, sub_city, woreda, fayda_id })]
       );
 
@@ -243,7 +243,7 @@ const patientController = {
         
         // Audit
         await db.query(
-          'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, "DELETE_PATIENT", "patients", ?)',
+          "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, 'DELETE_PATIENT', 'patients', ?)",
           [tenantId, actorId, patientId]
         );
 

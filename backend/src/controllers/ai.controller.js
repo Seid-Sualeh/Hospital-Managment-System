@@ -49,47 +49,6 @@ const rehydrateText = (text, mapping) => {
   return rehydrated;
 };
 
-// Communicate with Gemini 1.5 Flash via standard REST API
-const callGemini = async (promptText) => {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey || apiKey === "YOUR_GEMINI_KEY") {
-    return null; // Force fallback
-  }
-
-  try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [
-              {
-                text: promptText,
-              },
-            ],
-          },
-        ],
-      }),
-    });
-
-    if (!response.ok) {
-      console.error("Gemini API call failed status:", response.status);
-      return null;
-    }
-
-    const data = await response.json();
-    const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    return generatedText || null;
-  } catch (error) {
-    console.error("Failed to communicate with Gemini API:", error);
-    return null;
-  }
-};
-
 const aiController = {
   // 1. Laboratory Result Explanation
   explainLabResult: async (req, res, next) => {
@@ -134,7 +93,6 @@ const aiController = {
         resultsObj = {};
       }
 
-      // System prompt building
       const patientInfo = {
         first_name: result.first_name,
         last_name: result.last_name,
@@ -142,51 +100,18 @@ const aiController = {
         phone_number: result.phone_number,
       };
 
-      const systemInstruction = `You are a professional clinical AI assistant helping a medical doctor interpret lab results. 
-Format your response using structured HTML bullets. Identify out-of-range values against typical clinical standards. 
-CRITICAL SAFETY RULE: You are NOT a doctor. Do NOT provide a definitive medical diagnosis. Keep results educational and remind the clinician to correlate findings.`;
-
-      const prompt = `${systemInstruction}
-Patient: [PATIENT_NAME_TOKEN] (Age: ${result.age}, Gender: ${result.gender}, MRN: [PATIENT_MRN_TOKEN])
-Lab Test: ${result.test_name}
-Measurements: ${JSON.stringify(resultsObj)}
-
-Explain the findings:`;
-
-      // Redact PII
-      const redactedPrompt = redactPHI(prompt, patientInfo);
-
-      // Call LLM
-      let generatedExplanation = await callGemini(redactedPrompt.text);
-
-      // Fallback if LLM key is absent
-      if (!generatedExplanation) {
-        generatedExplanation = `<strong>[LOCAL CLINICAL SIMULATION DRAFT]</strong><br/>
-        Analyzed laboratory measurements for <strong>${result.test_name}</strong>:<br/>
-        <ul>
-          <li>All results must be clinically correlated with patient vitals and symptoms.</li>
-          <li>For abnormal parameters (such as elevated or depressed indices in ${Object.keys(resultsObj).join(", ")}), check reference intervals.</li>
-          <li>Common causes include acute inflammation, hydration variance, or nutritional trends.</li>
-        </ul>
-        <em>Warning: This is an educational draft summary. The doctor remains the final decision maker.</em>`;
-      } else {
-        // Rehydrate PII
-        generatedExplanation = rehydrateText(
-          generatedExplanation,
-          redactedPrompt.mapping,
-        );
-      }
-
-      // Write to audit log
-      await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, "AI_LAB_EXPLAIN", "lab_results", ?)',
-        [tenantId, req.user.id, lab_result_id],
-      );
+      const explanation = await aiService.labSummary({
+        tenantId,
+        req,
+        patient: { ...result, full_name: `${result.first_name} ${result.last_name}` },
+        labResult: result,
+        userId: req.user?.id,
+      });
 
       res.status(200).json({
         success: true,
         data: {
-          explanation_draft: generatedExplanation,
+          explanation_draft: explanation.summary,
           disclaimer:
             "AI-generated draft. Licensed clinician must verify and approve final diagnostic values.",
         },
@@ -225,7 +150,6 @@ Explain the findings:`;
         [patient_id, tenantId],
       );
 
-      // Aggregate historical metrics
       const visits = consultations.map((c) => {
         let parsedVitals = {};
         let parsedDiag = {};
@@ -246,33 +170,18 @@ Explain the findings:`;
         };
       });
 
-      const systemInstruction = `You are a clinical scribe helping a doctor summarize a patient's recent clinical timeline.
-Write a dense 3-4 sentence paragraph presenting the patient. Include demographics, vital trends, medication history, and diagnoses if available.
-Keep tone formal and medical. Refrain from speculating.`;
-
-      const prompt = `${systemInstruction}
-Patient: [PATIENT_NAME_TOKEN] (Age: ${patient.age}, Gender: ${patient.gender})
-Recent Visit History: ${JSON.stringify(visits)}
-
-Provide clinical presentation summary:`;
-
-      const redacted = redactPHI(prompt, patient);
-      let summaryText = await callGemini(redacted.text);
-
-      if (!summaryText) {
-        const complaintsText = visits
-          .map((v) => v.complaint)
-          .filter(Boolean)
-          .join("; ");
-        summaryText = `Patient ${patient.first_name} ${patient.last_name} is a ${patient.age}-year-old ${patient.gender === "M" ? "male" : "female"} presenting with clinical history of: ${complaintsText || "Routine follow-ups"}. Vital parameters show stable cardiovascular benchmarks across the last ${visits.length} consultations. No active diagnostic conflicts flagged.`;
-      } else {
-        summaryText = rehydrateText(summaryText, redacted.mapping);
-      }
+      const summary = await aiService.patientSummary({
+        tenantId,
+        req,
+        patient: { ...patient, full_name: `${patient.first_name} ${patient.last_name}` },
+        visits,
+        userId: req.user?.id,
+      });
 
       res.status(200).json({
         success: true,
         data: {
-          summary_draft: summaryText,
+          summary_draft: summary.summary,
           disclaimer: aiService.AI_DISCLAIMER,
         },
       });
@@ -281,7 +190,7 @@ Provide clinical presentation summary:`;
     }
   },
 
-  // New wrapper: labAnalysis -> delegates to aiService.labAnalysis
+  // 3. Lab Analysis
   labAnalysis: async (req, res, next) => {
     try {
       const tenantId = req.tenantId;
@@ -295,7 +204,6 @@ Provide clinical presentation summary:`;
         );
       }
 
-      // Attempt to fetch lab result and patient; if missing, pass request body as fallback
       let labResult = null;
       try {
         const q = `SELECT lr.*, p.first_name, p.middle_name, p.last_name, p.gender, p.mrn, p.phone_number, TIMESTAMPDIFF(YEAR, p.dob_gregorian, CURDATE()) as age FROM lab_results lr JOIN patients p ON lr.patient_id = p.id WHERE lr.id = ? AND lr.clinic_id = ? LIMIT 1`;
@@ -332,7 +240,7 @@ Provide clinical presentation summary:`;
     }
   },
 
-  // New wrapper: patientSummary
+  // 4. Patient Summary
   patientSummary: async (req, res, next) => {
     try {
       const tenantId = req.tenantId;
@@ -353,7 +261,7 @@ Provide clinical presentation summary:`;
       const response = await aiService.patientSummary({
         tenantId,
         req,
-        patient,
+        patient: patient ? { ...patient, full_name: `${patient.first_name} ${patient.last_name}` } : null,
         visits,
         userId: req.user?.id,
       });
@@ -363,7 +271,7 @@ Provide clinical presentation summary:`;
     }
   },
 
-  // New wrapper: clinicalSuggestion
+  // 5. Clinical Suggestion
   clinicalSuggestion: async (req, res, next) => {
     try {
       const tenantId = req.tenantId;
@@ -384,26 +292,20 @@ Provide clinical presentation summary:`;
           physical_exam: req.body.physical_exam,
         };
       }
-      const patient = patient_id
-        ? Array.isArray(
-            await db.query(
-              "SELECT * FROM patients WHERE id = ? AND clinic_id = ? LIMIT 1",
-              [patient_id, tenantId],
-            ),
-          )
-          ? (
-              await db.query(
-                "SELECT * FROM patients WHERE id = ? AND clinic_id = ? LIMIT 1",
-                [patient_id, tenantId],
-              )
-            )[0]
-          : null
-        : null;
+      
+      let patient = null;
+      if (patient_id) {
+        const rows = await db.query(
+          "SELECT *, TIMESTAMPDIFF(YEAR, dob_gregorian, CURDATE()) as age FROM patients WHERE id = ? AND clinic_id = ? LIMIT 1",
+          [patient_id, tenantId],
+        );
+        patient = Array.isArray(rows) ? rows[0] : null;
+      }
 
       const response = await aiService.clinicalSuggestion({
         tenantId,
         req,
-        patient,
+        patient: patient ? { ...patient, full_name: `${patient.first_name} ${patient.last_name}` } : null,
         consultation,
         userId: req.user?.id,
       });
@@ -413,7 +315,7 @@ Provide clinical presentation summary:`;
     }
   },
 
-  // New wrapper: pharmacyInsight
+  // 6. Pharmacy Insight
   pharmacyInsight: async (req, res, next) => {
     try {
       const tenantId = req.tenantId;
@@ -437,7 +339,7 @@ Provide clinical presentation summary:`;
     }
   },
 
-  // New wrapper: dashboardInsight
+  // 7. Dashboard Insight
   dashboardInsight: async (req, res, next) => {
     try {
       const tenantId = req.tenantId;
@@ -480,7 +382,7 @@ Provide clinical presentation summary:`;
     }
   },
 
-  // 3. Prescription Assistance (Interaction Check)
+  // 8. Prescription Safety Check
   checkPrescription: async (req, res, next) => {
     try {
       const tenantId = req.tenantId;
@@ -507,61 +409,30 @@ Provide clinical presentation summary:`;
         );
       }
 
-      const systemInstruction = `You are an expert clinical pharmacologist validating medication safety.
-Analyze if the proposed drug has a severe allergy conflict or contraindication with patient's known medical history.
-State the severity (None, Mild, Moderate, Severe) clearly at the top. Mention biochemical reason.
-Suggest standard alternative chemical options.`;
-
-      const prompt = `${systemInstruction}
-Proposed Medication: ${medication_name}
-Patient Profile: [PATIENT_NAME_TOKEN] (Age: ${patient.age}, Gender: ${patient.gender})
-Allergies Flagged: ${allergies || "none recorded"}
-Active Conditions: ${diagnoses || "none recorded"}
-
-Verify drug interaction safety:`;
-
-      const redacted = redactPHI(prompt, patient);
-      let validationText = await callGemini(redacted.text);
-
-      if (!validationText) {
-        // Local rule-based check
-        const proposedLower = medication_name.toLowerCase();
-        const allergiesLower = (allergies || "").toLowerCase();
-        let isAllergic = false;
-
-        if (
-          allergiesLower &&
-          (proposedLower.includes("penicillin") ||
-            proposedLower.includes("amoxicillin")) &&
-          allergiesLower.includes("penicillin")
-        ) {
-          isAllergic = true;
-        }
-
-        if (isAllergic) {
-          validationText = `🚨 **SEVERITY: SEVERE CONTRAINDICATION**\n\nThe patient has a documented allergy to Penicillin. The proposed medication (${medication_name}) belongs to the beta-lactam class and poses an immediate risk of anaphylaxis. Suggest prescribing Macrolides (e.g. Azithromycin, Erythromycin) as an alternative.`;
-        } else {
-          validationText = `✅ **SEVERITY: NONE FLAGGED**\n\nPrescription check for ${medication_name} complete. No immediate severe contraindications or allergy overlaps detected against the patient profile (Allergies: ${allergies || "none"}, Diagnoses: ${diagnoses || "none"}). Maintain standard dosing intervals.`;
-        }
-      } else {
-        validationText = rehydrateText(validationText, redacted.mapping);
-      }
+      const checkRes = await aiService.checkPrescription({
+        tenantId,
+        req,
+        patient: { ...patient, full_name: `${patient.first_name} ${patient.last_name}` },
+        medication_name,
+        allergies,
+        diagnoses,
+        userId: req.user?.id,
+      });
 
       res.status(200).json({
         success: true,
-        data: {
-          interaction_draft: validationText,
-        },
+        data: checkRes,
       });
     } catch (error) {
       next(error);
     }
   },
 
-  // 4. Medical Report Summarization
+  // 9. Medical Report Summarization
   summarizeMedicalReport: async (req, res, next) => {
     try {
       const { report_text } = req.body;
+      const tenantId = req.tenantId;
 
       if (!report_text || report_text.trim().length === 0) {
         throw new APIError(
@@ -571,34 +442,23 @@ Verify drug interaction safety:`;
         );
       }
 
-      const systemInstruction = `You are a clinical transcription expert. Summarize dense clinical documentation into a structured outline.
-Include: 'Key Findings' and 'Clinical Recommendations'. Maintain professional medical terminology. Limit summary to 120 words.`;
-
-      const prompt = `${systemInstruction}
-Report Text:
-${report_text}
-
-Summarize:`;
-
-      let summaryText = await callGemini(prompt);
-
-      if (!summaryText) {
-        summaryText = `**Key Findings:** Clinical assessment indicates general physiological metrics are within normal parameters. Diagnostic imaging reports clear cardiopulmonary markings with no acute processes.
-        
-**Clinical Recommendations:** Continue routine vitals tracking. Schedule outpatient checkup in 2 weeks. Maintain current medication schedule.`;
-      }
+      const summary = await aiService.summarizeMedicalReport({
+        report_text,
+        req,
+        userId: req.user?.id,
+        tenantId,
+      });
 
       res.status(200).json({
         success: true,
-        data: {
-          summary: summaryText,
-        },
+        data: summary,
       });
     } catch (error) {
       next(error);
     }
   },
 
+  // 10. Diagnosis Support
   diagnosisSupport: async (req, res, next) => {
     try {
       const tenantId = req.tenantId;
@@ -624,6 +484,7 @@ Summarize:`;
     }
   },
 
+  // 11. Medication Assistance
   medicationAssistance: async (req, res, next) => {
     try {
       const tenantId = req.tenantId;
@@ -649,6 +510,7 @@ Summarize:`;
     }
   },
 
+  // 12. Lab Summary
   labSummary: async (req, res, next) => {
     try {
       const tenantId = req.tenantId;
@@ -689,6 +551,7 @@ Summarize:`;
     }
   },
 
+  // 13. Lab Abnormal Detection
   labAbnormalDetection: async (req, res, next) => {
     try {
       const { result, interpretation, results_json } = req.body;
@@ -701,6 +564,7 @@ Summarize:`;
     }
   },
 
+  // 14. Dashboard Insights
   dashboardInsights: async (req, res, next) => {
     try {
       const tenantId = req.tenantId;
@@ -735,6 +599,7 @@ Summarize:`;
     }
   },
 
+  // 15. Pharmacy Insights
   pharmacyInsights: async (req, res, next) => {
     try {
       const tenantId = req.tenantId;
