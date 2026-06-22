@@ -3112,3 +3112,78 @@
 {"level":"error","message":"[500 Server Error] Path: GET /api/v1/auth/me","timestamp":"2026-06-21T07:14:47.101Z"}
 {"level":"error","message":"Error: getaddrinfo ENOTFOUND mysql-1baa60-seidsualeh123.a.aivencloud.com\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)","timestamp":"2026-06-21T07:14:47.102Z"}
 {"level":"info","message":"GET /api/v1/auth/me 500 141 - 13.994 ms","timestamp":"2026-06-21T07:14:47.104Z"}
+{"level":"info","message":"POST /api/v1/auth/login 200 - - 4569.550 ms","timestamp":"2026-06-21T16:27:42.609Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1912.190 ms","timestamp":"2026-06-21T16:27:44.736Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 927.722 ms","timestamp":"2026-06-21T16:27:45.667Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 3023.329 ms","timestamp":"2026-06-21T16:27:47.773Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 923.095 ms","timestamp":"2026-06-21T16:27:48.698Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights - - - - ms","timestamp":"2026-06-21T16:28:02.855Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights - - - - ms","timestamp":"2026-06-21T16:28:02.873Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights - - - - ms","timestamp":"2026-06-21T16:28:03.719Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 - - 10568.170 ms","timestamp":"2026-06-21T16:28:18.007Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 466.871 ms","timestamp":"2026-06-21T16:28:57.731Z"}
+{"level":"info","message":"GET /api/v1/labs/requests 304 - - 230.080 ms","timestamp":"2026-06-21T16:28:57.962Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 502.819 ms","timestamp":"2026-06-21T16:29:00.803Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 231.970 ms","timestamp":"2026-06-21T16:29:01.038Z"}
+{"level":"info","message":"POST /api/v1/ai/pharmacy-insights 200 - - 7620.586 ms","timestamp":"2026-06-21T16:29:16.566Z"}
+{"level":"info","message":"GET /api/v1/reports/summary?startDate=2026-06-01&endDate=2026-06-21 404 161 - 2.149 ms","timestamp":"2026-06-21T16:29:50.323Z"}
+{"level":"info","message":"GET /api/v1/reports/summary?startDate=2026-06-01&endDate=2026-06-21 404 161 - 0.933 ms","timestamp":"2026-06-21T16:29:50.327Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/billing/invoices","timestamp":"2026-06-21T16:29:55.890Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async listInvoices (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\billing.controller.js:303:24)","timestamp":"2026-06-21T16:29:55.891Z"}
+{"level":"info","message":"GET /api/v1/billing/invoices 500 150 - 467.412 ms","timestamp":"2026-06-21T16:29:55.893Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/billing/invoices","timestamp":"2026-06-21T16:29:56.126Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async listInvoices (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\billing.controller.js:303:24)","timestamp":"2026-06-21T16:29:56.127Z"}
+{"level":"info","message":"GET /api/v1/billing/invoices 500 150 - 232.732 ms","timestamp":"2026-06-21T16:29:56.129Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 235.821 ms","timestamp":"2026-06-21T16:29:57.879Z"}
+{"level":"info","message":"GET /api/v1/pharmacy/medicines 304 - - 238.401 ms","timestamp":"2026-06-21T16:29:58.125Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 564.058 ms","timestamp":"2026-06-21T16:30:01.915Z"}
+{"level":"info","message":"GET /api/v1/queues/CONSULTATION 304 - - 232.720 ms","timestamp":"2026-06-21T16:30:02.151Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients","timestamp":"2026-06-21T16:30:04.646Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-21T16:30:04.646Z"}
+{"level":"info","message":"GET /api/v1/patients 500 150 - 462.845 ms","timestamp":"2026-06-21T16:30:04.647Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients","timestamp":"2026-06-21T16:30:04.881Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-21T16:30:04.881Z"}
+{"level":"info","message":"GET /api/v1/patients 500 150 - 232.674 ms","timestamp":"2026-06-21T16:30:04.882Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-21T16:30:07.109Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-21T16:30:07.109Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 150 - 231.461 ms","timestamp":"2026-06-21T16:30:07.110Z"}
+{"level":"error","message":"[500 Server Error] Path: GET /api/v1/patients?page=1&limit=10","timestamp":"2026-06-21T16:30:07.344Z"}
+{"level":"error","message":"Error: Incorrect arguments to mysqld_stmt_execute\n    at Object.query (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\config\\db.js:82:42)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async list (C:\\Users\\pc\\Desktop\\ethiopia-cms\\backend\\src\\controllers\\patient.controller.js:24:24)","timestamp":"2026-06-21T16:30:07.344Z"}
+{"level":"info","message":"GET /api/v1/patients?page=1&limit=10 500 150 - 232.512 ms","timestamp":"2026-06-21T16:30:07.345Z"}
+{"level":"warn","message":"[400 API Warning] Path: POST /api/v1/patients - Code: VALIDATION_ERROR - Message: Validation failed.","timestamp":"2026-06-21T16:30:41.820Z"}
+{"level":"info","message":"POST /api/v1/patients 400 123 - 3.453 ms","timestamp":"2026-06-21T16:30:41.823Z"}
+{"level":"warn","message":"[400 API Warning] Path: POST /api/v1/patients - Code: VALIDATION_ERROR - Message: Validation failed.","timestamp":"2026-06-21T16:30:44.264Z"}
+{"level":"info","message":"POST /api/v1/patients 400 123 - 1.451 ms","timestamp":"2026-06-21T16:30:44.264Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1618.249 ms","timestamp":"2026-06-21T16:30:57.674Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 918.495 ms","timestamp":"2026-06-21T16:30:58.595Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1879.540 ms","timestamp":"2026-06-21T16:30:59.564Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 936.805 ms","timestamp":"2026-06-21T16:31:00.503Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 - - 11352.139 ms","timestamp":"2026-06-21T16:31:11.869Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 - - 13112.698 ms","timestamp":"2026-06-21T16:31:12.725Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights - - - - ms","timestamp":"2026-06-21T16:31:14.609Z"}
+{"level":"info","message":"GET /api/v1/auth/me 200 460 - 1702.729 ms","timestamp":"2026-06-21T16:36:20.901Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 599.159 ms","timestamp":"2026-06-21T16:36:21.507Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 2350.756 ms","timestamp":"2026-06-21T16:36:23.960Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1447.585 ms","timestamp":"2026-06-21T16:36:25.443Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 1482.385 ms","timestamp":"2026-06-21T16:36:25.448Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 1629.398 ms","timestamp":"2026-06-21T16:36:27.181Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 - - 13463.475 ms","timestamp":"2026-06-21T16:36:39.051Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 - - 13309.695 ms","timestamp":"2026-06-21T16:36:40.550Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights - - - - ms","timestamp":"2026-06-21T16:36:40.714Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 472.442 ms","timestamp":"2026-06-21T16:37:05.090Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 483.480 ms","timestamp":"2026-06-21T16:37:05.583Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 942.898 ms","timestamp":"2026-06-21T16:37:06.659Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 928.562 ms","timestamp":"2026-06-21T16:37:07.601Z"}
+{"level":"info","message":"GET /api/v1/reports/patients 304 - - 946.497 ms","timestamp":"2026-06-21T16:37:07.608Z"}
+{"level":"info","message":"GET /api/v1/attendance/stats 304 - - 940.342 ms","timestamp":"2026-06-21T16:37:08.632Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights 200 - - 12842.348 ms","timestamp":"2026-06-21T16:37:20.553Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights - - - - ms","timestamp":"2026-06-21T16:37:22.701Z"}
+{"level":"info","message":"POST /api/v1/ai/dashboard-insights - - - - ms","timestamp":"2026-06-21T16:37:23.669Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/auth/me - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-21T16:42:59.972Z"}
+{"level":"info","message":"GET /api/v1/auth/me 401 154 - 567.587 ms","timestamp":"2026-06-21T16:42:59.973Z"}
+{"level":"warn","message":"[401 API Warning] Path: GET /api/v1/auth/me - Code: TOKEN_EXPIRED - Message: Access token has expired. Please refresh your token.","timestamp":"2026-06-21T16:42:59.991Z"}
+{"level":"info","message":"GET /api/v1/auth/me 401 154 - 6.978 ms","timestamp":"2026-06-21T16:42:59.994Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 792.260 ms","timestamp":"2026-06-21T16:43:00.816Z"}
+{"level":"info","message":"POST /api/v1/auth/refresh 200 664 - 1046.066 ms","timestamp":"2026-06-21T16:43:01.058Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 970.037 ms","timestamp":"2026-06-21T16:43:01.835Z"}
+{"level":"info","message":"GET /api/v1/auth/me 304 - - 615.505 ms","timestamp":"2026-06-21T16:43:02.454Z"}
