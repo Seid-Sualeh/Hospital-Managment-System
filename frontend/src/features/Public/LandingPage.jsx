@@ -141,41 +141,17 @@ const LandingPage = () => {
 
             {/* Hero Mockup */}
             <div className="col-lg-6">
-              <div className="device-mockup animate-float">
-                <div className="device-header">
+              <div className="device-mockup animate-float" style={{ boxShadow: "0 25px 60px -15px rgba(0,0,0,0.5)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                <div className="device-header" style={{ background: "#0f172a", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", padding: "10px 16px" }}>
                   <div className="device-dot red" /><div className="device-dot yellow" /><div className="device-dot green" />
-                  <span style={{ color: "#475569", fontSize: "10px", marginLeft: "8px" }}>Executive Analytics Hub</span>
+                  <span style={{ color: "#94a3b8", fontSize: "11px", marginLeft: "8px", fontWeight: 600, fontFamily: "Outfit, sans-serif" }}>Clinic Operations Dashboard</span>
                 </div>
-                <div className="device-screen p-3">
-                  <div className="d-flex justify-content-between align-items-center pb-2 mb-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                    <span style={{ fontWeight: 700, fontSize: "11px", color: "#e2e8f0" }}>Clinical Insights Hub</span>
-                    <span style={{ background: "rgba(16,185,129,0.12)", color: "#10b981", border: "1px solid rgba(16,185,129,0.2)", borderRadius: "99px", fontSize: "8px", padding: "2px 8px", fontWeight: 700 }}>HIPAA PROTECTED</span>
-                  </div>
-                  <div className="row g-2 mb-3">
-                    {[{ label: "Monthly Turnover", value: "482,450 ETB", change: "+14.2% this week" }, { label: "Total Consultations", value: "1,240 visits", change: "+8.5% this week" }].map((m, i) => (
-                      <div key={i} className="col-6">
-                        <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "8px", padding: "10px" }}>
-                          <span style={{ display: "block", fontSize: "7px", color: "#475569", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "4px" }}>{m.label}</span>
-                          <strong style={{ display: "block", fontSize: "13px", color: "#f1f5f9", marginBottom: "3px" }}>{m.value}</strong>
-                          <span style={{ fontSize: "8px", color: "#10b981" }}>↑ {m.change}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div style={{ background: "rgba(37,99,235,0.06)", border: "1px solid rgba(37,99,235,0.15)", borderRadius: "8px", padding: "10px", marginBottom: "12px" }}>
-                    <div className="d-flex align-items-center gap-2 mb-2">
-                      <Brain size={12} style={{ color: "#818cf8" }} className="animate-pulse-slow" />
-                      <span style={{ fontSize: "9px", fontWeight: 700, color: "#e2e8f0" }}>Clinical Intelligence Engine (Gemini)</span>
-                    </div>
-                    <p style={{ fontSize: "8.5px", color: "#64748b", lineHeight: 1.5, marginBottom: 0 }}>
-                      "Positive correlation detected between afternoon triage congestion and lab queue delays. Staff shift reassignment recommended."
-                    </p>
-                  </div>
-                  <div className="d-flex align-items-end justify-content-between" style={{ height: "50px", gap: "2px" }}>
-                    {[30,45,20,60,50,75,40,85,65,95,70,110,80,120].map((h, i) => (
-                      <div key={i} style={{ flex: 1, height: `${h * 0.35}px`, background: `linear-gradient(to top, #2563eb, #60a5fa)`, borderRadius: "2px 2px 0 0", opacity: 0.7 + (i * 0.02) }} />
-                    ))}
-                  </div>
+                <div className="device-screen p-0" style={{ overflow: "hidden", background: "#0b0f19" }}>
+                  <img
+                    src="/clinic_dashboard_hero.png"
+                    alt="Enterprise Clinic Management System EMR Dashboard"
+                    style={{ width: "100%", height: "auto", display: "block", objectFit: "cover" }}
+                  />
                 </div>
               </div>
             </div>
@@ -959,10 +935,17 @@ const LandingPage = () => {
                     </div>
                     <div className="col-12">
                       <button
+                        
+                        
                         type="submit"
                         disabled={submitting}
-                        className="btn btn-primary d-inline-flex align-items-center justify-content-center gap-2 w-100"
-                        style={{ padding: "0.8rem 2rem", fontWeight: 700, fontSize: "0.95rem", borderRadius: "10px", boxShadow: "0 8px 24px rgba(37,99,235,0.3)" }}
+                        className="btn  d-inline-flex align-items-center justify-content-center gap-2 w-100"
+                        style={{
+                                background:
+                            "linear-gradient(135deg, TEAL, #06b6d4)",
+                          color: 'white',
+                          padding: "0.8rem 2rem", fontWeight: 700, fontSize: "0.95rem", borderRadius: "10px", boxShadow: "0 8px 24px rgba(37,99,235,0.3)"
+                        }}
                       >
                         {submitting ? (
                           <span className="spinner-border spinner-border-sm" role="status" />

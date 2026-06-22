@@ -53,30 +53,93 @@ const ServicesPage = () => {
       {/* Page Header */}
       <section className="bg-light py-5 border-bottom border-light">
         <div className="container text-center">
-          <span className="badge bg-primary-soft text-primary mb-2 px-3 py-2 rounded-pill fw-semibold">WHAT WE MANAGE</span>
-          <h1 className="fw-bold display-5 public-display-font text-dark mb-3">Clinical Services</h1>
-          <p className="text-secondary mx-auto mb-0 lead" style={{ maxWidth: "700px" }}>
-            Explore how MediCare AI automates and secures core clinical service pipelines, ensuring patient data flows cleanly from admission to exit.
+          <span className="badge bg-primary-soft text-primary mb-2 px-3 py-2 rounded-pill fw-semibold">
+            WHAT WE MANAGE
+          </span>
+          <h1 className="fw-bold display-5 public-display-font text-dark mb-3">
+            Clinical Services
+          </h1>
+          <p
+            className="text-secondary mx-auto mb-0 lead"
+            style={{ maxWidth: "700px" }}
+          >
+            Explore how MediCare AI automates and secures core clinical service
+            pipelines, ensuring patient data flows cleanly from admission to
+            exit.
           </p>
         </div>
       </section>
 
+      {/* Services Showcase */}
+      <section className="py-5 bg-white">
+        <div className="container">
+          <div className="row g-5 align-items-center">
+            <div className="col-lg-6 order-2 order-lg-1">
+              <div style={{ position: "relative", borderRadius: "16px", overflow: "hidden", boxShadow: "0 20px 45px rgba(0,0,0,0.1)", border: "1px solid rgba(0,0,0,0.06)" }}>
+                <img
+                  src="/clinical_services.png"
+                  alt="Clinical Services Laboratory Mockup"
+                  style={{ width: "100%", height: "auto", display: "block" }}
+                />
+              </div>
+            </div>
+            <div className="col-lg-6 order-1 order-lg-2">
+              <span className="badge bg-purple-soft text-purple mb-2 px-3 py-2 rounded-pill fw-semibold">CLINICAL PRECISION</span>
+              <h2 className="fw-bold public-display-font text-dark mb-4">
+                Connecting Diagnostic Data with Patient Care
+              </h2>
+              <p className="text-secondary mb-4" style={{ lineHeight: "1.7" }}>
+                Our platform resolves clinical isolation by ensuring laboratory tests, prescription dispense items, and vital triage records talk to each other in real-time. Clinicians receive instant notifications of patient lab results directly in their workspace.
+              </p>
+              <div className="d-flex flex-column gap-2 mb-0">
+                {["Automated billing logs trigger directly from physician prescriptions", "Abnormal lab value notifications show up on doctor dashboards", "Real-time drug inventory counts update automatically on checkout"].map((f, i) => (
+                  <div key={i} className="d-flex align-items-center gap-2 small text-dark fw-semibold">
+                    <div
+                      className="text-success d-flex align-items-center justify-content-center bg-success bg-opacity-10 rounded-circle flex-shrink-0"
+                      style={{ width: "18px", height: "18px" }}
+                    >
+                      <Check size={12} />
+                    </div>
+                    <span>{f}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Services Grid */}
-      <section className="py-5">
+      <section className="py-5 bg-light">
         <div className="container">
           <div className="row g-4">
             {services.map((service, index) => (
               <div key={index} className="col-lg-4 col-md-6">
-                <div className="card h-100 p-4 border-0 shadow-sm rounded-4 glass-card-light">
-                  <div className={`feature-icon-wrapper ${service.bgClass} mb-3`}>
+                <div
+                  className="card h-100 p-4 border-1 shadow-sm rounded-4 glass-card-light "
+                 
+                >
+                  <div
+                    className={`feature-icon-wrapper ${service.bgClass} mb-3`}
+                  >
                     {service.icon}
                   </div>
-                  <h4 className="fw-bold public-display-font text-dark mb-2">{service.title}</h4>
-                  <p className="text-secondary small mb-4">{service.description}</p>
+                  <h4 className="fw-bold public-display-font text-dark mb-2">
+                    {service.title}
+                  </h4>
+                  <p className="text-secondary small mb-4">
+                    {service.description}
+                  </p>
                   <ul className="list-unstyled d-flex flex-column gap-2 mb-0 mt-auto">
                     {service.details.map((detail, idx) => (
-                      <li key={idx} className="d-flex align-items-center gap-2 small text-dark fw-semibold">
-                        <div className="text-success d-flex align-items-center justify-content-center bg-success bg-opacity-10 rounded-circle" style={{ width: "18px", height: "18px" }}>
+                      <li
+                        key={idx}
+                        className="d-flex align-items-center gap-2 small text-dark fw-semibold"
+                      >
+                        <div
+                          className="text-success d-flex align-items-center justify-content-center bg-success bg-opacity-10 rounded-circle"
+                          style={{ width: "18px", height: "18px" }}
+                        >
                           <Check size={12} />
                         </div>
                         <span>{detail}</span>
@@ -93,11 +156,23 @@ const ServicesPage = () => {
       {/* Workflow CTA */}
       <section className="py-5 bg-dark text-white text-center position-relative">
         <div className="container py-4">
-          <h3 className="fw-bold public-display-font mb-3">Looking for a comprehensive breakdown?</h3>
-          <p className="text-secondary mx-auto mb-4" style={{ maxWidth: "600px" }}>
-            See exactly how these services coordinate in our interactive clinical workflow map.
+          <h3 className="fw-bold public-display-font mb-3">
+            Looking for a comprehensive breakdown?
+          </h3>
+          <p
+            className="text-secondary mx-auto mb-4"
+            style={{ maxWidth: "600px" }}
+          >
+            See exactly how these services coordinate in our interactive
+            clinical workflow map.
           </p>
-          <Link to="/features" className="btn btn-primary btn-lg px-4 d-inline-flex align-items-center gap-2">
+          <Link
+            to="/features"
+            className="btn  btn-lg px-4 d-inline-flex align-items-center gap-2"
+            style={{
+              background: "linear-gradient(135deg, TEAL, #06b6d4)",
+            }}
+          >
             <span>Explore Clinical Workflows</span>
             <ArrowRight size={18} />
           </Link>
