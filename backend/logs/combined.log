@@ -934,3 +934,5 @@
 {"level":"info","message":"POST /api/v1/auth/login 401 159 - 1.431 ms","timestamp":"2026-06-12T17:59:10.461Z"}
 {"level":"warn","message":"[Server] SKIP_DB=true — skipping database connection check. Server will start without verifying DB.","timestamp":"2026-06-12T18:23:36.100Z"}
 {"level":"info","message":"[Server] CMS SaaS Engine listening at http://localhost:5000 (DB check skipped)","timestamp":"2026-06-12T18:23:36.104Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at http://localhost:5000","timestamp":"2026-06-22T11:31:16.104Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at http://localhost:5000","timestamp":"2026-06-22T18:45:35.671Z"}

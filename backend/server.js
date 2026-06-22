@@ -45,6 +45,7 @@ const allowedOrigins = [
   "http://127.0.0.1:5173",
   "http://localhost:3000",
   "http://127.0.0.1:3000",
+  "https://medicares-ai.netlify.app"
 ];
 const originRegex = /^https?:\/\/([a-z0-9-]+\.)?cms\.et(:[0-9]+)?$/;
 app.use(
