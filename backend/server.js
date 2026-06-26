@@ -31,6 +31,7 @@ const queueRoutes = require("./src/routes/queue.routes");
 const shiftRoutes = require("./src/routes/shift.routes");
 const leaveRoutes = require("./src/routes/leave.routes");
 const attendanceRoutes = require("./src/routes/attendance.routes");
+const tenantRoutes = require("./src/routes/tenant.routes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -38,40 +39,75 @@ const PORT = process.env.PORT || 5000;
 // Security and HTTP Headers
 app.use(helmet());
 
-// Dynamic CORS whitelist
-// Allow common local dev ports (Vite:5173, CRA/React:3000)
 const allowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
   "http://localhost:3000",
   "http://127.0.0.1:3000",
-  "https://medicares-ai.netlify.app"
-];
-const originRegex = /^https?:\/\/([a-z0-9-]+\.)?cms\.et(:[0-9]+)?$/;
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl, postman)
-      if (!origin) return callback(null, true);
+  "https://medicares-ai.netlify.app",
+  process.env.FRONTEND_URL,
+].filter(Boolean);
 
-      // Check if origin matches allowed list exactly or matches regex for subdomains
-      const isAllowed =
-        allowedOrigins.some(
-          (ao) => origin === ao || origin.startsWith(ao + "/"),
-        ) || originRegex.test(origin);
-      if (isAllowed) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  }),
-);
+const originRegex = /^https?:\/\/([a-z0-9-]+\.)?cms\.et(:[0-9]+)?$/;
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+
+    const isAllowed =
+      allowedOrigins.some(
+        (ao) => origin === ao || origin.startsWith(ao + "/")
+      ) || originRegex.test(origin);
+
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
 // Request parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Root path handler (Vercel health pings and direct browser hits)
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    service: "Ethiopia CMS Backend API",
+    version: "1.0.0",
+    docs: "/api/v1/health",
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// Health Check API (must be BEFORE tenant middleware)
+app.get("/api/v1/health", async (req, res) => {
+  try {
+    if (process.env.SKIP_DB !== "true") {
+      await db.query("SELECT 1");
+    }
+    res.status(200).json({
+      success: true,
+      status: "healthy",
+      database: process.env.SKIP_DB === "true" ? "skipped" : "connected",
+      timestamp: new Date().toISOString(),
+      tenantContext: "global",
+    });
+  } catch (error) {
+    logger.error(`Health check failed: ${error.message}`);
+    res.status(500).json({
+      success: false,
+      status: "unhealthy",
+      error: process.env.NODE_ENV === "production" ? "Database connection error" : error.message,
+      timestamp: new Date().toISOString(),
+    });
+  }
+});
 
 // HTTP Request Logging via Morgan routing through Winston
 app.use(
@@ -103,18 +139,7 @@ app.use("/api/v1/certificates", certificateRoutes);
 app.use("/api/v1/shifts", shiftRoutes);
 app.use("/api/v1/leaves", leaveRoutes);
 app.use("/api/v1/attendance", attendanceRoutes);
-
-// Health Check API
-app.get("/api/v1/health", (req, res) => {
-  res.status(200).json({
-    success: true,
-    status: "healthy",
-    timestamp: new Date().toISOString(),
-    tenantContext: req.tenantId
-      ? { id: req.tenantId, name: req.tenantName }
-      : "global",
-  });
-});
+app.use("/api/v1/tenants", tenantRoutes);
 
 // Centralized error handling middleware (must be mounted last)
 app.use(errorHandler);

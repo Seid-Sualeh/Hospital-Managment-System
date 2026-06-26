@@ -1,16 +1,64 @@
 import axios from 'axios';
 
-const getSubdomain = () => {
-  const host = window.location.host;
-  const parts = host.split('.');
-  if (parts.length >= 2) {
-    return parts[0].toLowerCase().trim();
-  }
-  return '';
-};
+const TENANT_KEY = 'tenant_id';
+const TOKEN_KEY = 'token';
+const USER_KEY = 'user';
 
 const getBaseURL = () => {
-  return import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1';
+  return import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1';
+};
+
+const getTenant = () => {
+  try {
+    const stored = localStorage.getItem(TENANT_KEY);
+    if (stored) {
+      return stored.toLowerCase().trim();
+    }
+  } catch (e) {
+    console.warn('[API] Failed to read tenant from localStorage:', e);
+  }
+  return null;
+};
+
+const setTenant = (subdomain) => {
+  try {
+    localStorage.setItem(TENANT_KEY, subdomain.toLowerCase().trim());
+  } catch (e) {
+    console.warn('[API] Failed to persist tenant to localStorage:', e);
+  }
+};
+
+const clearTenant = () => {
+  try {
+    localStorage.removeItem(TENANT_KEY);
+  } catch (e) {
+    console.warn('[API] Failed to clear tenant from localStorage:', e);
+  }
+};
+
+const getStoredToken = () => {
+  try {
+    return localStorage.getItem(TOKEN_KEY);
+  } catch (e) {
+    return null;
+  }
+};
+
+const setStoredToken = (token) => {
+  try {
+    localStorage.setItem(TOKEN_KEY, token);
+  } catch (e) {
+    console.warn('[API] Failed to persist token to localStorage:', e);
+  }
+};
+
+const clearStoredToken = () => {
+  try {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+  } catch (e) {
+    console.warn('[API] Failed to clear auth from localStorage:', e);
+  }
 };
 
 const api = axios.create({
@@ -23,14 +71,12 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const subdomain = getSubdomain();
-    if (subdomain && subdomain !== 'www' && subdomain !== 'localhost') {
-      config.headers['X-Tenant-ID'] = subdomain;
-    } else {
-      config.headers['X-Tenant-ID'] = 'yared';
+    const tenant = getTenant();
+    if (tenant) {
+      config.headers['X-Tenant-ID'] = tenant;
     }
 
-    const token = localStorage.getItem('token');
+    const token = getStoredToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -66,18 +112,22 @@ api.interceptors.response.use(
         const refreshResponse = await axios.post(
           `${getBaseURL()}/auth/refresh`,
           {},
-          { withCredentials: true }
+          {
+            withCredentials: true,
+            headers: {
+              'X-Tenant-ID': getTenant(),
+            },
+          }
         );
 
         if (refreshResponse.data?.accessToken) {
-          const newToken = refreshResponse.data.accessToken;
-          localStorage.setItem('token', newToken);
-          originalRequest.headers.Authorization = `Bearer ${newToken}`;
+          setStoredToken(refreshResponse.data.accessToken);
+          originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.accessToken}`;
           return api(originalRequest);
         }
       } catch {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        clearStoredToken();
+        clearTenant();
         if (!window.location.pathname.includes('/login')) {
           window.location.href = '/login';
         }
@@ -85,7 +135,7 @@ api.interceptors.response.use(
     }
 
     if (error.response?.status === 401 && !originalRequest?.url?.includes('/auth/login')) {
-      const stored = localStorage.getItem('token');
+      const stored = getStoredToken();
       if (!stored && !window.location.pathname.includes('/login')) {
         window.location.href = '/login';
       }
@@ -96,5 +146,5 @@ api.interceptors.response.use(
   }
 );
 
-export { handleApiError, getBaseURL };
+export { handleApiError, getBaseURL, getTenant, setTenant, clearTenant, getStoredToken, setStoredToken, clearStoredToken };
 export default api;

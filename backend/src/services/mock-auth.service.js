@@ -185,6 +185,7 @@ class MockAuthService {
           id: user.role_id,
           name: user.role_name,
         },
+        subdomain: 'demo',
       },
     };
   }

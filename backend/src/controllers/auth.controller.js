@@ -1,36 +1,41 @@
 const authService = require("../services/auth.service");
-const mockAuthService = require("../services/mock-auth.service");
+const tenantService = require("../services/tenant.service");
 const db = require("../config/db");
 const { APIError } = require("../middlewares/error");
 
 const authController = {
-  // Login handler
   login: async (req, res, next) => {
     try {
       const { email, password } = req.body;
-      const tenantId = req.tenantId;
-      const SKIP_DB =
-        String(process.env.SKIP_DB || "").toLowerCase() === "true";
+      const tenantHeader = req.headers["x-tenant-id"] || req.headers["x-tenant-subdomain"];
+      const SKIP_DB = String(process.env.SKIP_DB || "").toLowerCase() === "true";
 
-      if (!tenantId) {
+      if (!SKIP_DB && !tenantHeader) {
         throw new APIError(
-          "Tenant context is missing. Log in through a valid clinic subdomain.",
+          "Clinic identifier required. Provide X-Tenant-ID header.",
           400,
-          "MISSING_TENANT",
+          "MISSING_TENANT_IDENTIFIER"
         );
+      }
+
+      let tenantId = req.tenantId;
+      let clinic = null;
+
+      if (!SKIP_DB && tenantHeader) {
+        const subdomain = String(tenantHeader).toLowerCase().trim();
+        clinic = await tenantService.getTenantBySubdomain(subdomain);
+        tenantId = clinic.id;
       }
 
       let loginResult;
 
-      // Use mock auth when SKIP_DB=true (dev/testing mode)
       if (SKIP_DB) {
         try {
-          loginResult = await mockAuthService.mockLogin(email, password);
+          loginResult = await require("../services/mock-auth.service").mockLogin(email, password);
         } catch (mockError) {
           throw new APIError(mockError.message, 401, "INVALID_CREDENTIALS");
         }
       } else {
-        // Fetch user from DB, enforcing tenant clinic_id
         const querySql = `
           SELECT u.*, r.name as role_name 
           FROM users u
@@ -44,7 +49,7 @@ const authController = {
           throw new APIError(
             "Invalid email or password credentials.",
             401,
-            "INVALID_CREDENTIALS",
+            "INVALID_CREDENTIALS"
           );
         }
 
@@ -54,24 +59,22 @@ const authController = {
           throw new APIError(
             "This account has been deactivated. Contact your clinic administrator.",
             403,
-            "USER_DEACTIVATED",
+            "USER_DEACTIVATED"
           );
         }
 
-        // Validate password via Service
         const isMatch = await authService.comparePasswords(
           password,
-          user.password_hash,
+          user.password_hash
         );
         if (!isMatch) {
           throw new APIError(
             "Invalid email or password credentials.",
             401,
-            "INVALID_CREDENTIALS",
+            "INVALID_CREDENTIALS"
           );
         }
 
-        // Generate tokens via Service
         const { accessToken, refreshToken, permissions } =
           await authService.generateTokens(user);
 
@@ -89,25 +92,24 @@ const authController = {
               id: user.role_id,
               name: user.role_name,
             },
+            ...(clinic ? { subdomain: clinic.subdomain } : {}),
           },
         };
       }
 
-      // Save refresh token in HTTP-Only secure cookie
       res.cookie("refreshToken", loginResult.refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in ms
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
-      // Audit Log entry (skip if mock mode)
-      if (!SKIP_DB) {
+      if (!SKIP_DB && tenantId) {
         const ip =
           req.ip || req.headers["x-forwarded-for"] || req.socket.remoteAddress;
         await db.query(
           'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, ip_address) VALUES (?, ?, "LOGIN", "users", ?)',
-          [tenantId, loginResult.user.id, ip],
+          [tenantId, loginResult.user.id, ip]
         );
       }
 
@@ -121,7 +123,6 @@ const authController = {
     }
   },
 
-  // User registration handler (Enforces tenant scope constraints)
   register: async (req, res, next) => {
     try {
       const tenantId = req.tenantId;
@@ -130,14 +131,12 @@ const authController = {
         throw new APIError("Tenant context is missing.", 400, "MISSING_TENANT");
       }
 
-      // Register clinic employee in service
       const newUser = await authService.registerClinicUser(tenantId, req.body);
 
-      // Security Audit Trail
       const actorId = req.user ? req.user.id : null;
       await db.query(
         'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, "CREATE_USER", "users", ?)',
-        [tenantId, actorId, newUser.id],
+        [tenantId, actorId, newUser.id]
       );
 
       res.status(201).json({
@@ -150,7 +149,6 @@ const authController = {
     }
   },
 
-  // Token refresh handler
   refresh: async (req, res, next) => {
     try {
       const jwt = require("jsonwebtoken");
@@ -167,7 +165,7 @@ const authController = {
         throw new APIError(
           "Refresh token is missing. Please log in again.",
           401,
-          "REFRESH_TOKEN_MISSING",
+          "REFRESH_TOKEN_MISSING"
         );
       }
 
@@ -178,11 +176,10 @@ const authController = {
         throw new APIError(
           "Invalid or expired refresh token. Log in again.",
           401,
-          "INVALID_REFRESH_TOKEN",
+          "INVALID_REFRESH_TOKEN"
         );
       }
 
-      // Verify user in database
       const querySql = `
         SELECT u.*, r.name as role_name 
         FROM users u
@@ -199,7 +196,7 @@ const authController = {
         throw new APIError(
           "User session expired or user is deactivated.",
           401,
-          "USER_SESSION_EXPIRED",
+          "USER_SESSION_EXPIRED"
         );
       }
 
@@ -216,7 +213,6 @@ const authController = {
     }
   },
 
-  // Forgot password handler
   forgotPassword: async (req, res, next) => {
     try {
       const { email } = req.body;
@@ -228,14 +224,11 @@ const authController = {
 
       const token = await authService.generateForgotPasswordToken(
         tenantId,
-        email,
+        email
       );
 
-      // In production, trigger an email client or SMS gateway to send the verification link.
-      // Here we mock the integration and return info details for dev visualization.
-      const mockResetLink = `https://${req.tenantName ? req.tenantName.toLowerCase().replace(/\s+/g, "") : "yared"}.cms.et/reset-password?token=${token}`;
+      const mockResetLink = `https://${req.tenantName ? req.tenantName.toLowerCase().replace(/\s+/g, "") : "demo"}.cms.et/reset-password?token=${token}`;
 
-      // If notification is logged/sent
       if (token) {
         const notifySql = `
           INSERT INTO notifications (clinic_id, recipient_type, recipient_id, notification_type, message, status, sent_at)
@@ -252,7 +245,6 @@ const authController = {
         success: true,
         message:
           "If the email matches an active account, a password reset link has been dispatched.",
-        // Dev helper (do not output in production environment)
         devHelper:
           process.env.NODE_ENV === "development"
             ? { resetLink: mockResetLink, token }
@@ -263,7 +255,6 @@ const authController = {
     }
   },
 
-  // Reset password handler
   resetPassword: async (req, res, next) => {
     try {
       const { token, password } = req.body;
@@ -285,7 +276,6 @@ const authController = {
     }
   },
 
-  // Logout handler
   logout: async (req, res, next) => {
     try {
       res.clearCookie("refreshToken", {
@@ -302,7 +292,6 @@ const authController = {
     }
   },
 
-  // Fetch current user details from JWT token session context
   getMe: async (req, res, next) => {
     try {
       const user = req.user;
@@ -322,7 +311,6 @@ const authController = {
 
       const dbUser = users[0];
 
-      // Fetch permission codes for this role
       const permSql = `
         SELECT p.code 
         FROM role_permissions rp

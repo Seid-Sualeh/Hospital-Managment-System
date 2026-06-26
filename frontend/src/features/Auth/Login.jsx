@@ -1,33 +1,63 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Heart, Eye, EyeOff } from 'lucide-react';
+import { getTenant, setTenant } from '../../services/api';
 
 const Login = () => {
   const { login, error } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [tenantId, setTenantId] = useState('');
   const [showPw, setShowPw] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [remember, setRemember] = useState(false);
 
+  useEffect(() => {
+    const storedTenant = getTenant();
+    if (storedTenant) {
+      setTenantId(storedTenant);
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
+    
+    const tenant = tenantId.trim() || (await resolveTenantByEmail(email));
+    if (tenant) {
+      setTenant(tenant);
+    }
+    
     try {
-      await login(email, password);
+      await login(email, password, tenant);
       navigate('/dashboard', { replace: true });
     } catch {
-      // error is set via AuthContext
     } finally {
       setSubmitting(false);
     }
   };
 
+  const resolveTenantByEmail = async (emailInput) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1'}/tenants/resolve?email=${encodeURIComponent(emailInput)}`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        return data.subdomain;
+      }
+    } catch (e) {
+      console.warn('[Login] Could not resolve tenant by email:', e.message);
+    }
+    return null;
+  };
+
   return (
     <div className="login-page">
-      {/* Left Panel - Login Form */}
       <div className="login-form-panel">
         <div className="login-form-inner">
           <div className="d-flex align-items-center gap-2 mb-4">
@@ -48,10 +78,22 @@ const Login = () => {
 
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label className="mc-form-label">Email or Username</label>
+              <label className="mc-form-label">Tenant / Clinic ID</label>
               <input
                 className="form-control"
-                placeholder="Enter email or username"
+                placeholder="Enter clinic subdomain (e.g., yared)"
+                value={tenantId}
+                onChange={(e) => setTenantId(e.target.value)}
+                required
+              />
+              <small className="text-muted">Your clinic subdomain identifier</small>
+            </div>
+
+            <div className="mb-3">
+              <label className="mc-form-label">Email</label>
+              <input
+                className="form-control"
+                placeholder="Enter email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -93,7 +135,7 @@ const Login = () => {
                   Remember me
                 </label>
               </div>
-              <a href="#!" className="small text-primary text-decoration-none fw-semibold">
+              <a href="/forgot-password" className="small text-primary text-decoration-none fw-semibold">
                 Forgot Password?
               </a>
             </div>
@@ -112,7 +154,6 @@ const Login = () => {
         </div>
       </div>
 
-      {/* Right Panel - Hero */}
       <div className="login-hero-panel">
         <div className="login-hero-content text-center">
           <h2 className="fw-bold mb-3">Smart Clinic Management</h2>

@@ -1,27 +1,45 @@
-import api from "./api";
+import api, { setTenant, clearTenant, setStoredToken, clearStoredToken } from "./api";
 
 const authService = {
-  login: async (email, password) => {
+  login: async (email, password, tenantId) => {
+    if (tenantId) {
+      setTenant(tenantId);
+    }
+    
     const response = await api.post("/auth/login", { email, password });
-    return response.data;
+    
+    const data = response.data;
+    if (data?.accessToken) {
+      setStoredToken(data.accessToken);
+    }
+    
+    if (!tenantId && data?.user?.email) {
+      const userTenant = await api
+        .get("/tenants/lookup", {
+          headers: {
+            'X-Tenant-ID': getTenant(),
+          },
+        })
+        .catch(() => null);
+      
+      if (userTenant?.data?.subdomain) {
+        setTenant(userTenant.data.subdomain);
+      }
+    }
+    
+    return data;
   },
 
   logout: async () => {
     try {
-      const response = await api.post(
-        "/auth/logout",
-        {},
-        { withCredentials: true },
-      );
-      return response.data;
+      await api.post("/auth/logout", {}, { withCredentials: true });
     } catch (error) {
-      // Logout succeeds even if the backend call fails (frontend clears token)
-      console.warn(
-        "Logout API call failed, but proceeding with local logout:",
-        error.message,
-      );
-      return { success: true };
+      console.warn("Logout API call failed:", error.message);
+    } finally {
+      clearStoredToken();
+      clearTenant();
     }
+    return { success: true };
   },
 
   getProfile: async () => {
@@ -30,13 +48,44 @@ const authService = {
   },
 
   refreshToken: async () => {
-    const response = await api.post(
-      "/auth/refresh",
-      {},
-      { withCredentials: true },
-    );
+    const response = await api.post("/auth/refresh", {}, { withCredentials: true });
+    const data = response.data;
+    if (data?.accessToken) {
+      setStoredToken(data.accessToken);
+    }
+    return data;
+  },
+
+  forgotPassword: async (email, tenantId) => {
+    const headers = {};
+    if (tenantId) {
+      headers['X-Tenant-ID'] = tenantId;
+    }
+    const response = await api.post("/auth/forgot-password", { email }, { headers });
+    return response.data;
+  },
+
+  resetPassword: async (token, password, tenantId) => {
+    const headers = {};
+    if (tenantId) {
+      headers['X-Tenant-ID'] = tenantId;
+    }
+    const response = await api.post("/auth/reset-password", { token, password }, { headers });
+    return response.data;
+  },
+
+  lookupTenant: async (identifier) => {
+    const response = await api.get(`/tenants/lookup?identifier=${encodeURIComponent(identifier)}`);
     return response.data;
   },
 };
+
+function getTenant() {
+  try {
+    return localStorage.getItem('tenant_id');
+  } catch {
+    return null;
+  }
+}
 
 export default authService;
