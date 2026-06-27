@@ -57,15 +57,14 @@ const billingController = {
       ]);
       const invoiceId = invoiceResult.insertId;
 
-      // Insert invoice details
-      const insertItemSql = `
-        INSERT INTO invoice_items (
-          clinic_id, invoice_id, item_type, item_reference_id, item_description, quantity, unit_price, total_price
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-      `;
-
-      for (const item of processedItems) {
-        await db.query(insertItemSql, [
+      // Insert invoice details in a single bulk INSERT query (minimizing database roundtrips)
+      if (processedItems.length > 0) {
+        const insertItemSql = `
+          INSERT INTO invoice_items (
+            clinic_id, invoice_id, item_type, item_reference_id, item_description, quantity, unit_price, total_price
+          ) VALUES ?
+        `;
+        const values = processedItems.map(item => [
           tenantId,
           invoiceId,
           item.item_type,
@@ -75,6 +74,7 @@ const billingController = {
           item.unit_price,
           item.total_price
         ]);
+        await db.query(insertItemSql, [values]);
       }
 
       res.status(201).json({
@@ -160,7 +160,7 @@ const billingController = {
         }
 
         // Audit Trail log
-        await db.query('INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, "COLLECT_PAYMENT", "invoices", ?)', [tenantId, cashierId, invoice_id]);
+        await db.query("INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, 'COLLECT_PAYMENT', 'invoices', ?)", [tenantId, cashierId, invoice_id]);
 
         return res.status(200).json({
           success: true,
@@ -207,10 +207,25 @@ const billingController = {
     try {
       const { transaction_reference, status } = req.body;
       const signature = req.headers['x-chapa-signature'] || req.headers['signature'];
+      const webhookSecret = process.env.CHAPA_WEBHOOK_SECRET || process.env.PAYMENT_WEBHOOK_SECRET;
 
-      // Mock Signature validation - check if key is provided and headers are present
       if (!transaction_reference || !status) {
         throw new APIError('Missing transaction_reference or status in payload.', 400, 'BAD_REQUEST');
+      }
+
+      if (webhookSecret) {
+        if (!signature) {
+          throw new APIError('Webhook signature is required.', 401, 'INVALID_WEBHOOK_SIGNATURE');
+        }
+        const expected = crypto
+          .createHmac('sha256', webhookSecret)
+          .update(JSON.stringify(req.body))
+          .digest('hex');
+        if (signature !== expected) {
+          throw new APIError('Invalid webhook signature.', 401, 'INVALID_WEBHOOK_SIGNATURE');
+        }
+      } else if (process.env.NODE_ENV === 'production') {
+        throw new APIError('Payment webhook secret is not configured.', 500, 'WEBHOOK_MISCONFIGURED');
       }
 
       // Query transaction status in DB
@@ -239,7 +254,7 @@ const billingController = {
         }
 
         // Write to audit log
-        await db.query('INSERT INTO audit_logs (clinic_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, "PAYMENT_WEBHOOK_RECEIVED", "payments", ?, ?)', [
+        await db.query("INSERT INTO audit_logs (clinic_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, 'PAYMENT_WEBHOOK_RECEIVED', 'payments', ?, ?)", [
           payment.clinic_id,
           payment.id,
           `Webhook success for ${payment.payment_method}`
@@ -255,7 +270,6 @@ const billingController = {
     }
   },
 
-  // List all invoices for the clinic tenant
   listInvoices: async (req, res, next) => {
     try {
       const tenantId = req.tenantId;
@@ -430,7 +444,10 @@ const billingController = {
       `;
       const prescriptions = await db.query(prescriptionsSql, [patientId, tenantId]);
 
-      const billedPrescriptions = [];
+      // Collect all unique medicine IDs from instructions to resolve in a single query
+      const medicineIds = new Set();
+      const prescriptionParsedList = [];
+
       for (const pr of prescriptions) {
         let instructions = [];
         try {
@@ -439,13 +456,32 @@ const billingController = {
         } catch (e) {
           instructions = [];
         }
+        prescriptionParsedList.push({ pr, instructions });
+        for (const rx of instructions) {
+          if (rx.medicine_id) {
+            medicineIds.add(parseInt(rx.medicine_id, 10));
+          }
+        }
+      }
 
+      // Fetch all medicine prices in a single query
+      const medicinePrices = new Map();
+      if (medicineIds.size > 0) {
+        const medicineSql = 'SELECT id, unit_price FROM medicines WHERE id IN (?) AND clinic_id = ?';
+        const medicinesList = await db.query(medicineSql, [Array.from(medicineIds), tenantId]);
+        for (const med of medicinesList) {
+          medicinePrices.set(med.id, parseFloat(med.unit_price));
+        }
+      }
+
+      const billedPrescriptions = [];
+      for (const { pr, instructions } of prescriptionParsedList) {
         for (const rx of instructions) {
           let medPrice = parseFloat(rx.unit_price) || 0;
           if (rx.medicine_id) {
-            const [med] = await db.query('SELECT unit_price FROM medicines WHERE id = ? LIMIT 1', [rx.medicine_id]);
-            if (med) {
-              medPrice = parseFloat(med.unit_price);
+            const resolvedPrice = medicinePrices.get(parseInt(rx.medicine_id, 10));
+            if (resolvedPrice !== undefined) {
+              medPrice = resolvedPrice;
             }
           }
 

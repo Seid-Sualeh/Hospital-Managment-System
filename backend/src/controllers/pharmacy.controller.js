@@ -2,6 +2,37 @@ const db = require('../config/db');
 const { APIError } = require('../middlewares/error');
 const visitService = require('../services/visit.service');
 
+const formatMedicineForUI = (medicine) => {
+  const stock = medicine.quantity_in_stock ?? 0;
+  const reorder = medicine.reorder_level ?? 10;
+  let status = 'in_stock';
+  if (stock === 0) status = 'out_of_stock';
+  else if (stock <= reorder) status = 'low_stock';
+
+  return {
+    ...medicine,
+    category: medicine.dosage_form || medicine.generic_name,
+    stock,
+    unit: medicine.dosage_form,
+    price: medicine.unit_price,
+    status,
+  };
+};
+
+const parseMedicineFromUI = (body) => ({
+  name: body.name,
+  generic_name: body.generic_name || body.category || body.name,
+  strength: body.strength || 'N/A',
+  dosage_form: body.dosage_form || body.unit || 'Tablets',
+  sku: body.sku || null,
+  quantity_in_stock: parseInt(body.quantity_in_stock ?? body.stock ?? 0, 10),
+  reorder_level: parseInt(body.reorder_level ?? 10, 10),
+  unit_price: parseFloat(body.unit_price ?? body.price ?? 0),
+  expiry_date: body.expiry_date || null,
+  batch_number: body.batch_number || null,
+  unit_cost: body.unit_cost,
+});
+
 const pharmacyController = {
   // 1. List medicines with low-stock and expiry filters
   listMedicines: async (req, res, next) => {
@@ -31,7 +62,7 @@ const pharmacyController = {
       const medicines = await db.query(sql, params);
       res.status(200).json({
         success: true,
-        data: medicines
+        data: medicines.map(formatMedicineForUI),
       });
     } catch (error) {
       next(error);
@@ -43,7 +74,8 @@ const pharmacyController = {
     try {
       const tenantId = req.tenantId;
       const actorId = req.user.id;
-      const { name, generic_name, strength, dosage_form, sku, quantity_in_stock, reorder_level, unit_price, expiry_date, batch_number, unit_cost } = req.body;
+      const parsed = parseMedicineFromUI(req.body);
+      const { name, generic_name, strength, dosage_form, sku, quantity_in_stock, reorder_level, unit_price, expiry_date, batch_number, unit_cost } = parsed;
 
       if (!name || !generic_name || !strength || !dosage_form || !unit_price) {
         throw new APIError('Name, generic name, strength, dosage form, and unit price are required.', 400, 'BAD_REQUEST');
@@ -88,7 +120,7 @@ const pharmacyController = {
 
         // Insert batch record for EFDA compliance
         await db.query(
-          'INSERT INTO medicine_batches (clinic_id, medicine_id, batch_number, expiry_date, quantity_received, quantity_remaining, unit_cost) VALUES (?, ?, ?, ?, ?, ?, ?)',
+          "INSERT INTO medicine_batches (clinic_id, medicine_id, batch_number, expiry_date, quantity_received, quantity_remaining, unit_cost) VALUES (?, ?, ?, ?, ?, ?, ?)",
           [tenantId, medicineId, bNum, expDate, initialQty, initialQty, uCost]
         );
 
@@ -102,7 +134,7 @@ const pharmacyController = {
 
       // Audit Log
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, "ADD_MEDICINE", "medicines", ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, 'ADD_MEDICINE', 'medicines', ?)",
         [tenantId, actorId, medicineId]
       );
 
@@ -116,7 +148,94 @@ const pharmacyController = {
     }
   },
 
-  // 3. Update stock levels (Receipts or Adjustments)
+  updateMedicine: async (req, res, next) => {
+    try {
+      const tenantId = req.tenantId;
+      const actorId = req.user.id;
+      const medicineId = req.params.id;
+      const parsed = parseMedicineFromUI(req.body);
+
+      const [existing] = await db.query(
+        'SELECT id FROM medicines WHERE id = ? AND clinic_id = ? LIMIT 1',
+        [medicineId, tenantId],
+      );
+      if (!existing) {
+        throw new APIError('Medicine not found in catalog.', 404, 'MEDICINE_NOT_FOUND');
+      }
+
+      await db.query(
+        `UPDATE medicines SET
+          name = ?, generic_name = ?, strength = ?, dosage_form = ?,
+          quantity_in_stock = ?, reorder_level = ?, unit_price = ?
+         WHERE id = ? AND clinic_id = ?`,
+        [
+          parsed.name.trim(),
+          parsed.generic_name.trim(),
+          parsed.strength.trim(),
+          parsed.dosage_form.trim(),
+          parsed.quantity_in_stock,
+          parsed.reorder_level,
+          parsed.unit_price,
+          medicineId,
+          tenantId,
+        ],
+      );
+
+      await db.query(
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, 'UPDATE_MEDICINE', 'medicines', ?)",
+        [tenantId, actorId, medicineId],
+      );
+
+      res.status(200).json({
+        success: true,
+        message: 'Medicine updated successfully.',
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  deactivateMedicine: async (req, res, next) => {
+    try {
+      const tenantId = req.tenantId;
+      const actorId = req.user.id;
+      const medicineId = req.params.id;
+
+      const [existing] = await db.query(
+        'SELECT id FROM medicines WHERE id = ? AND clinic_id = ? LIMIT 1',
+        [medicineId, tenantId],
+      );
+      if (!existing) {
+        throw new APIError('Medicine not found in catalog.', 404, 'MEDICINE_NOT_FOUND');
+      }
+
+      await db.query(
+        'UPDATE medicines SET is_active = FALSE WHERE id = ? AND clinic_id = ?',
+        [medicineId, tenantId],
+      );
+
+      await db.query(
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, 'DEACTIVATE_MEDICINE', 'medicines', ?)",
+        [tenantId, actorId, medicineId],
+      );
+
+      res.status(200).json({
+        success: true,
+        message: 'Medicine removed from catalog.',
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  dispenseFromUI: async (req, res, next) => {
+    req.body = {
+      medicine_id: req.body.medicine_id,
+      quantity: req.body.quantity,
+      prescription_id: req.body.prescription_id || null,
+    };
+    return pharmacyController.dispenseMedicine(req, res, next);
+  },
   updateStock: async (req, res, next) => {
     try {
       const tenantId = req.tenantId;
@@ -169,13 +288,13 @@ const pharmacyController = {
 
       // Record transaction
       await db.query(
-        'INSERT INTO inventory_transactions (clinic_id, medicine_id, transaction_type, quantity, remarks, performed_by) VALUES (?, ?, ?, ?, ?, ?)',
+        "INSERT INTO inventory_transactions (clinic_id, medicine_id, transaction_type, quantity, remarks, performed_by) VALUES (?, ?, ?, ?, ?, ?)",
         [tenantId, medicine_id, transaction_type, txQty, remarks ? remarks.trim() : null, actorId]
       );
 
       // Audit
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, "UPDATE_STOCK", "medicines", ?, ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, 'UPDATE_STOCK', 'medicines', ?, ?)",
         [tenantId, actorId, medicine_id, `Stock updated via transaction type: ${transaction_type}`]
       );
 
@@ -271,7 +390,7 @@ const pharmacyController = {
         : `Over-the-counter dispense (${batchDeductions.map(b => `${b.batch_number}:${b.deducted}`).join(', ')})`;
         
       const [txResult] = await db.query(
-        'INSERT INTO inventory_transactions (clinic_id, medicine_id, transaction_type, quantity, remarks, performed_by) VALUES (?, ?, "dispense", ?, ?, ?)',
+        "INSERT INTO inventory_transactions (clinic_id, medicine_id, transaction_type, quantity, remarks, performed_by) VALUES (?, ?, 'dispense', ?, ?, ?)",
         [tenantId, medicine_id, -dispenseQty, remarks, actorId]
       );
 
@@ -292,7 +411,7 @@ const pharmacyController = {
 
       // Audit Log
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, "DISPENSE_MEDICINE", "medicines", ?, ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id, remarks) VALUES (?, ?, 'DISPENSE_MEDICINE', 'medicines', ?, ?)",
         [tenantId, actorId, medicine_id, `Dispensed ${dispenseQty} units of ${medicine.name}`]
       );
 

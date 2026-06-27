@@ -7,9 +7,10 @@ const ICONS = {
   warning: ShieldAlert,
 };
 
-const AlertBanner = ({ type = 'success', message, onDismiss }) => {
+const AlertBanner = ({ type = 'success', message, onDismiss, onClose }) => {
   if (!message) return null;
   const Icon = ICONS[type] || ShieldAlert;
+  const dismiss = onDismiss || onClose;
 
   return (
     <div className={`mc-alert-banner alert-${type}`} role="alert">
@@ -17,8 +18,8 @@ const AlertBanner = ({ type = 'success', message, onDismiss }) => {
         <Icon size={16} />
         <span>{message}</span>
       </div>
-      {onDismiss && (
-        <button type="button" className="btn-close btn-close-sm" onClick={onDismiss} aria-label="Dismiss" />
+      {dismiss && (
+        <button type="button" className="btn-close btn-close-sm" onClick={dismiss} aria-label="Dismiss" />
       )}
     </div>
   );

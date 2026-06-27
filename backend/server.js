@@ -1,11 +1,17 @@
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
+const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
+const path = require("path");
 const dotenv = require("dotenv");
+const rateLimit = require("express-rate-limit");
+const compression = require("compression");
 
 // Configs and Helpers
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, ".env"), override: true });
+const { validateEnv } = require("./src/config/env");
+validateEnv();
 const logger = require("./src/config/logger");
 const db = require("./src/config/db");
 
@@ -32,13 +38,75 @@ const shiftRoutes = require("./src/routes/shift.routes");
 const leaveRoutes = require("./src/routes/leave.routes");
 const attendanceRoutes = require("./src/routes/attendance.routes");
 const tenantRoutes = require("./src/routes/tenant.routes");
+const settingsRoutes = require("./src/routes/settings.routes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Security and HTTP Headers
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "'unsafe-eval'",
+          "https://apis.google.com",
+        ],
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "https://fonts.googleapis.com",
+        ],
+        fontSrc: ["'self'", "data:", "https://fonts.gstatic.com"],
+        imgSrc: ["'self'", "data:", "https:", "http:"],
+        connectSrc: [
+          "'self'",
+          "http://localhost:5000",
+          "http://localhost:5173",
+          "http://127.0.0.1:5173",
+          "https://*.vercel.app",
+          "https://*.netlify.app",
+          "https://*.cms.et",
+        ],
+        frameSrc: ["'self'"],
+        objectSrc: ["'none'"],
+        upgradeInsecureRequests: [],
+      },
+    },
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  })
+);
+app.use(cookieParser());
+app.use(compression());
 
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    error: {
+      message: "Too many requests. Please try again later.",
+      code: "RATE_LIMITED",
+    },
+  },
+});
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 1000,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use("/api/v1/auth", authLimiter);
+app.use("/api/v1", apiLimiter);
+
+// Dynamic CORS whitelist
+const envFrontendUrl = process.env.FRONTEND_URL;
 const allowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
@@ -47,32 +115,39 @@ const allowedOrigins = [
   "https://medicares-ai.netlify.app",
   process.env.FRONTEND_URL,
 ].filter(Boolean);
+if (envFrontendUrl && !allowedOrigins.includes(envFrontendUrl)) {
+  allowedOrigins.push(envFrontendUrl.replace(/\/$/, ""));
+}
 
 const originRegex = /^https?:\/\/([a-z0-9-]+\.)?cms\.et(:[0-9]+)?$/;
+const netlifyRegex = /^https?:\/\/([a-z0-9-]+\.)?netlify\.app$/;
 
 const corsOptions = {
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
 
+    const normalizedOrigin = origin.replace(/\/$/, "");
+
     const isAllowed =
       allowedOrigins.some(
-        (ao) => origin === ao || origin.startsWith(ao + "/")
-      ) || originRegex.test(origin);
+        (ao) => ao === normalizedOrigin || normalizedOrigin.startsWith(ao + "/")
+      ) || originRegex.test(normalizedOrigin) || netlifyRegex.test(normalizedOrigin);
 
     if (isAllowed) {
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      callback(new Error(`Origin ${origin} not allowed by CORS`));
     }
   },
   credentials: true,
-  optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
 
 // Request parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+const sanitizeInput = require("./src/middlewares/sanitize");
+app.use(sanitizeInput);
 
 // Root path handler (Vercel health pings and direct browser hits)
 app.get("/", (req, res) => {
@@ -96,7 +171,9 @@ app.get("/api/v1/health", async (req, res) => {
       status: "healthy",
       database: process.env.SKIP_DB === "true" ? "skipped" : "connected",
       timestamp: new Date().toISOString(),
-      tenantContext: "global",
+      tenantContext: req.tenantId
+        ? { id: req.tenantId, name: req.tenantName }
+        : "global",
     });
   } catch (error) {
     logger.error(`Health check failed: ${error.message}`);
@@ -140,6 +217,7 @@ app.use("/api/v1/shifts", shiftRoutes);
 app.use("/api/v1/leaves", leaveRoutes);
 app.use("/api/v1/attendance", attendanceRoutes);
 app.use("/api/v1/tenants", tenantRoutes);
+app.use("/api/v1/settings", settingsRoutes);
 
 // Centralized error handling middleware (must be mounted last)
 app.use(errorHandler);
@@ -147,24 +225,22 @@ app.use(errorHandler);
 // Database connection diagnostics and server startup
 const SKIP_DB = String(process.env.SKIP_DB || "").toLowerCase() === "true";
 
+const startServer = () => {
+  app.listen(PORT, () => {
+    logger.info(`[Server] CMS SaaS Engine listening at:${PORT}`);
+  });
+};
+
 if (SKIP_DB) {
   logger.warn(
     "[Server] SKIP_DB=true — skipping database connection check. Server will start without verifying DB.",
   );
-  app.listen(PORT, () => {
-    logger.info(
-      `[Server] CMS SaaS Engine listening at http://localhost:${PORT} (DB check skipped)`,
-    );
-  });
+  startServer();
 } else {
   db.testConnection()
     .then((connected) => {
       if (connected) {
-        app.listen(PORT, () => {
-          logger.info(
-            `[Server] CMS SaaS Engine listening at http://localhost:${PORT}`,
-          );
-        });
+        startServer();
       } else {
         logger.error(
           "[Server] Critical Error: Unable to verify database connection. Server startup aborted.",

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Heart, Eye, EyeOff } from 'lucide-react';
+import { HeartPulse, Eye, EyeOff, Shield, Lock, Sparkles } from 'lucide-react';
 import { getTenant, setTenant } from '../../services/api';
 
 const Login = () => {
@@ -62,10 +62,12 @@ const Login = () => {
         <div className="login-form-inner">
           <div className="d-flex align-items-center gap-2 mb-4">
             <div className="sidebar-brand-icon">
-              <Heart size={22} color="#fff" />
+              <HeartPulse size={18} color="#fff" />
             </div>
-            <span className="fw-bold fs-5">MediCare</span>
+            <span className="fw-bold fs-5">MediCare AI</span>
           </div>
+
+
 
           <h4 className="fw-bold mb-1">Clinic Management System</h4>
           <p className="text-muted mb-4">Sign in to your account</p>
@@ -105,7 +107,7 @@ const Login = () => {
               <div className="input-group">
                 <input
                   className="form-control"
-                  type={showPw ? 'text' : 'password'}
+                  type={showPw ? "text" : "password"}
                   placeholder="Enter password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -131,7 +133,10 @@ const Login = () => {
                   checked={remember}
                   onChange={(e) => setRemember(e.target.checked)}
                 />
-                <label className="form-check-label small" htmlFor="remember">
+                <label
+                  className="form-check-label small text-secondary"
+                  htmlFor="remember"
+                >
                   Remember me
                 </label>
               </div>
@@ -140,26 +145,120 @@ const Login = () => {
               </a>
             </div>
 
-            <button className="btn btn-primary w-100 py-2 fw-bold" type="submit" disabled={submitting}>
+            <button
+              className="btn btn-primary w-100 py-2.5 fw-bold"
+              type="submit"
+              disabled={submitting}
+              style={{ boxShadow: "0 4px 15px rgba(37, 99, 235, 0.25)" }}
+            >
               {submitting ? (
                 <span className="spinner-border spinner-border-sm me-2" />
               ) : null}
-              Sign In
+              Sign In to Workspace
             </button>
           </form>
 
-          <p className="text-center text-muted small mt-4 mb-0">
-            © 2024 MediCare CMS. All rights reserved.
+          {/* Secure Trust indicators in form */}
+          <div className="d-flex justify-content-center gap-3 mt-4 pt-3 border-top border-light">
+            <span className="hipaa-badge-container" style={{ fontSize: "9px" }}>
+              <Shield size={10} /> HIPAA SECURE
+            </span>
+            <span
+              className="secure-badge-container"
+              style={{ fontSize: "9px" }}
+            >
+              <Lock size={10} /> 256-BIT ENCRYPTION
+            </span>
+          </div>
+
+          <p
+            className="text-center text-muted small mt-4 mb-0"
+            style={{ fontSize: "10px" }}
+          >
+            © {new Date().getFullYear()} MediCare AI Inc. Bole District, Addis
+            Ababa, Ethiopia.
           </p>
         </div>
       </div>
 
-      <div className="login-hero-panel">
-        <div className="login-hero-content text-center">
-          <h2 className="fw-bold mb-3">Smart Clinic Management</h2>
-          <p className="opacity-75 mb-0">
-            Manage your clinic operations efficiently and provide better care for your patients.
+      {/* Right Panel - Hero */}
+      <div
+        className="login-hero-panel d-none d-lg-flex"
+        style={{
+          background: "linear-gradient(135deg, #090d1a 0%, #1e1b4b 100%)",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/* Glow decoration */}
+        <div
+          className="position-absolute bg-primary rounded-circle opacity-10"
+          style={{
+            width: "400px",
+            height: "400px",
+            top: "-100px",
+            right: "-100px",
+            filter: "blur(50px)",
+          }}
+        ></div>
+        <div
+          className="position-absolute bg-purple rounded-circle opacity-10"
+          style={{
+            width: "400px",
+            height: "400px",
+            bottom: "-100px",
+            left: "-100px",
+            filter: "blur(50px)",
+          }}
+        ></div>
+
+        <div className="login-hero-content text-center position-relative z-2">
+          <div
+            className="d-flex align-items-center justify-content-center bg-primary text-white rounded-circle mx-auto mb-4"
+            style={{
+              width: "54px",
+              height: "54px",
+              boxShadow: "0 0 30px rgba(37, 99, 235, 0.5)",
+            }}
+          >
+            <HeartPulse size={22} color="#fff" />
+          </div>
+          <h2
+            className="fw-bold display-6 public-display-font text-white mb-3"
+            style={{ letterSpacing: "-1px" }}
+          >
+            MediCare<span className="text-primary">AI</span> Portal
+          </h2>
+          <p
+            className="opacity-75 mb-4 lead small"
+            style={{ fontSize: "1rem", lineHeight: "1.6" }}
+          >
+            Connecting consultations, LIS laboratories, drug inventories, and
+            cashier billings in one secure, unified workflow database.
           </p>
+
+          <div
+            className="p-3 bg-white bg-opacity-5 border border-white border-opacity-10 rounded-4 shadow-sm text-start"
+            style={{ backdropFilter: "blur(8px)" }}
+          >
+            <div className="d-flex align-items-center gap-2 mb-2">
+              <Sparkles size={14} className="text-warning" />
+              <span
+                className="fw-bold text-white small"
+                style={{ fontSize: "11px" }}
+              >
+                Clinical Intelligence Active
+              </span>
+            </div>
+            <p
+              className="text-secondary small mb-0"
+              style={{ fontSize: "10px", lineHeight: "1.5" }}
+            >
+              Gemini LLM integrations continuously monitor for potential
+              prescription drug interactions, diagnose differentials, and
+              translate lab result structures.
+            </p>
+          </div>
         </div>
       </div>
     </div>

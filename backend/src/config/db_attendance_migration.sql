@@ -23,15 +23,15 @@ CREATE TABLE IF NOT EXISTS staff_shifts (
 
 -- 2. Alter users Table to link to shifts (if shift_id doesn't exist)
 SET @dbname = DATABASE();
-SET @tablename = "users";
-SET @columnname = "shift_id";
+SET @tablename = 'users';
+SET @columnname = 'shift_id';
 SET @preparedStatement = (SELECT IF(
   (SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
    WHERE TABLE_SCHEMA = @dbname
      AND TABLE_NAME = @tablename
      AND COLUMN_NAME = @columnname) > 0,
-  "SELECT 1",
-  "ALTER TABLE users ADD COLUMN shift_id INT UNSIGNED DEFAULT NULL AFTER role_id, ADD CONSTRAINT fk_users_shift_id FOREIGN KEY (shift_id) REFERENCES staff_shifts(id) ON DELETE SET NULL"
+  'SELECT 1',
+  'ALTER TABLE users ADD COLUMN shift_id INT UNSIGNED DEFAULT NULL AFTER role_id, ADD CONSTRAINT fk_users_shift_id FOREIGN KEY (shift_id) REFERENCES staff_shifts(id) ON DELETE SET NULL'
 ));
 PREPARE stmt FROM @preparedStatement;
 EXECUTE stmt;

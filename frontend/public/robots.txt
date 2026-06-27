@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+Allow: /about
+Allow: /features
+Allow: /services
+Allow: /contact
+Disallow: /login
+Disallow: /dashboard
+Disallow: /patients
+Disallow: /appointments
+Disallow: /consultations
+Disallow: /labs
+Disallow: /pharmacy
+Disallow: /billing
+Disallow: /reports
+Disallow: /attendance
+Disallow: /triage
+Disallow: /users
+Disallow: /settings
+
+Sitemap: https://cms.et/sitemap.xml

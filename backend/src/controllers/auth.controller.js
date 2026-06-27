@@ -24,7 +24,9 @@ const authController = {
       if (!SKIP_DB && tenantHeader) {
         const subdomain = String(tenantHeader).toLowerCase().trim();
         clinic = await tenantService.getTenantBySubdomain(subdomain);
-        tenantId = clinic.id;
+        if (clinic) {
+          tenantId = clinic.id;
+        }
       }
 
       let loginResult;
@@ -40,7 +42,7 @@ const authController = {
           SELECT u.*, r.name as role_name 
           FROM users u
           JOIN roles r ON u.role_id = r.id
-          WHERE u.clinic_id = ? AND u.email = ?
+          WHERE u.clinic_id = ? AND u.email = ? AND u.is_active = TRUE
           LIMIT 1
         `;
         const users = await db.query(querySql, [tenantId, email.trim()]);
@@ -54,14 +56,6 @@ const authController = {
         }
 
         const user = users[0];
-
-        if (!user.is_active) {
-          throw new APIError(
-            "This account has been deactivated. Contact your clinic administrator.",
-            403,
-            "USER_DEACTIVATED"
-          );
-        }
 
         const isMatch = await authService.comparePasswords(
           password,
@@ -100,11 +94,12 @@ const authController = {
       res.cookie("refreshToken", loginResult.refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: "none",
+        path: "/",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
-      if (!SKIP_DB && tenantId) {
+      if (tenantId && loginResult.user) {
         const ip =
           req.ip || req.headers["x-forwarded-for"] || req.socket.remoteAddress;
         await db.query(
@@ -135,8 +130,8 @@ const authController = {
 
       const actorId = req.user ? req.user.id : null;
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, "CREATE_USER", "users", ?)',
-        [tenantId, actorId, newUser.id]
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, affected_record_id) VALUES (?, ?, 'CREATE_USER', 'users', ?)",
+        [tenantId, actorId, newUser.id],
       );
 
       res.status(201).json({
@@ -154,7 +149,17 @@ const authController = {
       const jwt = require("jsonwebtoken");
       const JWT_REFRESH_SECRET =
         process.env.JWT_REFRESH_SECRET ||
-        "another_super_secret_refresh_cryptographic_key_v1";
+        (process.env.NODE_ENV === "production"
+          ? null
+          : "dev_only_refresh_secret_change_before_production");
+
+      if (!JWT_REFRESH_SECRET) {
+        throw new APIError(
+          "Refresh token secret is not configured.",
+          500,
+          "AUTH_MISCONFIGURED",
+        );
+      }
 
       let refreshToken = req.cookies?.refreshToken;
       if (!refreshToken && req.body.refreshToken) {
@@ -201,6 +206,15 @@ const authController = {
       }
 
       const user = users[0];
+
+      if (req.tenantId && decoded.clinicId !== req.tenantId) {
+        throw new APIError(
+          "Cross-tenant session violation during token refresh.",
+          403,
+          "CROSS_TENANT_VIOLATION",
+        );
+      }
+
       const { accessToken: newAccessToken } =
         await authService.generateTokens(user);
 
@@ -281,7 +295,8 @@ const authController = {
       res.clearCookie("refreshToken", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: "none",
+        path: "/",
       });
       res.status(200).json({
         success: true,

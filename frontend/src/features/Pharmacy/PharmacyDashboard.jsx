@@ -8,6 +8,7 @@ import Modal from "../../components/Common/Modal";
 import Loader from "../../components/Common/Loader";
 import EmptyState from "../../components/Common/EmptyState";
 import AlertBanner from "../../components/Common/AlertBanner";
+import PharmacyAIPanel from "../../components/AI/PharmacyAIPanel";
 import api from "../../services/api";
 import { Plus, Edit, Trash2, Pill, ShoppingCart } from "lucide-react";
 
@@ -113,10 +114,11 @@ const PharmacyDashboard = () => {
       const res = await api.get("/pharmacy/medicines", { params });
       const data = res.data?.data || res.data;
       setMedicines(
-        Array.isArray(data) ? data : data.medicines || MOCK_MEDICINES,
+        Array.isArray(data) ? data : data.medicines || [],
       );
-    } catch {
-      setMedicines(MOCK_MEDICINES);
+    } catch (err) {
+      console.error("Failed to load medicines:", err);
+      setMedicines([]);
     } finally {
       setLoading(false);
     }
@@ -206,7 +208,10 @@ const PharmacyDashboard = () => {
     e.preventDefault();
     setSaving(true);
     try {
-      await api.post("/pharmacy/dispense", dispenseForm);
+      await api.post("/pharmacy/dispense", {
+        medicine_id: dispenseForm.medicine_id,
+        quantity: dispenseForm.quantity,
+      });
       setAlert({ type: "success", msg: "Medicine dispensed successfully." });
       setShowDispenseModal(false);
       setDispenseForm({ ...DISPENSE_FORM });
@@ -518,6 +523,8 @@ const PharmacyDashboard = () => {
           </div>
         </form>
       </Modal>
+
+      <PharmacyAIPanel medicines={medicines} dispenseForm={dispenseForm} />
     </PageShell>
   );
 };

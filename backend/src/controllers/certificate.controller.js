@@ -62,7 +62,7 @@ const certificateController = {
 
       // Audit Log
       await db.query(
-        'INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, remarks) VALUES (?, ?, "CREATE_CERTIFICATE", "medical_certificates", ?)',
+        "INSERT INTO audit_logs (clinic_id, user_id, action_type, affected_table, remarks) VALUES (?, ?, 'CREATE_CERTIFICATE', 'medical_certificates', ?)",
         [tenantId, doctorId, `Issued sick leave certificate: ${serial_number} for ${sick_leave_days} days`]
       );
 

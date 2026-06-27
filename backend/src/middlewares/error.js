@@ -21,7 +21,7 @@ function errorHandler(err, req, res, next) {
   // Log error stack for severe errors (500)
   if (statusCode === 500) {
     logger.error(`[500 Server Error] Path: ${req.method} ${req.originalUrl}`);
-    logger.error(err.stack);
+    logger.error(err.stack || err);
   } else {
     logger.warn(`[${statusCode} API Warning] Path: ${req.method} ${req.originalUrl} - Code: ${errorCode} - Message: ${message}`);
   }
@@ -31,6 +31,14 @@ function errorHandler(err, req, res, next) {
     statusCode = 409;
     errorCode = 'DUPLICATE_ENTRY';
     message = 'A record with this unique attribute already exists.';
+    details = [];
+  }
+
+  // Production security hardening: Mask all raw 500 errors
+  const isProduction = process.env.NODE_ENV === 'production';
+  if (statusCode === 500 && isProduction) {
+    message = 'An unexpected error occurred on the server.';
+    details = [];
   }
 
   res.status(statusCode).json({
@@ -38,7 +46,7 @@ function errorHandler(err, req, res, next) {
     error: {
       code: errorCode,
       message,
-      details,
+      ...(isProduction ? {} : { details }),
       timestamp: new Date().toISOString()
     }
   });

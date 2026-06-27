@@ -6,10 +6,10 @@ import { NAV_ITEMS } from "../../constants/navigation";
 import { canAccessRoute } from "../../constants/roles";
 
 const Sidebar = ({ collapsed, mobileOpen, onNavigate }) => {
-  const { user, effectiveUser } = useAuth();
+  const { user } = useAuth();
 
   const visibleItems = NAV_ITEMS.filter((item) =>
-    canAccessRoute(effectiveUser || user, item.roles),
+    canAccessRoute(user, item.roles),
   );
 
   return (

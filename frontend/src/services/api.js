@@ -1,8 +1,29 @@
-import axios from 'axios';
+import axios from "axios";
 
 const TENANT_KEY = 'tenant_id';
 const TOKEN_KEY = 'token';
 const USER_KEY = 'user';
+
+const getSubdomain = () => {
+  const host = window.location.host;
+  const hostname = host.split(":")[0].toLowerCase().trim();
+
+  // Treat localhost and loopback IPs as no tenant subdomain
+  if (
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname === "::1" ||
+    /^127\.[0-9]+\.[0-9]+\.[0-9]+$/.test(hostname)
+  ) {
+    return "";
+  }
+
+  const parts = hostname.split(".");
+  if (parts.length >= 2) {
+    return parts[0].toLowerCase().trim();
+  }
+  return "";
+};
 
 const getBaseURL = () => {
   return import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1';
@@ -64,8 +85,9 @@ const clearStoredToken = () => {
 const api = axios.create({
   baseURL: getBaseURL(),
   timeout: 15000,
+  withCredentials: true,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -74,6 +96,12 @@ api.interceptors.request.use(
     const tenant = getTenant();
     if (tenant) {
       config.headers['X-Tenant-ID'] = tenant;
+    } else {
+      // Fallback to subdomain-based tenant detection
+      const subdomain = getSubdomain();
+      if (subdomain && subdomain !== "www") {
+        config.headers["X-Tenant-ID"] = subdomain;
+      }
     }
 
     const token = getStoredToken();
@@ -83,7 +111,7 @@ api.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 const handleApiError = (error) => {
@@ -91,7 +119,7 @@ const handleApiError = (error) => {
     error.response?.data?.error?.message ||
     error.response?.data?.message ||
     error.message ||
-    'Request failed';
+    "Request failed";
   const code = error.response?.data?.error?.code;
   return { message, code, status: error.response?.status };
 };
@@ -103,7 +131,7 @@ api.interceptors.response.use(
 
     if (
       error.response?.status === 401 &&
-      error.response?.data?.error?.code === 'TOKEN_EXPIRED' &&
+      error.response?.data?.error?.code === "TOKEN_EXPIRED" &&
       originalRequest &&
       !originalRequest._retry
     ) {
@@ -115,7 +143,7 @@ api.interceptors.response.use(
           {
             withCredentials: true,
             headers: {
-              'X-Tenant-ID': getTenant(),
+              'X-Tenant-ID': getTenant() || getSubdomain() || "yared",
             },
           }
         );
@@ -143,7 +171,7 @@ api.interceptors.response.use(
 
     error.apiError = handleApiError(error);
     return Promise.reject(error);
-  }
+  },
 );
 
 export { handleApiError, getBaseURL, getTenant, setTenant, clearTenant, getStoredToken, setStoredToken, clearStoredToken };
