@@ -456,6 +456,35 @@ h6 {
   }
 }
 
+@media (max-width: 768px) {
+  .login-page {
+    flex-direction: column;
+  }
+  
+  .login-form-panel {
+    padding: 1rem;
+    min-height: 100vh;
+  }
+  
+  .login-form-inner {
+    max-width: 100%;
+  }
+  
+  .login-form-inner .form-control,
+  .login-form-inner .btn {
+    font-size: 0.9rem;
+  }
+  
+  .login-form-inner h4 {
+    font-size: 1.4rem;
+  }
+  
+  .login-form-inner .hipaa-badge-container,
+  .login-form-inner .secure-badge-container {
+    font-size: 8px !important;
+  }
+}
+
 /* Calendar grid */
 .calendar-grid {
   display: grid;

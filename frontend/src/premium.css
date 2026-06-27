@@ -1119,6 +1119,36 @@ tr.cursor-pointer {
   line-height: 1.7 !important;
 }
 
+@media (max-width: 768px) {
+  .login-form-panel {
+    padding: 1rem !important;
+    min-height: 100vh !important;
+  }
+  
+  .login-form-inner {
+    max-width: 100% !important;
+    padding: 0 0.25rem !important;
+  }
+  
+  .login-form-inner .form-control,
+  .login-form-inner .btn {
+    font-size: 0.875rem !important;
+  }
+  
+  .login-form-inner h4 {
+    font-size: 1.3rem !important;
+  }
+  
+  .login-hero-panel {
+    display: none !important;
+  }
+  
+  .login-form-inner .hipaa-badge-container,
+  .login-form-inner .secure-badge-container {
+    font-size: 8px !important;
+  }
+}
+
 /* ─── Calendar ───────────────────────────────────────────────────────────────── */
 .calendar-grid {
   border-radius: var(--mc-radius-lg) !important;

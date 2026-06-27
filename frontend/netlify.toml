@@ -4,10 +4,11 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  VITE_API_URL = "https://medicare-ai-lac.vercel.app/api/v1"
 
 [[redirects]]
   from = "/api/v1/*"
-  to = "https://ethiopia-cms-backend.vercel.app/api/v1/:splat"
+  to = "https://medicare-ai-lac.vercel.app/api/v1/:splat"
   status = 200
   force = true
   headers = {X-From = "Netlify"}
@@ -16,9 +17,6 @@
   from = "/*"
   to = "/index.html"
   status = 200
-
-[build.environment]
-  VITE_API_URL = "https://ethiopia-cms-backend.vercel.app/api/v1"
 
 [[headers]]
   for = "/assets/*"
@@ -32,7 +30,7 @@
     X-Content-Type-Options = "nosniff"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "no-referrer-when-downgrade"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://vercel.app https://netlify.app https://cms.et;"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://medicare-ai-lac.vercel.app https://cms.et;"
 
 [[headers]]
   for = "/assets/*"
