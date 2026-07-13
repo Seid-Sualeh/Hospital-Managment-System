@@ -1,0 +1,89 @@
+/* ==========================================
+   LOGIN RESPONSIVE
+========================================== */
+
+.login-page{
+    display:flex;
+    min-height:100vh;
+    width:100%;
+}
+
+.login-form-panel{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px;
+    background:#fff;
+}
+
+.login-form-inner{
+    width:100%;
+    max-width:450px;
+}
+
+.login-hero-panel{
+    flex:1;
+}
+
+/* Tablet */
+
+@media (max-width:991px){
+
+    .login-page{
+        display:block;
+    }
+
+    .login-form-panel{
+        min-height:100vh;
+        padding:30px 20px;
+    }
+
+    .login-form-inner{
+        max-width:100%;
+    }
+
+}
+
+/* Mobile */
+
+@media (max-width:576px){
+
+    .login-form-panel{
+        padding:20px 15px;
+    }
+
+    .login-form-inner{
+        max-width:100%;
+    }
+
+    h4{
+        font-size:1.5rem;
+    }
+
+    .btn{
+        font-size:15px;
+    }
+
+    .form-control{
+        font-size:15px;
+        min-height:46px;
+    }
+
+    .mc-form-label{
+        font-size:14px;
+    }
+
+    .d-flex.justify-content-between{
+        flex-direction:column;
+        align-items:flex-start !important;
+        gap:12px;
+    }
+
+    .hipaa-badge-container,
+    .secure-badge-container{
+        font-size:8px !important;
+        padding:6px 8px;
+    }
+
+}
