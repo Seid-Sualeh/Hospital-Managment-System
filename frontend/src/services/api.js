@@ -1,8 +1,34 @@
 import axios from "axios";
 
-const TENANT_KEY = 'tenant_id';
-const TOKEN_KEY = 'token';
-const USER_KEY = 'user';
+const TENANT_KEY = "tenant_id";
+const TOKEN_KEY = "token";
+const USER_KEY = "user";
+const DEFAULT_API_BASE_URL = "https://medicare-ai-lac.vercel.app/api/v1";
+
+const normalizeBaseURL = (value) => {
+  if (!value) return DEFAULT_API_BASE_URL;
+
+  const trimmed = value.trim();
+  if (!trimmed) return DEFAULT_API_BASE_URL;
+
+  const withoutTrailingSlash = trimmed.replace(/\/+$/, "");
+  if (
+    withoutTrailingSlash === "http://localhost:5000" ||
+    withoutTrailingSlash === "http://localhost:5000/api/v1"
+  ) {
+    return DEFAULT_API_BASE_URL;
+  }
+
+  if (withoutTrailingSlash.endsWith("/api/v1")) {
+    return withoutTrailingSlash;
+  }
+
+  if (withoutTrailingSlash.endsWith("/api")) {
+    return `${withoutTrailingSlash}/v1`;
+  }
+
+  return `${withoutTrailingSlash}/api/v1`;
+};
 
 const getSubdomain = () => {
   const host = window.location.host;
@@ -26,7 +52,7 @@ const getSubdomain = () => {
 };
 
 const getBaseURL = () => {
-  return  import.meta.env.VITE_API_URL 
+  return normalizeBaseURL(import.meta.env.VITE_API_URL);
 };
 
 const getTenant = () => {
@@ -36,7 +62,7 @@ const getTenant = () => {
       return stored.toLowerCase().trim();
     }
   } catch (e) {
-    console.warn('[API] Failed to read tenant from localStorage:', e);
+    console.warn("[API] Failed to read tenant from localStorage:", e);
   }
   return null;
 };
@@ -45,7 +71,7 @@ const setTenant = (subdomain) => {
   try {
     localStorage.setItem(TENANT_KEY, subdomain.toLowerCase().trim());
   } catch (e) {
-    console.warn('[API] Failed to persist tenant to localStorage:', e);
+    console.warn("[API] Failed to persist tenant to localStorage:", e);
   }
 };
 
@@ -53,7 +79,7 @@ const clearTenant = () => {
   try {
     localStorage.removeItem(TENANT_KEY);
   } catch (e) {
-    console.warn('[API] Failed to clear tenant from localStorage:', e);
+    console.warn("[API] Failed to clear tenant from localStorage:", e);
   }
 };
 
@@ -69,7 +95,7 @@ const setStoredToken = (token) => {
   try {
     localStorage.setItem(TOKEN_KEY, token);
   } catch (e) {
-    console.warn('[API] Failed to persist token to localStorage:', e);
+    console.warn("[API] Failed to persist token to localStorage:", e);
   }
 };
 
@@ -78,7 +104,7 @@ const clearStoredToken = () => {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
   } catch (e) {
-    console.warn('[API] Failed to clear auth from localStorage:', e);
+    console.warn("[API] Failed to clear auth from localStorage:", e);
   }
 };
 
@@ -95,7 +121,7 @@ api.interceptors.request.use(
   (config) => {
     const tenant = getTenant();
     if (tenant) {
-      config.headers['X-Tenant-ID'] = tenant;
+      config.headers["X-Tenant-ID"] = tenant;
     } else {
       // Fallback to subdomain-based tenant detection
       const subdomain = getSubdomain();
@@ -143,9 +169,9 @@ api.interceptors.response.use(
           {
             withCredentials: true,
             headers: {
-              'X-Tenant-ID': getTenant() || getSubdomain() || "yared",
+              "X-Tenant-ID": getTenant() || getSubdomain() || "yared",
             },
-          }
+          },
         );
 
         if (refreshResponse.data?.accessToken) {
@@ -156,16 +182,19 @@ api.interceptors.response.use(
       } catch {
         clearStoredToken();
         clearTenant();
-        if (!window.location.pathname.includes('/login')) {
-          window.location.href = '/login';
+        if (!window.location.pathname.includes("/login")) {
+          window.location.href = "/login";
         }
       }
     }
 
-    if (error.response?.status === 401 && !originalRequest?.url?.includes('/auth/login')) {
+    if (
+      error.response?.status === 401 &&
+      !originalRequest?.url?.includes("/auth/login")
+    ) {
       const stored = getStoredToken();
-      if (!stored && !window.location.pathname.includes('/login')) {
-        window.location.href = '/login';
+      if (!stored && !window.location.pathname.includes("/login")) {
+        window.location.href = "/login";
       }
     }
 
@@ -174,5 +203,14 @@ api.interceptors.response.use(
   },
 );
 
-export { handleApiError, getBaseURL, getTenant, setTenant, clearTenant, getStoredToken, setStoredToken, clearStoredToken };
+export {
+  handleApiError,
+  getBaseURL,
+  getTenant,
+  setTenant,
+  clearTenant,
+  getStoredToken,
+  setStoredToken,
+  clearStoredToken,
+};
 export default api;

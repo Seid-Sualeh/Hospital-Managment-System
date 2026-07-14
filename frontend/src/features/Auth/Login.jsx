@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import { HeartPulse, Eye, EyeOff, Shield, Lock, Sparkles } from 'lucide-react';
-import { getTenant, setTenant } from '../../services/api';
-import './Login.css'; // Import the CSS file for styling
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { HeartPulse, Eye, EyeOff, Shield, Lock, Sparkles } from "lucide-react";
+import { getBaseURL, getTenant, setTenant } from "../../services/api";
+import "./Login.css"; // Import the CSS file for styling
 
 const Login = () => {
   const { login, error } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [tenantId, setTenantId] = useState('');
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [tenantId, setTenantId] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [remember, setRemember] = useState(false);
@@ -27,15 +27,15 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    
+
     const tenant = tenantId.trim() || (await resolveTenantByEmail(email));
     if (tenant) {
       setTenant(tenant);
     }
-    
+
     try {
       await login(email, password, tenant);
-      navigate('/dashboard', { replace: true });
+      navigate("/dashboard", { replace: true });
     } catch {
     } finally {
       setSubmitting(false);
@@ -45,14 +45,14 @@ const Login = () => {
   const resolveTenantByEmail = async (emailInput) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1'}/tenants/resolve?email=${encodeURIComponent(emailInput)}`
+        `${getBaseURL()}/tenants/resolve?email=${encodeURIComponent(emailInput)}`,
       );
       if (response.ok) {
         const data = await response.json();
         return data.subdomain;
       }
     } catch (e) {
-      console.warn('[Login] Could not resolve tenant by email:', e.message);
+      console.warn("[Login] Could not resolve tenant by email:", e.message);
     }
     return null;
   };
@@ -67,8 +67,6 @@ const Login = () => {
             </div>
             <span className="fw-bold fs-5">MediCare AI</span>
           </div>
-
-
 
           <h4 className="fw-bold mb-1">Clinic Management System</h4>
           <p className="text-muted mb-4">Sign in to your account</p>
@@ -89,7 +87,9 @@ const Login = () => {
                 onChange={(e) => setTenantId(e.target.value)}
                 required
               />
-              <small className="text-muted">Your clinic subdomain identifier</small>
+              <small className="text-muted">
+                Your clinic subdomain identifier
+              </small>
             </div>
 
             <div className="mb-3">
@@ -141,7 +141,10 @@ const Login = () => {
                   Remember me
                 </label>
               </div>
-              <a href="/forgot-password" className="small text-primary text-decoration-none fw-semibold">
+              <a
+                href="/forgot-password"
+                className="small text-primary text-decoration-none fw-semibold"
+              >
                 Forgot Password?
               </a>
             </div>
