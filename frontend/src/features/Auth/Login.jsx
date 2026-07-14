@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { HeartPulse, Eye, EyeOff, Shield, Lock, Sparkles } from "lucide-react";
 import { getBaseURL, getTenant, setTenant } from "../../services/api";
-import "./Login.css"; // Import the CSS file for styling
+import './login.css'; // Import the CSS file for styling
 
 const Login = () => {
   const { login, error } = useAuth();

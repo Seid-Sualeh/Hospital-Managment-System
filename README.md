@@ -225,7 +225,7 @@ Integrated clinical intelligence supporting healthcare professionals with faster
 
 👨‍💻 Developer
 
-### **Seid Sualih Mohammed**
+### **Seid Sualeh Mohammed**
 *Full-Stack Web Developer*
 
 **Specializing in:**
