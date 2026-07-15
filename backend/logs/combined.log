@@ -3214,3 +3214,14 @@
 {"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-06-27T06:29:15.566Z"}
 {"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-06-27T06:29:18.930Z"}
 {"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-07-13T16:28:46.259Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-07-15T02:30:30.086Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-07-15T02:59:40.770Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-07-15T03:06:48.102Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-07-15T03:08:30.308Z"}
+{"level":"info","message":"[Server] CMS SaaS Engine listening at:5000","timestamp":"2026-07-15T03:08:34.426Z"}
+{"level":"warn","message":"[400 API Warning] Path: POST /api/v1/auth/login - Code: MISSING_TENANT_IDENTIFIER - Message: Clinic identifier required. Provide X-Tenant-ID header.","timestamp":"2026-07-15T03:23:14.715Z"}
+{"level":"info","message":"POST /api/v1/auth/login 400 169 - 5.300 ms","timestamp":"2026-07-15T03:23:14.725Z"}
+{"level":"warn","message":"[400 API Warning] Path: POST /api/v1/auth/login - Code: MISSING_TENANT_IDENTIFIER - Message: Clinic identifier required. Provide X-Tenant-ID header.","timestamp":"2026-07-15T03:23:36.422Z"}
+{"level":"info","message":"POST /api/v1/auth/login 400 169 - 1.819 ms","timestamp":"2026-07-15T03:23:36.424Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-07-15T03:26:06.735Z"}
+{"level":"info","message":"[ENV VALIDATION] All required environment variables are present.","timestamp":"2026-07-15T03:29:30.124Z"}

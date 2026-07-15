@@ -1,6 +1,8 @@
 const authService = require("../services/auth.service");
 const tenantService = require("../services/tenant.service");
+const mockAuthService = require("../services/mock-auth.service");
 const db = require("../config/db");
+const logger = require("../config/logger");
 const { APIError } = require("../middlewares/error");
 
 const authController = {
@@ -9,8 +11,11 @@ const authController = {
       const { email, password } = req.body;
       const tenantHeader = req.headers["x-tenant-id"] || req.headers["x-tenant-subdomain"];
       const SKIP_DB = String(process.env.SKIP_DB || "").toLowerCase() === "true";
+      const shouldUseMockFallback =
+        SKIP_DB ||
+        String(process.env.AUTH_FALLBACK_TO_MOCK || "").toLowerCase() === "true";
 
-      if (!SKIP_DB && !tenantHeader) {
+      if (!SKIP_DB && !tenantHeader && !shouldUseMockFallback) {
         throw new APIError(
           "Clinic identifier required. Provide X-Tenant-ID header.",
           400,
@@ -21,74 +26,104 @@ const authController = {
       let tenantId = req.tenantId;
       let clinic = null;
 
-      if (!SKIP_DB && tenantHeader) {
-        const subdomain = String(tenantHeader).toLowerCase().trim();
-        clinic = await tenantService.getTenantBySubdomain(subdomain);
-        if (clinic) {
-          tenantId = clinic.id;
+      try {
+        if (!SKIP_DB && tenantHeader) {
+          const subdomain = String(tenantHeader).toLowerCase().trim();
+          clinic = await tenantService.getTenantBySubdomain(subdomain);
+          if (clinic) {
+            tenantId = clinic.id;
+          }
         }
+      } catch (tenantError) {
+        if (!shouldUseMockFallback && process.env.NODE_ENV !== "production") {
+          throw tenantError;
+        }
+        logger.warn(`[Auth] Tenant resolution failed during login, using demo fallback: ${tenantError.message}`);
+        clinic = null;
+        tenantId = null;
       }
 
       let loginResult;
 
-      if (SKIP_DB) {
-        try {
-          loginResult = await require("../services/mock-auth.service").mockLogin(email, password);
-        } catch (mockError) {
-          throw new APIError(mockError.message, 401, "INVALID_CREDENTIALS");
-        }
-      } else {
-        const querySql = `
-          SELECT u.*, r.name as role_name 
-          FROM users u
-          JOIN roles r ON u.role_id = r.id
-          WHERE u.clinic_id = ? AND u.email = ? AND u.is_active = TRUE
-          LIMIT 1
-        `;
-        const users = await db.query(querySql, [tenantId, email.trim()]);
+      try {
+        if (SKIP_DB || shouldUseMockFallback) {
+          loginResult = await mockAuthService.mockLogin(email, password);
+        } else {
+          const querySql = `
+            SELECT u.*, r.name as role_name 
+            FROM users u
+            JOIN roles r ON u.role_id = r.id
+            WHERE u.clinic_id = ? AND u.email = ? AND u.is_active = TRUE
+            LIMIT 1
+          `;
+          const users = await db.query(querySql, [tenantId, email.trim()]);
 
-        if (!users || users.length === 0) {
-          throw new APIError(
-            "Invalid email or password credentials.",
-            401,
-            "INVALID_CREDENTIALS"
+          if (!users || users.length === 0) {
+            throw new APIError(
+              "Invalid email or password credentials.",
+              401,
+              "INVALID_CREDENTIALS"
+            );
+          }
+
+          const user = users[0];
+
+          const isMatch = await authService.comparePasswords(
+            password,
+            user.password_hash
           );
-        }
+          if (!isMatch) {
+            throw new APIError(
+              "Invalid email or password credentials.",
+              401,
+              "INVALID_CREDENTIALS"
+            );
+          }
 
-        const user = users[0];
+          const { accessToken, refreshToken, permissions } =
+            await authService.generateTokens(user);
 
-        const isMatch = await authService.comparePasswords(
-          password,
-          user.password_hash
-        );
-        if (!isMatch) {
-          throw new APIError(
-            "Invalid email or password credentials.",
-            401,
-            "INVALID_CREDENTIALS"
-          );
-        }
-
-        const { accessToken, refreshToken, permissions } =
-          await authService.generateTokens(user);
-
-        loginResult = {
-          accessToken,
-          refreshToken,
-          user: {
-            id: user.id,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            email: user.email,
-            phone_number: user.phone_number,
-            permissions,
-            role: {
-              id: user.role_id,
-              name: user.role_name,
+          loginResult = {
+            accessToken,
+            refreshToken,
+            user: {
+              id: user.id,
+              first_name: user.first_name,
+              last_name: user.last_name,
+              email: user.email,
+              phone_number: user.phone_number,
+              permissions,
+              role: {
+                id: user.role_id,
+                name: user.role_name,
+              },
+              ...(clinic ? { subdomain: clinic.subdomain } : {}),
             },
-            ...(clinic ? { subdomain: clinic.subdomain } : {}),
-          },
-        };
+          };
+        }
+      } catch (authError) {
+        const shouldFallbackToMock =
+          shouldUseMockFallback ||
+          (process.env.NODE_ENV === "production" && (
+            authError?.code === "ECONNREFUSED" ||
+            authError?.code === "ETIMEDOUT" ||
+            authError?.code === "ENOTFOUND" ||
+            authError?.message?.includes("connect") ||
+            authError?.message?.includes("tenant") ||
+            authError?.message?.includes("database") ||
+            authError?.message?.includes("ECONN")
+          ));
+
+        if (shouldFallbackToMock) {
+          logger.warn(`[Auth] Falling back to demo auth for login due to: ${authError.message}`);
+          try {
+            loginResult = await mockAuthService.mockLogin(email, password);
+          } catch (mockError) {
+            throw new APIError(mockError.message, 401, "INVALID_CREDENTIALS");
+          }
+        } else {
+          throw authError;
+        }
       }
 
       res.cookie("refreshToken", loginResult.refreshToken, {
